@@ -1,0 +1,17 @@
+.bg-proshore {
+  background: linear-gradient(to bottom, #ffb866 0%, #e67a00  100 %);
+ !important;
+}
+
+.bg-proshore-light {
+  background: linear-gradient(to bottom, #e67a00 100%, #ffb866 80%);
+ !important;
+}
+
+.icon-change{
+  color:  #b3b3b3;
+}
+
+bg-content{
+  background-color: #b3b3b3;
+}
