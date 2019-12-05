@@ -1,0 +1,82 @@
+<% include ./../layouts/layoutheader%>
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">Add Leave Form</li>
+
+    <li class="ml-auto"  style="float: right;">
+        <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/leave/list" style="color: white;">Leave List </a></li>
+    </li>
+</ol>
+
+<div class="card mb-3">
+  
+  <div class="card-header">
+    Leave Form
+  </div>
+  <div class="card-body">
+      <form>
+          <div class="form-group">
+            <label for="employeeName">Employee Name *</label>
+            <input type="text" class="form-control" id="employeeName" aria-describedby="nameinfo" placeholder="Enter Employee Name">
+            <small id="nameinfo" class="form-text text-muted"></small>
+          </div>
+          <div class="form-group">
+            <label for="leaveType">Leave Type *</label>
+            <select name="leaveType" id="leaveType" class="form-control">
+              <option value="">Casual Leave</option>
+              <option value="">Sick</option>
+              <option value="">Paternity</option>
+              <option value="">maternity</option>
+              <option value="">Marriage</option>
+              <option value="">mourn</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+              <label for="leaveReason">Reason for Leave *</label>
+              <textarea class="form-control" id="leaveReason" aria-describedby="reason" placeholder="Reason for Leave in detail"></textarea>
+              <small id="reason" class="form-text text-muted">PS: Write exact reason</small>
+            </div>
+
+            <div class="form-group">
+                <label for="leaveDay">Leave Days*</label>
+                <input type="number" class="form-control" id="leaveDay" aria-describedby="nameinfo" placeholder="Enter leave day" step="1">
+              </div>
+
+             
+
+
+
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                        <label for="fromDate">From Days*</label>
+                        <input type="date" class="form-control" id="fromDate" >
+                      </div>
+                      <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                      <label for="toDate">To Days*</label>
+                      <input type="date" class="form-control" id="toDate">
+                    </div>
+                  </div>
+
+
+
+
+
+
+
+
+
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+  </div>
+  </div>
+
+<% include ./../layouts/layoutfooter%>
