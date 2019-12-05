@@ -1,18 +1,48 @@
 <% include ./../layouts/layoutheader%>
-
-<style>
-    #banner {
-        border: 1px solid teal;
-    }
-</style>
-
+<!-- Custom styles for dashboard-->
+<link href="/css/change.css" rel="stylesheet">
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
         <a href="#">Dashboard</a>
     </li>
-    <li class="breadcrumb-item active">leave type</li>
+    <li class="breadcrumb-item active">holiday</li>
 </ol>
+<div class="card ml-5" style="width: 25rem;">
+    <div class="card-header">
+        Leave
+    </div>
+    <div class="card-body">
+        <div class="form-group ">
+            <label for="inputGroupSelect01"></label>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Name:</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="number of day leave employee will be allowed">
+            </div>
 
-<b id="banner">Leave TYPE</b>
+            <div class="form-group mx-0 mb-2">
+                <label for="exampleInputEmail1">Number of Days:</label>
+                <input type="number" class="form-control " id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="name of the holiday event">
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Description:</label>
+                <textarea class="form-control" cols="30" rows="5" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="desciption for the type of leave"></textarea>
+            </div>
+
+
+        </div>
+        <div class="justify-content-end">
+            <a href="#" class="btn btn-primary float-left">Add</a>
+            <a href="#" class="btn btn-danger float-right">Discard</a>
+        </div>
+
+    </div>
+</div>
+
 <% include ./../layouts/layoutfooter%>

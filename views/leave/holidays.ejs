@@ -1,5 +1,6 @@
 <% include ./../layouts/layoutheader%>
-
+<!-- Custom styles for dashboard-->
+<link href="/css/change.css" rel="stylesheet">
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
@@ -7,7 +8,47 @@
     </li>
     <li class="breadcrumb-item active">holiday</li>
 </ol>
+<div class="card ml-5" style="width: 25rem;">
+    <div class="card-header">
+        Holidays
+    </div>
+    <div class="card-body">
+        <div class="form-group ">
+            <label for="inputGroupSelect01"></label>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Name:</label>
+                <input type="" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="name of the holiday event">
+            </div>
+            <div class="from-group">
+                <select class="custom-select form-control" id="inputGroupSelect01">
+                    <option selected>Choose holiday</option>
+                    <option value="1">Public Holiday</option>
+                    <option value="2">FLoating Holiday</option>
+                    <option value="3">Office Holiday</option>
+                </select>
+            </div>
 
-<b>HOLIDAYS</b>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Date:</label>
+                <input type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="name of the holiday event">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Date:</label>
+                <textarea class="form-control" cols="30" rows="5" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="name of the holiday event"></textarea>
+            </div>
+
+
+        </div>
+        <div class="justify-content-end">
+            <a href="#" class="btn btn-primary float-left">Add</a>
+            <a href="#" class="btn btn-danger float-right">Discard</a>
+        </div>
+
+    </div>
+</div>
 
 <% include ./../layouts/layoutfooter%>
