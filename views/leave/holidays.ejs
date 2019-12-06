@@ -1,6 +1,8 @@
 <% include ./../layouts/layoutheader%>
-<!-- Custom styles for dashboard-->
-<link href="/css/change.css" rel="stylesheet">
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
@@ -17,28 +19,28 @@
             <label for="inputGroupSelect01"></label>
             <div class="form-group">
                 <label for="exampleInputEmail1">Name:</label>
-                <input type="" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="name of the holiday event">
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="name of the holiday event" required>
             </div>
-            <div class="from-group">
-                <select class="custom-select form-control" id="inputGroupSelect01">
+            <div>
+
+            <div class="from-group box">
+                <select class="custom-select form-control" id="holidaytype" required>
                     <option selected>Choose holiday</option>
                     <option value="1">Public Holiday</option>
-                    <option value="2">FLoating Holiday</option>
+                    <option value="2">Floating Holiday</option>
                     <option value="3">Office Holiday</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="exampleInputEmail1">Date:</label>
-                <input type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="name of the holiday event">
+                <label for="date">Date:</label>
+                <input type="date" id="date" class="form-control" value="" required>
             </div>
 
             <div class="form-group">
-                <label for="exampleInputEmail1">Date:</label>
-                <textarea class="form-control" cols="30" rows="5" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="name of the holiday event"></textarea>
+                <label for="description">Description:</label>
+                <textarea class="form-control" cols="30" rows="5" id="description" required></textarea>
             </div>
 
 
@@ -50,5 +52,39 @@
 
     </div>
 </div>
+<script>
+$(document).ready(function(){
+
+    var now  =getDate('today');
+    var maxDate = getDate('maxdate')+'-'+'03'+'-'+'31';
+
+  
+    $('#date').mouseenter(function(){
+          $('#date').val(now)
+    $('#date').attr('max',maxDate);
+    $('#date').attr('min',now);
+           })
+
+
+function getDate(status) {
+      var now = new Date();
+      var month = (now.getMonth() + 1);
+      var day = now.getDate();
+      if (month < 10)
+        month = "0" + month;
+      if (day < 10)
+        day = "0" + day;
+      var today = now.getFullYear() + '-' + month + '-' + day;
+      if(status ==="today") return today;
+      if(status ==="maxdate" )  return now.getFullYear()+1;
+      else '';
+    }
+})
+
+
+
+
+        
+</script>
 
 <% include ./../layouts/layoutfooter%>
