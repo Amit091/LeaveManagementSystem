@@ -1,82 +1,150 @@
 <% include ./../layouts/layoutheader%>
+<style>
+  select::-webkit-inner-spin-button,
+  select::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="date"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+</style>
 
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a href="#">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item active">Add Leave Form</li>
+  <li class="breadcrumb-item">
+    <a href="#">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active">Add Leave Form</li>
 
-    <li class="ml-auto"  style="float: right;">
-        <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/list/" style="color: white;">Leave List </a></li>
-    </li>
+  <li class="ml-auto" style="float: right;">
+  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/list/" style="color: white;">Leave List </a>
+  </li>
+  </li>
 </ol>
 
 <div class="card mb-3">
-  
   <div class="card-header">
     Leave Form
   </div>
   <div class="card-body">
-      <form>
-          <div class="form-group">
-            <label for="employeeName">Employee Name *</label>
-            <input type="text" class="form-control" id="employeeName" aria-describedby="nameinfo" placeholder="Enter Employee Name">
-            <small id="nameinfo" class="form-text text-muted"></small>
-          </div>
-          <div class="form-group">
-            <label for="leaveType">Leave Type *</label>
-            <select name="leaveType" id="leaveType" class="form-control">
-              <option value="">Casual Leave</option>
-              <option value="">Sick</option>
-              <option value="">Paternity</option>
-              <option value="">maternity</option>
-              <option value="">Marriage</option>
-              <option value="">mourn</option>
-            </select>
-          </div>
+    <form>
+      <div class="form-group">
+        <label for="employeeName">Employee Name *</label>
+        <input type="text" class="form-control" id="employeeName" aria-describedby="nameinfo"
+          placeholder="Enter Employee Name" required>
+        <small id="nameinfo" class="form-text text-muted"></small>
+      </div>
 
-          <div class="form-group">
-              <label for="leaveReason">Reason for Leave *</label>
-              <textarea class="form-control" id="leaveReason" aria-describedby="reason" placeholder="Reason for Leave in detail"></textarea>
-              <small id="reason" class="form-text text-muted">PS: Write exact reason</small>
+      <div class="form-row">
+        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+          <label for="leaveDay">Leave Days*</label>
+          <input type="number" class="form-control" id="leaveDay" placeholder="Enter leave day" step="1" min="1" required>
+        </div>
+        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+          <label for="leaveType">Leave Type *</label>
+          <select name="leaveType" id="leaveType" class="form-control" required>
+            <option value="">Casual Leave</option>
+            <option value="">Sick</option>
+            <option value="">Paternity</option>
+            <option value="">maternity</option>
+            <option value="">Marriage</option>
+            <option value="">mourn</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+          <label for="fromDate">From Days*</label>
+          <div class="input-group">          
+          <input type="date" class="form-control" id="fromDate" readonly required  aria-describedby="fdate">
+          <div class="input-group-append">
+              <span class="input-group-text" id="fdate"><i class="fa fa-calendar"></i></span>
             </div>
+        </div>
+      </div>
 
-            <div class="form-group">
-                <label for="leaveDay">Leave Days*</label>
-                <input type="number" class="form-control" id="leaveDay" aria-describedby="nameinfo" placeholder="Enter leave day" step="1">
-              </div>
+      <div class="form-group col-md-6 col-sm-6 col-xs-12">
+          <label for="toDate">To Days*</label>
+          <div class="input-group">          
+          <input type="date" class="form-control" id="toDate"  required readonly   aria-describedby="tdate" >
+          <div class="input-group-append">
+              <span class="input-group-text" id="tdate"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+      </div>
+      </div>
+      <div class="form-group">
+        <label for="leaveReason">Reason for Leave *</label>
+        <textarea class="form-control" id="leaveReason" aria-describedby="reason"
+          placeholder="Reason for Leave in detail" required></textarea>
+        <small id="reason" class="form-text text-muted">PS: Write exact reason</small>
+      </div>
 
-             
-
-
-
-                <div class="form-row">
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label for="fromDate">From Days*</label>
-                        <input type="date" class="form-control" id="fromDate" >
-                      </div>
-                      <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                      <label for="toDate">To Days*</label>
-                      <input type="date" class="form-control" id="toDate">
-                    </div>
-                  </div>
-
-
-
-
-
-
-
-
-
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="doneCheck">
+        <label class="form-check-label" for="doneCheck">Check me out</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
   </div>
-  </div>
+</div>
 
+<script>
+  $(document).ready(function () {
+    populateDate();
+
+    $('#toDate').on('change', () => {
+      console.log($(this).val());
+    })
+
+    $('#leaveDay').on('keyup', () => {
+      var day = $('#leaveDay').val();
+      nextDay(day);
+    });
+
+    function populateDate() {
+      var today = getDate('today');
+      $('#fromDate').val(today)
+      $('#toDate').val(today);
+      $('#fromDate').attr('min', today);
+      $('#toDate').attr('min', today);
+      var maxdate = getDate('maxdate');
+      $('#toDate').attr('max', maxdate + '-' + '03' + '-' + '31');
+      $('#fromDate').attr('max', maxdate + '-' + '03' + '-' + '31');
+    }
+
+    function getDate(status) {
+      var now = new Date();
+      var month = (now.getMonth() + 1);
+      var day = now.getDate();
+      if (month < 10)
+        month = "0" + month;
+      if (day < 10)
+        day = "0" + day;
+      var today = now.getFullYear() + '-' + month + '-' + day;
+      if (status === "today") return today;
+      else if (status === "maxdate") return now.getFullYear() + 1;
+      else return today;
+    }
+
+    function nextDay(day) {
+      day = day !== '' ? parseInt(day) : 0;
+      var now = new Date();
+      var newDate = new Date(now);
+      newDate.setDate(newDate.getDate() + day);
+      var month = (newDate.getMonth() + 1);
+      var day = newDate.getDate();
+      if (month < 10)
+        month = "0" + month;
+      if (day < 10)
+        day = "0" + day;
+      var today = newDate.getFullYear() + '-' + month + '-' + day;
+      $('#toDate').val(today);
+    }
+  })
+
+  
+</script>
 <% include ./../layouts/layoutfooter%>
