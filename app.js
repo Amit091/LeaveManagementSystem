@@ -1,27 +1,95 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const path = require('path');
+const cors = require('cors');
+const logger = require('morgan');
+const createError = require('http-errors');
+const cookieParser = require('cookie-parser');
+const express = require('express');
+const session = require('express-session');
+const validator = require('express-validator');
+const flash = require('connect-flash');
 
-var leaveRouter = require('./routes/leave')
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var listRouter = require('./routes/list');
-
-
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 //app.use(logger('dev'));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//express session
+app.use(session({
+  secret: 'keyboard',
+  resave: false,
+  saveUninitialized: false,
+  duration: 1000 * 1
+}));
+
+//flash mesage and CORS
+app.use(flash());
+app.use(cors());
+
+//global variable for message type
+app.use(function(req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.warning_msg = req.flash('warning_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
+
+//validators
+app.use(validator({
+  errorFormatter: function(param, msg, value) {
+      var namescape = param.split('.'),
+          root = namescape.shift(),
+          formParam = root;
+      while (namescape.length) {
+          formParam += '[' + namescape.shift() + ']';
+      }
+      return {
+          param: formParam,
+          msg: msg,
+          value: value
+      };
+  },
+  customValidators: {
+      isImage: function(value, filename) {
+          var extension = (path.extname(filename)).toLowerCase();
+          switch (extension) {
+              case '.jpg':
+                  return '.jpg';
+              case '.jpeg':
+                  return '.jpeg';
+              case '.png':
+                  return '.png';
+              case '':
+                  return '.jpg';
+              default:
+                  return false;
+          }
+      }
+  }
+}));
+
+//Global value for app
+app.all('*', (req, res, next) => {
+  res.locals.user = req.user || null;
+  next();
+});
+
+//loading route
+const leaveRouter = require('./routes/leave')
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const listRouter = require('./routes/list');
+
+//Routing
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/leave', leaveRouter);
