@@ -1,0 +1,33 @@
+<div class="table-responsive-sm d-table-row">
+    <table class="table table-hover table-sm table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Date</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% allresult.forEach(function(holiday){%>
+            <tr>
+                <td><%= holiday.name%></td>
+                <td><%= holiday.type%></td>
+                <td><%= holiday.dateformat%></td>
+                <td><%= holiday.description%></td>
+                <td>
+                    <form action="">
+                        <input class="btn btn-primary btn-sm" type="submit" value="Edit" /></input>
+                    </form>
+                </td>
+                <td>
+                    <form action="">
+                        <input class="btn btn-danger btn-sm" type="submit" value="Delete" /></input>
+                    </form>
+                </td>
+            </tr>
+
+            <%})%>
+        </tbody>
+    </table>
+</div>

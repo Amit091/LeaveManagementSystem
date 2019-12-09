@@ -1,8 +1,6 @@
 <% include ./../layouts/layoutheader%>
-<script
-  src="https://code.jquery.com/jquery-3.4.1.js"
-  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="anonymous"></script>
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
@@ -10,81 +8,102 @@
     </li>
     <li class="breadcrumb-item active">holiday</li>
 </ol>
-<div class="card ml-5" style="width: 25rem;">
-    <div class="card-header">
-        Holidays
-    </div>
-    <div class="card-body">
-        <div class="form-group ">
-            <label for="inputGroupSelect01"></label>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Name:</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="name of the holiday event" required>
-            </div>
-            <div>
-
-            <div class="from-group box">
-                <select class="custom-select form-control" id="holidaytype" required>
-                    <option selected>Choose holiday</option>
-                    <option value="1">Public Holiday</option>
-                    <option value="2">Floating Holiday</option>
-                    <option value="3">Office Holiday</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="date">Date:</label>
-                <input type="date" id="date" class="form-control" value="" required>
-            </div>
-
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea class="form-control" cols="30" rows="5" id="description" required></textarea>
-            </div>
-
-
+<div class="row">
+    <div class="col-md-6">
+        <div>
+            <% include ./allholidays.ejs%>
         </div>
-        <div class="justify-content-end">
-            <a href="#" class="btn btn-primary float-left">Add</a>
-            <a href="#" class="btn btn-danger float-right">Discard</a>
-        </div>
-
     </div>
+    <div class="col-md-6">
+        <div class="card ml-5" style="width: 25rem;">
+            <div class="card-header">
+                Holidays
+            </div>
+            <div class="card-body">
+                <form id="product-form" action="/leave/addholidays" method="post">
+                    <div class="form-group ">
+                        <label for="inputGroupSelect01"></label>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Name:</label>
+                            <input type="text" name="name" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="name of the holiday event" required>
+                        </div>
+                        <div>
+
+                            <div class="from-group box">
+                                <select class="custom-select form-control" id="holidaytype" name="holidaypicker"
+                                    required>
+                                    <option selected>Choose holiday</option>
+                                    <option value="Public Holiday">Public Holiday</option>
+                                    <option value="Floating Holiday">Floating Holiday</option>
+                                    <option value="Office Holiday">Office Holiday</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="date">Date:</label>
+                                <input type="date" id="date" name="date" class="form-control" value="" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <textarea class="form-control" cols="30" name="description" rows="5" id="description"
+                                    required></textarea>
+                            </div>
+
+
+                        </div>
+                        <div class="justify-content-end">
+                            <button type="submit" class="btn btn-primary float-left">Submit</button>
+                            <button type="submit" class="btn btn-danger float-right">Discard</button>
+                        </div>
+
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
+
+
 <script>
-$(document).ready(function(){
+    $(document).ready(function () {
 
-    var now  =getDate('today');
-    var maxDate = getDate('maxdate')+'-'+'03'+'-'+'31';
-
-  
-    $('#date').mouseenter(function(){
-          $('#date').val(now)
-    $('#date').attr('max',maxDate);
-    $('#date').attr('min',now);
-           })
+        var now = getDate('today');
+        var maxDate = getDate('maxdate') + '-' + '03' + '-' + '31';
 
 
-function getDate(status) {
-      var now = new Date();
-      var month = (now.getMonth() + 1);
-      var day = now.getDate();
-      if (month < 10)
-        month = "0" + month;
-      if (day < 10)
-        day = "0" + day;
-      var today = now.getFullYear() + '-' + month + '-' + day;
-      if(status ==="today") return today;
-      if(status ==="maxdate" )  return now.getFullYear()+1;
-      else '';
-    }
-})
+        $('#date').mouseenter(function () {
+            $('#date').val(now)
+            $('#date').attr('max', maxDate);
+            $('#date').attr('min', now);
+        })
+
+
+        function getDate(status) {
+            var now = new Date();
+            var month = (now.getMonth() + 1);
+            var day = now.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var today = now.getFullYear() + '-' + month + '-' + day;
+            if (status === "today") return today;
+            if (status === "maxdate") return now.getFullYear() + 1;
+            else '';
+        }
+    })
 
 
 
 
-        
+
 </script>
 
 <% include ./../layouts/layoutfooter%>

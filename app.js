@@ -35,7 +35,7 @@ app.use(flash());
 app.use(cors());
 
 //global variable for message type
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.warning_msg = req.flash('warning_msg');
@@ -45,35 +45,35 @@ app.use(function(req, res, next) {
 
 //validators
 app.use(validator({
-  errorFormatter: function(param, msg, value) {
-      var namescape = param.split('.'),
-          root = namescape.shift(),
-          formParam = root;
-      while (namescape.length) {
-          formParam += '[' + namescape.shift() + ']';
-      }
-      return {
-          param: formParam,
-          msg: msg,
-          value: value
-      };
+  errorFormatter: function (param, msg, value) {
+    var namescape = param.split('.'),
+      root = namescape.shift(),
+      formParam = root;
+    while (namescape.length) {
+      formParam += '[' + namescape.shift() + ']';
+    }
+    return {
+      param: formParam,
+      msg: msg,
+      value: value
+    };
   },
   customValidators: {
-      isImage: function(value, filename) {
-          var extension = (path.extname(filename)).toLowerCase();
-          switch (extension) {
-              case '.jpg':
-                  return '.jpg';
-              case '.jpeg':
-                  return '.jpeg';
-              case '.png':
-                  return '.png';
-              case '':
-                  return '.jpg';
-              default:
-                  return false;
-          }
+    isImage: function (value, filename) {
+      var extension = (path.extname(filename)).toLowerCase();
+      switch (extension) {
+        case '.jpg':
+          return '.jpg';
+        case '.jpeg':
+          return '.jpeg';
+        case '.png':
+          return '.png';
+        case '':
+          return '.jpg';
+        default:
+          return false;
       }
+    }
   }
 }));
 
@@ -97,9 +97,9 @@ app.use('/list', listRouter);
 
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+// app.use(function (req, res, next) {
+//   next(createError(404));
+// });
 
 // error handler
 app.use(function (err, req, res, next) {
