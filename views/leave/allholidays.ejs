@@ -16,12 +16,12 @@
                 <td><%= holiday.dateformat%></td>
                 <td><%= holiday.description%></td>
                 <td>
-                    <form action="">
+                    <form action="/leave/editholiday/<%=holiday.id%>">
                         <input class="btn btn-primary btn-sm" type="submit" value="Edit" /></input>
                     </form>
                 </td>
                 <td>
-                    <form action="">
+                    <form action="/leave/deleteholiday/<%=holiday.id%>">
                         <input class="btn btn-danger btn-sm" type="submit" value="Delete" /></input>
                     </form>
                 </td>

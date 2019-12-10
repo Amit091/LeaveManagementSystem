@@ -12,7 +12,7 @@ const dbConfig = {
 module.exports = async () => {
     try {
         let con = await mysql.createConnection(dbConfig);
-        if (con) console.log('DB Connect');
+
         return con;
     } catch (error) {
         console.log('SQL ERROR');
