@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var holidaysController = require("./../controller/holidaysController");
-const holidaysSQL = require('./../helpers/holidaysSQL');
+const holidaysSQL = require('../helpers/Dao/holidaysSQL');
 const hSQL = new holidaysSQL();
 
 
