@@ -32,13 +32,13 @@
           </thead>
           <tbody></tbody>
           <%list.forEach(record => {%>
-            <tr>
+            <tr id="<%=record.id%>">
             <td><%=record.employee_name%></td>
             <td><%=record.leave_day%></td>
             <td><%=record.leave_type_lists_id%></td>
             <td><%=record.sDate%></td>
             <td><%=record.eDate%></td>
-            <td><%=record.status%></td>
+            <td id="<%=record.id%>_status"><%=record.status%></td>
             
             <td class="btn-group-toggle btn-group-sm"> <button class="btn  btn-primary"><i class="fa fa-pen"></i></button>
             <button class="btn btn-info"><i class="fa fa-check"></i></button>

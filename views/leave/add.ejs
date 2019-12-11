@@ -39,14 +39,7 @@
  
 
       <div class="form-row">
-        <div class="form-group col-md-6 col-sm-6 col-xs-12">
-          <label for="leaveDay">Leave Days*</label>
-          <input type="number" class="form-control" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1"
-            min="1" max="100" required aria-describedby="leaveinfo" autocomplete="off">
-         <small id="leaveinfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
-
-        </div>
-
+        
         <div class="form-group col-md-6 col-sm-6 col-xs-12">
           <label for="leaveType">Leave Type *</label>
           <select name="leaveType" id="leaveType" class="form-control" required>
@@ -61,10 +54,10 @@
       </div>
 
       <div class="form-row">
-        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="fromDate">From Days*</label>
           <div class="input-group">
-            <input type="date" class="form-control" name="fromDate" id="fromDate" readonly required
+            <input type="date" class="form-control" name="fromDate" id="fromDate"  required
               aria-describedby="fdate">
             <div class="input-group-append">
               <span class="input-group-text" id="fdate"><i class="fa fa-calendar"></i></span>
@@ -72,17 +65,28 @@
           </div>
         </div>
 
-        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="toDate">To Days*</label>
           <div class="input-group">
-            <input type="date" class="form-control" name="toDate" id="toDate" readonly  required
+            <input type="date" class="form-control" name="toDate" id="toDate" required
               aria-describedby="tdate">
             <div class="input-group-append">
               <span class="input-group-text" id="tdate"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
         </div>
+
+        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+          <label for="leaveDay">Leave Days*</label>
+          <input type="number" class="form-control" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1"
+            min="1" max="100" value="0" required aria-describedby="leaveinfo" autocomplete="off" readonly>
+         <small id="leaveinfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
+
+        </div>
+
+
       </div>
+
 
       <div class="form-group">
         <label for="leaveReason">Reason for Leave *</label>
@@ -95,92 +99,10 @@
         <input type="checkbox" class="form-check-input" id="doneCheck" >
         <label class="form-check-label" for="doneCheck">Check me out</label>
       </div>
-      <button type="submit" id="btnSubmit" class="btn btn-primary" disabled>Submit</button>
+      <button type="submit" id="btnSubmit" class="btn btn-primary" >Submit</button>
     </form>
   </div>
 </div>
 
-<script>
-  $(document).ready(function () {
-    populateDate();
-    $('#leaveDay').on('keyup', () => {
-      var day = parseInt($('#leaveDay').val());
-      
-      console.log(day);
-      console.log(typeof day);
-      if(day > 0 && typeof day =="number" && day< 100 ){
-        day=(typeof day == 'number' && day>=0)? day:0;    
-        $('#leaveinfo').attr('color','red');
-        $('#leaveinfo').html('');    
-        console.log('10');
-
-        nextDay(day);
-      }else if(day > 100 && typeof day =="number"){
-        console.log('11');
-        
-        $('#leaveinfo').html('Invalid value! must be below 100 Days');
-      }else if(day <0 || day == 'NaN'){
-        console.log('Invalid leave day');
-        $('#leaveinfo').html('Invalid value! Must be +ve Number');
-        console.log('12j');
-
-      }else if(day =="" || day =='NaN'){
-        $('#leaveinfo').html('');
-
-      } else if($('#leaveDay').val() ==""){
-        $('#leaveinfo').html('');
-      }
-    });
-
-    $('#doneCheck').click(function() {
-      console.log('check this out');      
-        if ($('#doneCheck').is(":checked")) {
-            $('#btnSubmit').prop('disabled', false)
-        } else {
-            $('#btnSubmit').prop('disabled', true)
-        }
-    })
-
-    function populateDate() {
-      var today = getDate('today');
-      console.log(today);
-      $('#fromDate').val(today)
-      $('#toDate').val(today);
-      $('#fromDate').attr('min', today);
-      $('#toDate').attr('min', today);
-      var maxdate = getDate('maxdate');
-      $('#toDate').attr('max', maxdate + '-' + '03' + '-' + '31');
-      $('#fromDate').attr('max', maxdate + '-' + '03' + '-' + '31');
-    }
-
-    function getDate(status) {
-      var now = new Date();
-      var month = (now.getMonth() + 1);
-      var day = now.getDate();
-      if (month < 10)
-        month = "0" + month;
-      if (day < 10)
-        day = "0" + day;
-      var today = now.getFullYear() + '-' + month + '-' + day;
-      if (status === "today") return today;
-      else if (status === "maxdate") return now.getFullYear() + 1;
-      else return today;
-    }
-
-    function nextDay(day) {
-      day = day !== '' ? parseInt(day) : 0;
-      var now = new Date();
-      var newDate = new Date(now);
-      newDate.setDate(newDate.getDate() + day);
-      var month = (newDate.getMonth() + 1);
-      var day = newDate.getDate();
-      if (month < 10)
-        month = "0" + month;
-      if (day < 10)
-        day = "0" + day;
-      var today = newDate.getFullYear() + '-' + month + '-' + day;
-      $('#toDate').val(today);
-    }
-  })  
-</script>
-<% include ./../layouts/layoutfooter%>
+<script src="/js/leaveAdd.js"></script>
+<% include ./../layouts/layoutfooter%>  
