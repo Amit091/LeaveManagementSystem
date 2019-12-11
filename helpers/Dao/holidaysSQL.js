@@ -1,4 +1,4 @@
-const gcon = require('./../middleware/sqlConnection');
+const gcon = require('../../config/DBConnection');
 const express = require('express');
 const router = express.Router();
 

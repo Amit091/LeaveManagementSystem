@@ -30,18 +30,23 @@
               <th>Option</th>
             </tr>
           </thead>
-          <tbody>
-            <th>A</th>
-            <th>B</th>
-            <th>C</th>
-            <th>D</th>
-            <th>E`</th>
-            <th class="btn-group-sm">
-            <button class="btn  btn-primary"><i class="fa fa-pen"></i></button>
+          <tbody></tbody>
+          <%list.forEach(record => {%>
+            <tr>
+            <td><%=record.employee_name%></td>
+            <td><%=record.leave_day%></td>
+            <td><%=record.leave_type_lists_id%></td>
+            <td><%=record.sDate%></td>
+            <td><%=record.eDate%></td>
+            <td><%=record.status%></td>
+            
+            <td class="btn-group-toggle btn-group-sm"> <button class="btn  btn-primary"><i class="fa fa-pen"></i></button>
             <button class="btn btn-info"><i class="fa fa-check"></i></button>
             <button class="btn btn-secondary"><i class="fa fa-times"></i></button>
-            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-          </th>
+            <button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+              </tr>
+          
+       <% });%>
           </tbody>
           <tfoot>
             <tr>

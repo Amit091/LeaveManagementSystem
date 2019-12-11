@@ -11,6 +11,7 @@
   }
 </style>
 
+<% include ./../partials/messages%>
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
   <li class="breadcrumb-item">
@@ -25,68 +26,76 @@
 </ol>
 
 <div class="card mb-3">
-  <div class="card-header">
-    Leave Form
-  </div>
+  <div class="card-header">Leave Form</div>
   <div class="card-body">
-    <form>
+    <form method="post" action="/list/add">
+
       <div class="form-group">
         <label for="employeeName">Employee Name *</label>
-        <input type="text" class="form-control" id="employeeName" aria-describedby="nameinfo"
-          placeholder="Enter Employee Name" required>
+        <input type="text" class="form-control" id="employeeName" name="employeeName" aria-describedby="nameinfo"
+          placeholder="Enter Employee Name" required value="">
         <small id="nameinfo" class="form-text text-muted"></small>
       </div>
+ 
 
       <div class="form-row">
         <div class="form-group col-md-6 col-sm-6 col-xs-12">
           <label for="leaveDay">Leave Days*</label>
-          <input type="number" class="form-control" id="leaveDay" placeholder="Enter leave day" step="1" min="1" required>
+          <input type="number" class="form-control" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1"
+            min="1" max="100" required aria-describedby="leaveinfo" autocomplete="off">
+         <small id="leaveinfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
+
         </div>
+
         <div class="form-group col-md-6 col-sm-6 col-xs-12">
           <label for="leaveType">Leave Type *</label>
           <select name="leaveType" id="leaveType" class="form-control" required>
             <option value="">Casual Leave</option>
-            <option value="">Sick</option>
-            <option value="">Paternity</option>
-            <option value="">maternity</option>
-            <option value="">Marriage</option>
-            <option value="">mourn</option>
+            <option value="1">Sick</option>
+            <option value="2">Paternity</option>
+            <option value="3">maternity</option>
+            <option value="4">Marriage</option>
+            <option value="5">mourn</option>
           </select>
         </div>
       </div>
+
       <div class="form-row">
         <div class="form-group col-md-6 col-sm-6 col-xs-12">
           <label for="fromDate">From Days*</label>
-          <div class="input-group">          
-          <input type="date" class="form-control" id="fromDate" readonly required  aria-describedby="fdate">
-          <div class="input-group-append">
+          <div class="input-group">
+            <input type="date" class="form-control" name="fromDate" id="fromDate" readonly required
+              aria-describedby="fdate">
+            <div class="input-group-append">
               <span class="input-group-text" id="fdate"><i class="fa fa-calendar"></i></span>
             </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+          <label for="toDate">To Days*</label>
+          <div class="input-group">
+            <input type="date" class="form-control" name="toDate" id="toDate" readonly  required
+              aria-describedby="tdate">
+            <div class="input-group-append">
+              <span class="input-group-text" id="tdate"><i class="fa fa-calendar"></i></span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="form-group col-md-6 col-sm-6 col-xs-12">
-          <label for="toDate">To Days*</label>
-          <div class="input-group">          
-          <input type="date" class="form-control" id="toDate"  required readonly   aria-describedby="tdate" >
-          <div class="input-group-append">
-              <span class="input-group-text" id="tdate"><i class="fa fa-calendar"></i></span>
-            </div>
-        </div>
-      </div>
-      </div>
       <div class="form-group">
         <label for="leaveReason">Reason for Leave *</label>
-        <textarea class="form-control" id="leaveReason" aria-describedby="reason"
+        <textarea class="form-control" name="leaveReason" id="leaveReason" aria-describedby="reason"
           placeholder="Reason for Leave in detail" required></textarea>
         <small id="reason" class="form-text text-muted">PS: Write exact reason</small>
       </div>
 
       <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="doneCheck">
+        <input type="checkbox" class="form-check-input" id="doneCheck" >
         <label class="form-check-label" for="doneCheck">Check me out</label>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" id="btnSubmit" class="btn btn-primary" disabled>Submit</button>
     </form>
   </div>
 </div>
@@ -94,18 +103,47 @@
 <script>
   $(document).ready(function () {
     populateDate();
-
-    $('#toDate').on('change', () => {
-      console.log($(this).val());
-    })
-
     $('#leaveDay').on('keyup', () => {
-      var day = $('#leaveDay').val();
-      nextDay(day);
+      var day = parseInt($('#leaveDay').val());
+      
+      console.log(day);
+      console.log(typeof day);
+      if(day > 0 && typeof day =="number" && day< 100 ){
+        day=(typeof day == 'number' && day>=0)? day:0;    
+        $('#leaveinfo').attr('color','red');
+        $('#leaveinfo').html('');    
+        console.log('10');
+
+        nextDay(day);
+      }else if(day > 100 && typeof day =="number"){
+        console.log('11');
+        
+        $('#leaveinfo').html('Invalid value! must be below 100 Days');
+      }else if(day <0 || day == 'NaN'){
+        console.log('Invalid leave day');
+        $('#leaveinfo').html('Invalid value! Must be +ve Number');
+        console.log('12j');
+
+      }else if(day =="" || day =='NaN'){
+        $('#leaveinfo').html('');
+
+      } else if($('#leaveDay').val() ==""){
+        $('#leaveinfo').html('');
+      }
     });
+
+    $('#doneCheck').click(function() {
+      console.log('check this out');      
+        if ($('#doneCheck').is(":checked")) {
+            $('#btnSubmit').prop('disabled', false)
+        } else {
+            $('#btnSubmit').prop('disabled', true)
+        }
+    })
 
     function populateDate() {
       var today = getDate('today');
+      console.log(today);
       $('#fromDate').val(today)
       $('#toDate').val(today);
       $('#fromDate').attr('min', today);
@@ -143,8 +181,6 @@
       var today = newDate.getFullYear() + '-' + month + '-' + day;
       $('#toDate').val(today);
     }
-  })
-
-  
+  })  
 </script>
 <% include ./../layouts/layoutfooter%>
