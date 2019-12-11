@@ -1,4 +1,3 @@
-<% include ./../layouts/layoutheader%>
 <!-- Custom styles for dashboard-->
 <link href="/css/change.css" rel="stylesheet">
 <!-- Breadcrumbs-->
@@ -18,34 +17,37 @@
                 Leave
             </div>
             <div class="card-body">
-                <form action="/leave/leaveType" method="post">
+                <form action="/leave/editleave/<%=leave.id%>" method="post">
                     <div class="form-group ">
                         <label></label>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Name:</label>
-                            <input type="text" class="form-control" value=name name=name
+                            <input type="text" class="form-control"
+                                value="<%=typeof leave !="undefined" ? leave.name : ''%>" name=name
                                 placeholder="number of day leave employee will be allowed" required>
                         </div>
 
                         <div class="form-group">
                             <label>Number of Days:</label>
-                            <input type="number" class="form-control" value=number name=number
+                            <input type="number" class="form-control"
+                                value="<%=typeof leave !="undefined" ? leave.number : ''%>" name=number
                                 placeholder="name of the holiday event" min="1" max="100">
                         </div>
 
 
 
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Description:</label>
-                            <textarea class="form-control" cols="30" rows="5" value=description name=description
-                                placeholder="desciption for the type of leave" required></textarea>
+                            <label>Description:</label>
+                            <textarea class="form-control" cols="30" rows="5" value="" name=description
+                                placeholder="description for the type of leave"
+                                required><%=typeof leave !="undefined" ? leave.description : ''%></textarea>
                         </div>
 
 
                     </div>
                     <div class="justify-content-end">
                         <button type="submit" class="btn btn-primary float-left">Add</button>
-                        <button type="submit" class="btn btn-danger float-right">Discard</button>
+                        <a href="/leave/leaveType" type="submit" class="btn btn-danger float-right">Discard</a>
                     </div>
                 </form>
 

@@ -23,11 +23,21 @@ router.post('/editholiday/:id', holidaysController.updateHoliday);
 router.get('/deleteholiday/:id', holidaysController.deleteHoliday);
 
 /* GET home page. */
-router.get('/leaveType', function (req, res, next) {
-    res.render('leave/leaveType', { title: 'leave Types' });
+router.get('/leaveType', async function (req, res, next) {
+    let allresult = await hSQL.showleavesSQL();
+    res.render('leave/leaveType', { allresult });
 });
 //create leave
 router.post('/leaveType', holidaysController.createLeave);
+
+//edit leave
+router.get('/editleave/:id', holidaysController.editLeave);
+
+//update leave
+router.post('/editleave/:id', holidaysController.updateLeave);
+
+//delete leave
+router.get('/deleteleave/:id', holidaysController.deleteLeave);
 
 
 // router.get('/list', function (req, res, next) {
