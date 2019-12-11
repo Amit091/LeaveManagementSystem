@@ -3,25 +3,25 @@
         <thead>
             <tr>
                 <th scope="col">Name</th>
-                <th scope="col">Type</th>
-                <th scope="col">Date</th>
+                <th scope="col">Number</th>
                 <th scope="col">Description</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <% allresult.forEach(function(holiday){%>
+            <% allresult.forEach(function(leave){%>
             <tr>
-                <td><%= holiday.name%></td>
-                <td><%= holiday.type%></td>
-                <td><%= holiday.dateformat%></td>
-                <td><%= holiday.description%></td>
+                <td><%= leave.name%></td>
+                <td><%= leave.number%></td>
+                <td><%= leave.description%></td>
                 <td>
-                    <form action="/leave/editholiday/<%=holiday.id%>">
+                    <form action="/leave/editleave/<%=leave.id%>">
                         <input class="btn btn-primary btn-sm" type="submit" value="Edit" /></input>
                     </form>
                 </td>
                 <td>
-                    <form action="/leave/deleteholiday/<%=holiday.id%>">
+                    <form action="/leave/deleteleave/<%=leave.id%>">
                         <input class="btn btn-danger btn-sm" type="submit" value="Delete" /></input>
                     </form>
                 </td>

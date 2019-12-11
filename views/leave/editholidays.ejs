@@ -17,45 +17,48 @@
     <div class="col-md-6">
         <div class="card ml-5" style="width: 25rem;">
             <div class="card-header">
-                Add                                                         Holidays
+                Edit Holidays
             </div>
             <div class="card-body">
-                <form id="product-form" action="/leave/addholidays" method="post">
+                <form id="product-form" action="/leave/editholiday/<%=holiday.id%>" method="post">
                     <div class="form-group ">
                         <label for="inputGroupSelect01"></label>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Name:</label>
-                            <input type="text" name="name" class="form-control" id="exampleInputEmail1"
-                                aria-describedby="emailHelp" placeholder="name of the holiday event" required>
+                            <input type="text" name="name" value="<%=typeof holiday !="undefined" ? holiday.name : ''%>"
+                                class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                                placeholder="name of the holiday event" required>
                         </div>
                         <div>
 
                             <div class="from-group box">
                                 <select class="custom-select form-control" id="holidaytype" name="holidaypicker"
-                                    required>
-                                    <option selected>Choose holiday</option>
-                                    <option value="Public Holiday">Public Holiday</option>
-                                    <option value="Floating Holiday">Floating Holiday</option>
-                                    <option value="Office Holiday">Office Holiday</option>
-                                </select>
-                            </div>
+                                    value="<%=typeof holiday !="undefined" ? holiday.type : ''%>" required>
+                                    <option value="">Choose holiday</option>
 
-                            <div class="form-group">
-                                <label for="date">Date:</label>
-                                <input type="date" id="date" name="date" class="form-control" value="" required>
+                                    <%types.forEach((holi)=>{%>
+                                    <option value="<%=holi%>" <%if(holiday.type==holi){%> selected <%}%>>
+                                        <%=holi%></option> <% })%> </select> </div> <div class="form-group"
+                                        id="date_loader">
+                                        <label for="date">Date:</label>
+                                        <input type="date"
+                                            data-date="<%=typeof holiday !='undefined' ? holiday.date : ''%>"
+                                            id="date_id" name="date" class="form-control" required>
+
                             </div>
 
                             <div class="form-group">
                                 <label for="description">Description:</label>
                                 <textarea class="form-control" cols="30" name="description" rows="5" id="description"
-                                    required></textarea>
+                                    value=""
+                                    required><%=typeof holiday !="undefined" ? holiday.description : ''%></textarea>
                             </div>
 
 
                         </div>
                         <div class="justify-content-end">
-                            <button type="submit" class="btn btn-primary float-left">Submit</button>
-                            <button type="submit" class="btn btn-danger float-right">Discard</button>
+                            <button type="submit" class="btn btn-primary float-left">Edit</button>
+                            <a href="/leave/addholidays" type="submit" class="btn btn-danger float-right">Discard</a>
                         </div>
 
                     </div>
@@ -76,13 +79,13 @@
 
         var now = getDate('today');
         var maxDate = getDate('maxdate') + '-' + '03' + '-' + '31';
+        // $('#date_id').val(now)
+        $('#date_id').attr('max', maxDate);
+        $('#date_id').attr('min', now);
 
+        var dateF = getdateFormat($('#date_id').data('date'));
+        $('#date_id').val(dateF);
 
-        $('#date').mouseenter(function () {
-            $('#date').val(now)
-            $('#date').attr('max', maxDate);
-            $('#date').attr('min', now);
-        })
 
 
         function getDate(status) {
@@ -98,7 +101,23 @@
             if (status === "maxdate") return now.getFullYear() + 1;
             else '';
         }
+        function getdateFormat(date) {
+            var newDate = new Date(date);
+            var month = (newDate.getMonth() + 1);
+            var day = newDate.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var today = newDate.getFullYear() + '-' + month + '-' + day;
+
+            return today;
+        }
+
+
+
     })
+
 
 
 
