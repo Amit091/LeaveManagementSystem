@@ -1,6 +1,8 @@
 <% include ./../layouts/layoutheader%>
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
     crossorigin="anonymous"></script>
+<!-- message -->
+<% include ./../partials/messages.ejs%>
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
@@ -17,7 +19,7 @@
     <div class="col-md-6">
         <div class="card ml-5" style="width: 25rem;">
             <div class="card-header">
-                Add                                                         Holidays
+                Add Holidays
             </div>
             <div class="card-body">
                 <form id="product-form" action="/leave/addholidays" method="post">
@@ -36,7 +38,6 @@
                                     <option selected>Choose holiday</option>
                                     <option value="Public Holiday">Public Holiday</option>
                                     <option value="Floating Holiday">Floating Holiday</option>
-                                    <option value="Office Holiday">Office Holiday</option>
                                 </select>
                             </div>
 

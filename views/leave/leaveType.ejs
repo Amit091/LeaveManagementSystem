@@ -1,6 +1,8 @@
 <% include ./../layouts/layoutheader%>
 <!-- Custom styles for dashboard-->
 <link href="/css/change.css" rel="stylesheet">
+<!-- display message -->
+<% include ./../partials/messages.ejs%>
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
@@ -8,6 +10,7 @@
     </li>
     <li class="breadcrumb-item active">holiday</li>
 </ol>
+
 <div class="row">
     <div class="col-md-6">
         <% include ./allleaves.ejs%>
@@ -15,7 +18,7 @@
     <div class="col-md-6">
         <div class="card ml-5" style="width: 25rem;">
             <div class="card-header">
-                Leave
+                Add Leave Type
             </div>
             <div class="card-body">
                 <form action="/leave/leaveType" method="post">
@@ -23,13 +26,15 @@
                         <label></label>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Name:</label>
-                            <input type="text" class="form-control" value=name name=name
-                                placeholder="number of day leave employee will be allowed" required>
+                            <input type="text" id="leave_type" class="form-control" name=name
+                                placeholder="number of day leave employee will be allowed" minlength="4" maxlength="8"
+                                size="10" onkeypress="return (event.charCode > 64 && 
+        event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" required>
                         </div>
 
                         <div class="form-group">
                             <label>Number of Days:</label>
-                            <input type="number" class="form-control" value=number name=number
+                            <input type="number" id="number_leaves" class="form-control" value=number name=number
                                 placeholder="name of the holiday event" min="1" max="100">
                         </div>
 
@@ -55,6 +60,36 @@
     </div>
 
 </div>
+<script>
+    $(document).ready(function () {
+        $("input#leave_type").on({
+            keydown: function (e) {
+                if (e.which === 32)
+                    return false;
+            },
+            change: function () {
+                this.value = this.value.replace(/\s/g, "");
+            }
+        });
 
+        var inputBox = document.getElementById("number_leaves");
+
+        var invalidChars = [
+            "-",
+            "+",
+            "e",
+        ];
+
+        inputBox.addEventListener("input", function () {
+            this.value = this.value.replace(/[e\+\-]/gi, "");
+        });
+
+        inputBox.addEventListener("keydown", function (e) {
+            if (invalidChars.includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+    })
+</script>
 
 <% include ./../layouts/layoutfooter%>
