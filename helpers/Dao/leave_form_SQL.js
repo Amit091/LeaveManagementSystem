@@ -24,4 +24,16 @@ module.exports = class leaveSQL {
       console.log(error);
     }
   }
+
+  async getholidaysRecord(){
+    try {
+      con = await gcon();
+      let status = await con.query(query.get_leve_record);
+      status = await JSON.parse(JSON.stringify(status));
+      console.log(status);
+      return status;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

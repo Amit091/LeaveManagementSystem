@@ -12,6 +12,11 @@
 </style>
 
 <% include ./../partials/messages%>
+
+<fieldset style="border: 1px solid red">
+  <legend  class="w-auto">Your Legend</legend>
+</fieldset>
+<br>
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
   <li class="breadcrumb-item">
@@ -43,12 +48,13 @@
         <div class="form-group col-md-6 col-sm-6 col-xs-12">
           <label for="leaveType">Leave Type *</label>
           <select name="leaveType" id="leaveType" class="form-control" required>
-            <option value="">Casual Leave</option>
-            <option value="1">Sick</option>
-            <option value="2">Paternity</option>
-            <option value="3">maternity</option>
-            <option value="4">Marriage</option>
-            <option value="5">mourn</option>
+            <option value="">Select the leave</option>
+            <option value="casual">Casual Leave</option>
+            <option value="sick">Sick</option>
+            <option value="paternity">Paternity</option>
+            <option value="maternity">maternity</option>
+            <option value="marriage">Marriage</option>
+            <option value="mourn">mourn</option>
           </select>
         </div>
       </div>

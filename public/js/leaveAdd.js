@@ -1,31 +1,5 @@
 $(document).ready(function () {
   populateDate();
-  $('#leaveDay').on('keyup', () => {
-    var day = $('#leaveDay').val();
-    
-    console.log(day);
-    day = (day == "") ? 0 : parseInt(day);
-
-    console.log(day);
-    console.log(typeof day);
-    if (day >= 0 && typeof day == "number" && day < 100) {
-      day = (typeof day == 'number' && day >= 0) ? day : 0;
-      $('#leaveinfo').attr('color', 'red');
-      $('#leaveinfo').html('');
-      nextDay();
-    } else if (day > 100 && typeof day == "number") {
-      console.log('11');
-      $('#leaveinfo').html('Invalid value! must be below 100 Days');
-    } else if (day < 0 || day == 'NaN') {
-      console.log('Invalid leave day');
-      $('#leaveinfo').html('Invalid value! Must be +ve Number');
-      console.log('12j');
-    } else if (day == "" || day == 'NaN') {
-      console.log('herer');
-      $('#leaveinfo').html('');
-    }
-  });
-
   $('#doneCheck').click(function () {
     console.log('check this out');
     if ($('#doneCheck').is(":checked")) {
@@ -40,8 +14,9 @@ $(document).ready(function () {
     $('#toDate').val($('#fromDate').val());
     var day = calculateDay();
     $('#leaveDay').val(day);
-    nextDay();
+    //nextDay();
     console.log($('#fromDate').val());    
+    $('#leaveDay').val(calculateDay());
     
   });
 
@@ -104,11 +79,8 @@ $(document).ready(function () {
 function calculateDay() {
   var fromdate = $('#fromDate').val();
   var todate = $('#toDate').val();
-  console.log((new Date(todate).getTime() - new Date(fromdate).getTime()) / (1000 * 3600 * 24));
-  var dayDiff = (new Date(todate).getTime() - new Date(fromdate).getTime()) / (1000 * 3600 * 24);
-  return dayDiff;
-  //$('#toDate').val(fromdate);
-  
+  var dayDiff = (new Date(todate).getTime() - new Date(fromdate).getTime()) / (1000 * 3600 * 24);  
+  return dayDiff+1;
 }
 
 var is_date = function (input) {
