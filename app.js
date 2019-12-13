@@ -30,7 +30,7 @@ app.use(session({
   duration: 1000 * 1
 }));
 
-//flash mesage and CORS
+//flash message and CORS
 app.use(flash());
 app.use(cors());
 
