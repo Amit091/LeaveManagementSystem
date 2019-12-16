@@ -2,66 +2,66 @@
 
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a href="#">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item active">Leave List</li>
+  <li class="breadcrumb-item">
+    <a href="#">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active">Leave List</li>
 
-    <li class="ml-auto"  style="float: right;">
-        <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/list/add" style="color: white;">Add Leave </a></li>
-    </li>
+  <li class="ml-auto" style="float: right;">
+  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/list/add" style="color: white;">Add Leave </a>
+  </li>
+  </li>
 </ol>
 
- <!-- DataTables Example -->
- <div class="card mb-3">
-    <div class="card-header">
-      <i class="fas fa-table"></i>
-      Leave List Detail</div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-borderless table-sm" id="dataTable" width="100%" cellspacing="0">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Position</th>
-              <th>Office</th>
-              <th>Age</th>
-              <th>Start date</th>
-              <th>Option</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-          <%list.forEach(record => {%>
-            <tr id="<%=record.id%>">
-            <td><%=record.employee_name%></td>
-            <td><%=record.leave_day%></td>
-            <td><%=record.leave_type_lists_id%></td>
-            <td><%=record.sDate%></td>
-            <td><%=record.eDate%></td>
-            <td id="<%=record.id%>_status"><%=record.status%></td>
-            
-            <td class="btn-group-toggle btn-group-sm"> <button class="btn  btn-primary"><i class="fa fa-pen"></i></button>
+<!-- DataTables Example -->
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-table"></i>
+    Leave List Detail</div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-borderless table-sm" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Office</th>
+            <th>Age</th>
+            <th>Start date</th>
+            <th>Option</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <%list.forEach(record => {%>
+        <tr id="<%=record.id%>">
+          <td><%=record.employee_name%></td>
+          <td><%=record.leave_day%></td>
+          <td><%=record.leave_type_lists_id%></td>
+          <td><%=record.sDate%></td>
+          <td><%=record.eDate%></td>
+          <td id="<%=record.id%>_status"><%=record.status%></td>
+
+          <td class="btn-group-toggle btn-group-sm"> <button class="btn  btn-primary"><i class="fa fa-pen"></i></button>
             <button class="btn btn-info"><i class="fa fa-check"></i></button>
             <button class="btn btn-secondary"><i class="fa fa-times"></i></button>
             <button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
-              </tr>
-          
-       <% });%>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Name</th>
-              <th>Position</th>
-              <th>Office</th>
-              <th>Age</th>
-              <th>Start date</th>
-              <th>Option</th>
-            </tr>
-          </tfoot>
-         
-        </table>
-      </div>
+        </tr>
+
+        <% });%>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Office</th>
+            <th>Age</th>
+            <th>Start date</th>
+            <th>Option</th>
+          </tr>
+        </tfoot>
+
+      </table>
     </div>
-    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
   </div>
-<% include ./../layouts/layoutfooter%>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>

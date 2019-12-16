@@ -1,12 +1,30 @@
 .bg-proshore {
-  background: linear-gradient(to bottom, #ffb866 0%, #e67a00  100 %);
+  background: linear-gradient(to right,#F09819,#FF512F );
  !important;
 }
 
 .bg-proshore-light {
-  background: linear-gradient(to bottom, #e67a00 100%, #ffb866 80%);
+  background: linear-gradient(#F09819,#659999);
  !important;
 }
+.bg-card-head {
+  background:#d1d4d4;
+ !important;
+}
+
+.bg-card-body {
+  background: #d0d4d4;
+ !important;
+}
+
+.bg-dashboard {
+  background: linear-gradient(to top, #e67a00 0%, #ffb866 70%);
+ !important;
+}
+
+
+
+
 
 .icon-change{
   color:  #b3b3b3;

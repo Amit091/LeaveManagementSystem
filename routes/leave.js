@@ -3,7 +3,10 @@ var router = express.Router();
 var holidaysController = require("./../controller/holidaysController");
 const holidaysSQL = require('../helpers/Dao/holidaysSQL');
 const hSQL = new holidaysSQL();
-
+//home
+router.get('/', async function (req, res, next) {
+    res.render('index');
+});
 
 /* GET home page. */
 router.get('/addholidays', async function (req, res, next) {

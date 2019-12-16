@@ -1,12 +1,16 @@
 <% include ./../layouts/layoutheader%>
+<!-- Custom styles for this template-->
+<link href="/css/change.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
     crossorigin="anonymous"></script>
+<!-- message -->
+<% include ./../partials/messages.ejs%>
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a href="#">Dashboard</a>
+    <li class="breadcrumb-item ">
+        <a href="/">Dashboard</a>
     </li>
-    <li class="breadcrumb-item active">holiday</li>
+    <li class="breadcrumb-item active">Edit Holiday</li>
 </ol>
 <div class="row">
     <div class="col-md-6">
@@ -16,29 +20,29 @@
     </div>
     <div class="col-md-6">
         <div class="card ml-5" style="width: 25rem;">
-            <div class="card-header">
-                Edit Holidays
+            <div class="card-header bg-card-head">
+                Add Holidays
             </div>
-            <div class="card-body">
+            <div class="card-body bg-card-body">
                 <form id="product-form" action="/leave/editholiday/<%=holiday.id%>" method="post">
                     <div class="form-group ">
-                        <label for="inputGroupSelect01"></label>
+
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Name:</label>
-                            <input type="text" name="name" value="<%=typeof holiday !="undefined" ? holiday.name : ''%>"
-                                class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            Name:
+                            <input type="text" name="name" value="<%=typeof holiday !='undefined' ? holiday.name : ''%>"
+                                class="form-control holiday-name" id="exampleInputEmail1" aria-describedby="emailHelp"
                                 placeholder="name of the holiday event" required>
                         </div>
                         <div>
 
                             <div class="from-group box">
                                 <select class="custom-select form-control" id="holidaytype" name="holidaypicker"
-                                    value="<%=typeof holiday !="undefined" ? holiday.type : ''%>" required>
+                                    value="<%=typeof holiday !='undefined' ? holiday.type : ''%>" required>
                                     <option value="">Choose holiday</option>
 
                                     <%types.forEach((holi)=>{%>
                                     <option value="<%=holi%>" <%if(holiday.type==holi){%> selected <%}%>>
-                                        <%=holi%></option> <% })%> </select> </div> <div class="form-group"
+                                                    <%=holi%></option> <% })%> </select> </div> <div class="form-group"
                                         id="date_loader">
                                         <label for="date">Date:</label>
                                         <input type="date"
@@ -51,7 +55,7 @@
                                 <label for="description">Description:</label>
                                 <textarea class="form-control" cols="30" name="description" rows="5" id="description"
                                     value=""
-                                    required><%=typeof holiday !="undefined" ? holiday.description : ''%></textarea>
+                                    required><%=typeof holiday !='undefined' ? holiday.description : ''%></textarea>
                             </div>
 
 
@@ -70,7 +74,6 @@
     </div>
 
 </div>
-
 
 
 
@@ -114,15 +117,11 @@
             return today;
         }
 
+        $('.holiday-name').keyup(function () {
+            this.value = this.value.replace(/[^0-9\.]/g, '');
+        });
+
 
 
     })
-
-
-
-
-
-
 </script>
-
-<% include ./../layouts/layoutfooter%>
