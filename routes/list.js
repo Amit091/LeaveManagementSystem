@@ -19,6 +19,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/add', (req, res, next) => {
+  req.flash('success_msg', 'Data save');
   res.render('leave/add');
 });
 
@@ -37,29 +38,30 @@ router.post('/add', async (req, res) => {
     req.checkBody('toDate', 'Date not selected').notEmpty();
     req.checkBody('toDate', 'End date of leave must be valid and after start date').isAfter((new Date(req.body.fromDate)).toDateString());
     req.checkBody('toDate', 'End date of lab must be valid and after start date').isAfter((new Date()).toDateString());
+
+    console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~New session~~~~~~~~${new Date}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
+
     var errors = req.validationErrors() || [];
     ((req.body.leaveDay) <= 0 ? errors.push({ 'param': 'leaveDay', 'msg': 'Leave must be positive Number' }) : '');
     var fromDate = req.body.fromDate;
     var toDate = req.body.toDate;
     var fromDateFormat = new Date(req.body.fromDate);
     var toDateFormat = new Date(req.body.toDate);
+
     (!is_date(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid From-Date Format' }) : (!(is_date_valid(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid Date ! From Date Should not be before today' }) : '');
     (!is_date(toDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid To-Date Format' }) : (!(is_date_valid(toDateFormat)) ? errors.push({ 'param': 'toDate ', 'msg': 'Invalid  Date! Date Should not be before today' }) : '');
 
-    /* After validation Work */
-    //Writing to DB
+    /* After validation Work Validation for Work */
     const leave_data = req.body;
     var leaveType = req.body.leaveType;
-    console.log(leaveType);
-    var leaveRecord = { 'leave': 5, 'casual': 5, 'unpaid': 5 };
-    console.log(leaveRecord.casual);
-    var dates = [];
-     var userLeaveStatus = [];
+    var userLeaveStatus = []; //to store leave date detail with holiday, weekend, leave type   
+    var userLeaveData = [];
+    var usl, uls;  //to store no of day of casual, leave unpaid and holiday
 
     //here goes code for user holidays validation
     //user leavye Status
 
-    let ull = await ltSQL.getUserLeaveDetail(1);
+    var ull = await ltSQL.getUserLeaveDetail(1);
     if (ull.casual == 0 && ull.sick == 0 && ull.marriage == 0 && ull.mourn == 0 && ull.paternity == 0 && ull.maternity == 0) {
       console.log('No Leave Remain');
       console.log('use unpaid leave');
@@ -68,65 +70,13 @@ router.post('/add', async (req, res) => {
     } else {
       switch (leaveType) {
         case 'casual':
-          
           console.log('casual leave');
-          console.log(moment(fromDateFormat).format('YYYY-MM-DD'));
-          var casualLeave = calculateCasualDay(fromDateFormat, toDateFormat);
-          var tempLeave = new Date(casualLeave).getMonth() + 1;
-          console.log('casualLeave' + tempLeave);
-          var holidays = await calculateHoliday(fromDate, toDate, 'casual');
-          console.log(holidays); 
-              
-          //to check the respective day with holiday
-          if(holidays != 0){
-          do {           
-            holidays.forEach(day=> {
-              if (moment(day.dateFormat).isSame(getDateFormat(fromDate))) {
-                console.log('no need of leave There is Holiday');
-                userLeaveStatus.push({ 'date': fromDate, 'holiday': true ,'type':'holiday'});
-                console.log(day.dateFormat);
-              } else {
-                console.log('no holiday');
-                userLeaveStatus.push({ 'date': fromDate, 'holiday': false });
-              }
-            });
-            fromDate = getDateFormat(moment(fromDate).add(1, 'day'));
-            console.log(fromDate + 'no holiday');
-          } while (fromDate <= toDate);
-        }else{
-          while(fromDate <= toDate){
-          fromDate = getDateFormat(moment(fromDate).add(1, 'day'));
-          userLeaveStatus.push({ 'date': fromDate, 'holiday': false ,'type':''});
-          }
-        }
-          console.log(userLeaveStatus);
-          //user leave status detail for weekend
-          userLeaveStatus.forEach(day=>{
-            if(moment(day.date).day() == 0 || moment(day.date).day()==6 ){
-              console.log('This is weekend');
-              day.holiday = true;
-              day.type = 'holiday';
-            }            
-          });
-          console.log(userLeaveStatus);
-          console.log(ull.casual);
-          console.log(fromDate);
-          console.log(`+++++++++++++++++++++++`);
-          
-          fromDate = leave_data.fromDate;
-          console.log(fromDate);
-          console.log(calculateCasualDay(fromDate,toDate));
-          var netCasualDay = calculateCasualDay(fromDate,toDate);
-          if(netCasualDay < ull.casual){
-            let temp =ull.casual - netCasualDay;
-            console.log(temp+`  is a acasual day`);            
-            console.log('casual Leave Accepted');            
-          }else{
-            console.log('Casual Leave is treate as unpaid leave');            
-          }                                               
+          usl = await calculateHoliday4Leave(leave_data.fromDate, leave_data.toDate, leaveType);
+          uls = await calculateLeave(leave_data.fromDate, leave_data.toDate, usl, ull, leaveType);
           break;
         case 'sick':
-          console.log('sick leave');
+          usl = await calculateHoliday4Leave(leave_data.fromDate, leave_data.toDate, leaveType);
+          uls = await calculateLeave(leave_data.fromDate, leave_data.toDate, usl, ull, leaveType);
           break;
         case 'marriage':
           console.log('marriage leave');
@@ -142,112 +92,45 @@ router.post('/add', async (req, res) => {
           break;
         default:
           console.log('Unpaid leave');
+          errors.push({ 'param': 'Leave_type', 'msg': 'Leave type not defined' });
           break;
       }
     }
-    if (leaveType == "casual") {
-      if (ull.casual == 0) {
-        //use unpaid leave
-      } else if (ull.casual < 9) {
-        //deduct casual leave from 
-      }
-
-    }
-    else if (leaveType == "sick") {
-      if (ull.sick == 0 && ull.casual == 0) {
-        //use casual leave
-      } else if (ull.sick == 0 && ull.casual !== 0) {
-        //use casualfunction();
-      }
-      //for sick code
-    } else if (leaveType == "marriage") {
-      //for marriage
-    }
-    else if (leaveType == "mourn") {
-      //for mourn
-    } else if (leaveType == "paternity") {
-
-    }
-    else if (leaveType == 'maternity') {
-
-    }
-    else {
-      //for unpaid leave
-    }
-
-
-    // /* //get leave info from DB*/
-    // console.log(`11111111111111111111111111`);
-
-    // let leave = await ltSQL.getLeaveTypeDetail(leave_data.leaveType);
-    // var leaveDay = leave.number;
-    // let user_leave_list = await ltSQL.getUserLeaveDetail(1);
-    // console.log(`************************************`);
-
-    // console.log(user_leave_list);
-
-    //checking if user have leave remaing for the type
-    //if(userLeave.leave_data.leaveType){ check userleave }
-    //if(override) then use casual leave 
-    // ekse if use unpaid leave
-
-
-    // console.log(`--------###################-------------`);
-
-
-
-
-
-    // var dayofDate = new Date(fromDate).getDay();
-    // console.log(weekDay[dayofDate]);
-
-    // console.log(dbDate);
-    // var dates = [];
-    // fromDate = new Date(fromDate);
-    // toDate = new Date(toDate);
-    // while (fromDate <= toDate) {
-    //   dates.push(fromDate);
-    //   fromDate = addDays(fromDate);
+    console.log(leave_data);
+      userLeaveData = uls[0];
+      userLeaveStatus = uls[1];
+    
+    // if (uls.length != 0) {
+    //   errors.push({ 'param': 'Internal Error', 'msg': 'Internal Server Error' });
+    // } else {
+    //   userLeaveData = uls[0];
+    //   userLeaveStatus = uls[1];
     // }
-    // console.log(dates);
-    // console.log(dates.length);
-
-
-    // console.log(fromDate);
-    // console.log('-----------------');
-    // var fDate = addDays(fromDate, 1);
-    // console.log(fDate);
-
-    // console.log(fromDate.setDate() + 1);
-
-
-    // console.log(dates);
-
-    // // console.log(userLeave.sick);
-
-    // var l = leave.number;
-    // console.log(l);
-    // let dayDiff = (new Date(toDate) - new Date(fromDate)) / (1000 * 3600 * 24);
-    // console.log(dayDiff);
-
-    /*computation using leave type*/
-
-    /*also checkthe public holiday*/
-
-    //deduct3ed by that rsult
-
-    //check whether the the leave have working holidays or non-working holidays
-
-    //at last find the actual leave
-
-    //let leaveStatus = await lSQL.saveLeaveForm(leave_data);
-    // console.log('mait');
-
-    // console.log(leave_data);
     if (errors.length > 0) {
       res.render('leave/add', { errors });
-    } else {
-      res.send(req.body);
+    } else {  
+      let form_status = await lSQL.saveLeaveForm(leave_data);
+      if(form_status.affectedRows == 1 && form_status.insertId !=0){
+        let array=[];
+        let insertValues = userLeaveStatus.map((data)=>{
+        return `(${form_status.insertId},'${data.date}','${data.isHoliday}',"${data.type}","${data.name}","${data.leave}")`;
+      })
+      console.log('*************+++++++++++++++++*****************');
+      
+      console.log(insertValues);
+      // console.log(insertValues.join(','));
+      //  var query = insertValues.join(',');
+       console.log(insertValues);
+       
+        
+        let leave_detail = await lSQL.insertLeaveHolidaydata(insertValues);
+        console.log(leave_detail);
+        
+      }
+      
+      res.send(leave_data)
+      // req.flash('success_msg', 'Data save');
+      // res.redirect('/list');
     }
   } catch (error) {
     console.log(error);
@@ -257,30 +140,137 @@ router.post('/add', async (req, res) => {
 function getDateFormat(date) {
   return moment(date).format('YYYY-MM-DD');
 }
-
-function calculateCasualDay(fromDate, toDate) {
-  fromDate = new Date(fromDate);
-  toDate = new Date(toDate);  
-  var year = ((fromDate.getMonth() + 1) > 3) ? fromDate.getFullYear() + 1 : formDate.getFullYear();
-  var endDate = year + '-' + '03' + '-' + '31';
-  var fromMonth = new Date(endDate) - new Date(fromDate);
-  var toMonth = new Date(endDate) - new Date(toDate);
+function calculateCasualDay(startDate, endDate) {
+  startDate = new Date(startDate);
+  endDate = new Date(endDate);
+  var year = ((startDate.getMonth() + 1) > 3) ? startDate.getFullYear() + 1 : startDate.getFullYear();
+  var lastDate = year + '-' + '03' + '-' + '31';
+  var fromMonth = new Date(lastDate) - new Date(startDate);
+  var toMonth = new Date(lastDate) - new Date(endDate);
   var cL = Math.max(fromMonth, toMonth);
-  cL= new Date(cL); 
+  cL = new Date(cL);
   return cL.getMonth();
 }
 
-async function calculateHoliday(fromDate, toDate, flag) {
-  var holidays = [];
-  console.log(fromDate);
-  let holiday = await ltSQL.getAllholidays(fromDate, toDate);
+async function calculateHoliday(startDate, endDate) {
+  let holiday = await ltSQL.getAllholidays(startDate, endDate);
   if (holiday.length == 0) {
-    console.log('No HoliDay');
     return 0;
   } else {
-    console.log(holiday.length + 'days');
     return holiday;
   }
+}
+
+function generateDateArray(startDate, endDate) {
+  var result = [];
+  var i = 0;
+  do {
+    console.log(i++);
+    result.push({ 'date': startDate });
+    startDate = getDateFormat(moment(startDate).add(1, 'day'));
+
+  } while (startDate <= endDate);
+  console.log(result);
+  return result;
+}
+
+async function calculateHoliday4Leave(fromDate, toDate, flag) {
+  var userLeaveStatus = generateDateArray(fromDate, toDate);
+  var holidays = await calculateHoliday(fromDate, toDate, 'flag');
+  //to check the respective day with holiday and storing the date data to array i json form
+  userLeaveStatus.forEach(leaveDay => {
+    if (holidays !== 0) {
+      holidays.forEach(holiday => {
+        if (leaveDay.isHoliday) {
+          leaveDay.isHoliday = true;
+        }
+        else if (moment(holiday.dateFormat).isSame(moment(leaveDay.date))) {
+          leaveDay.isHoliday = true;
+          leaveDay.type = holiday.type;
+          leaveDay.name = holiday.name;
+        }
+        else {
+          leaveDay.isHoliday = false;
+          leaveDay.type = 'none';
+          leaveDay.name = 'none';
+        }
+      });
+    } else {
+      leaveDay.isHoliday = false;
+      leaveDay.type = 'none';
+      leaveDay.name = 'none';
+    }
+  });
+  userLeaveStatus.forEach(leaveDay => {
+    if ((moment(leaveDay.date).day() == 0 || moment(leaveDay.date).day() == 6) && !leaveDay.isHoliday) {
+      leaveDay.isHoliday = true;
+      leaveDay.type = 'weekend';
+      leaveDay.name = weekDay[moment(leaveDay.date).day()];
+    }
+  });
+  console.log(userLeaveStatus);
+  return userLeaveStatus;
+}
+
+async function calculateLeave(startDate, endDate, userLeaveStatus, ull, type) {
+  console.log('initiate leave Calculation');
+  var leaveRecord = [];
+  var netCasualDay = calculateCasualDay(startDate, endDate);
+  var leaveAbleDay = (netCasualDay < ull.casual) ? parseInt(ull.casual - netCasualDay) : 0;
+  var typeLeave = ull.sick;
+  var flag = type;
+  //checking casual leave
+  var day = 0, casual = 0, unpaid = 0, holiday = 0;
+  userLeaveStatus.forEach(leaveDay => {
+    if (leaveDay.isHoliday) {
+      leaveDay.leave = 'none';
+      holiday++;
+    }
+    else if (leaveDay.isHoliday == false) {
+      if (flag == 'sick') {
+        if (typeLeave != 0) {
+          typeLeave--;
+          day++;
+          leaveDay.leave = 'sick';
+        }
+        else if (typeLeave == 0) {
+          if (leaveAbleDay != 0) {
+            leaveAbleDay--;
+            casual++;
+            leaveDay.leave = 'casual';
+          } else {
+            unpaid++;
+            leaveDay.leave = 'unpaid';
+          }
+        } else {
+          unpaid++;
+          leaveDay.leave = 'unpaid';
+        }
+      } else if (flag == 'casual') {
+        if (leaveAbleDay != 0) {
+          leaveAbleDay--;
+          casual++;
+          leaveDay.leave = 'casual';
+        } else if (leaveAbleDay == 0) {
+          unpaid++;
+          leaveDay.leave = 'unpaid';
+        }
+        else {
+          unpaid++;
+          leaveDay.leave = 'unpaid';
+        }
+      }
+    }
+    else {
+      unpaid++;
+      leaveDay.leave = 'unpaid';
+    }
+  });
+  leaveAbleDay = (netCasualDay < ull.casual) ? parseInt(ull.casual - netCasualDay) : 0;
+  leaveRecord.push({ 'type': flag, 'day': day, 'casual': casual, 'unpaid': unpaid, 'holiday': holiday });
+  console.log(leaveRecord);
+  console.log(userLeaveStatus);
+  return [leaveRecord, userLeaveStatus];
 }
 
 
