@@ -51,7 +51,6 @@ module.exports = class holidaysSQL {
             var sql = `UPDATE holidays SET name = '${data.name}',type='${data.holidaypicker}',date='${data.date}',description='${data.description}' WHERE id = '${id}'`;
             let status = await con.query(sql);
             status = await JSON.parse(JSON.stringify(status));
-
             return status;
         }
         catch (error) {

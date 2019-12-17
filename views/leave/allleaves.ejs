@@ -1,11 +1,10 @@
-<div class="table-responsive-sm d-table-row">
-    <table class="table table-hover table-sm table-bordered">
+<div class="table table-responsive-sm text-center">
+    <table class="table  table-sm">
         <thead>
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Number</th>
-                <th scope="col">Description</th>
-
+                <th>Options</th>
             </tr>
 
         </thead>
@@ -14,16 +13,15 @@
             <tr>
                 <td><%= leave.name%></td>
                 <td><%= leave.number%></td>
-                <td><%= leave.description%></td>
+
                 <td>
-                    <form action="/leave/editleave/<%=leave.id%>">
-                        <input class="btn btn-primary btn-sm" type="submit" value="Edit" /></input>
-                    </form>
-                </td>
-                <td>
-                    <form action="/leave/deleteleave/<%=leave.id%>">
-                        <input class="btn btn-danger btn-sm" type="submit" value="Delete" /></input>
-                    </form>
+                    <div class="btn-group btn-group-sm mr-0">
+                        <a href="/leave/editleave/<%=leave.id%>" class="btn btn-warning btn-sm">Edit &nbsp;<i
+                                class="fa fa-pen"></i></a>
+                        <a href="/leave/deleteleave/<%=leave.id%>" class="btn btn-danger btn-sm">Delete &nbsp;<i
+                                class="fa fa-times"></i></a>
+                    </div>
+
                 </td>
             </tr>
 

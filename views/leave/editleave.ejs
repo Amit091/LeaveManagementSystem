@@ -1,41 +1,42 @@
 <% include ./../layouts/layoutheader%>
 <!-- Custom styles for dashboard-->
 <link href="/css/change.css" rel="stylesheet">
-<!-- message -->
+<!-- display message -->
 <% include ./../partials/messages.ejs%>
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
-        <a href="#">Dashboard</a>
+        <a href="/">Dashboard</a>
     </li>
-    <li class="breadcrumb-item active">holiday</li>
+    <li class="breadcrumb-item active">Edit Leave</li>
 </ol>
+
 <div class="row">
     <div class="col-md-6">
         <% include ./allleaves.ejs%>
     </div>
     <div class="col-md-6">
-        <div class="card ml-5" style="width: 25rem;">
-            <div class="card-header">
-                Edit Leave Type
+        <div class="card" style="width: 25rem;">
+            <div class="card-header bg-card-head">
+                Add Leave Type
             </div>
-            <div class="card-body">
+            <div class="card-body bg-card-body" id="fromDiv">
                 <form action="/leave/editleave/<%=leave.id%>" method="post">
                     <div class="form-group ">
-                        <label></label>
+
                         <div class="form-group">
                             <label for="exampleInputEmail1">Name:</label>
-                            <input type="text" id="leave_type" class="form-control" onkeypress="return (event.charCode > 64 && 
-event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
+                            <input type="text" id="leave_type" class="form-control leave-name" onkeypress="return (event.charCode > 64 && 
+                                event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
                                 value="<%=typeof leave !="undefined" ? leave.name : ''%>" name=name
-                                placeholder="number of day leave employee will be allowed" required>
+                                placeholder="type of leave" required>
                         </div>
 
                         <div class="form-group">
                             <label>Number of Days:</label>
                             <input type="number" id="number_leaves" class="form-control"
                                 value="<%=typeof leave !="undefined" ? leave.number : ''%>" name=number
-                                placeholder="name of the holiday event" min="1" step="1" max="100" required>
+                                placeholder="name of the holiday event" min="1" step="1" max="12" required>
                         </div>
 
 
@@ -63,6 +64,10 @@ event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
 </div>
 <script>
     $(document).ready(function () {
+        // setTimeout(() => {
+        //     $('#fromDiv').hide('slow')
+        // }, 1000);
+
         $("input#leave_type").on({
             keydown: function (e) {
                 if (e.which === 32)
@@ -72,6 +77,7 @@ event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
                 this.value = this.value.replace(/\s/g, "");
             }
         });
+
         var inputBox = document.getElementById("number_leaves");
 
         var invalidChars = [
@@ -91,6 +97,3 @@ event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
         });
     })
 </script>
-
-
-<% include ./../layouts/layoutfooter%>

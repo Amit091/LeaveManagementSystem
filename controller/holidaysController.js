@@ -15,7 +15,6 @@ exports.createHolidays = async (req, res) => {
         }
         let allresult = await hSQL.showHolidaysSQL();
         if (errors.length > 0) {
-            console.log("heloo");
             res.render('leave/holidays', { allresult, errors })
         } else {
             await hSQL.createHolidays(req.body);
@@ -37,6 +36,7 @@ exports.editHoliday = async (req, res) => {
         const id = req.params.id;
         let holiday = await hSQL.getHolidayById(id);
         let allresult = await hSQL.showHolidaysSQL();
+        console.log(holiday);
 
         res.render('leave/editholidays', { holiday, allresult, types });
     } catch (error) {
@@ -53,13 +53,21 @@ exports.updateHoliday = async (req, res) => {
         const id = req.params.id;
         var errors = req.validationErrors();
         errors = [];
+        console.log('000000000000000');
+
+        console.log(req.body);
+        console.log('000000000000000');
+
         const allresult = await hSQL.showHolidaysSQL();
         const holiday = await hSQL.getHolidayById(id);
         let holidayName = await hSQL.getHolidayByName(req.body);
         if (holidayName != "") {
 
             if (req.body.name == holiday.name) {
-                hSQL.updateHoliday(id, req.body);
+                let result = await hSQL.updateHoliday(id, req.body);
+                console.log('dddddddddddddddddddd');
+                console.log(result);
+                console.log('dddddddddddddddddddd');
                 res.render('leave/holidays', { holiday, allresult });
             } else {
                 errors.push({ 'param': 'name', 'msg': 'Holiday with this name already exists' });
@@ -71,6 +79,9 @@ exports.updateHoliday = async (req, res) => {
 
         } else {
             let holiday = await hSQL.updateHoliday(id, req.body);
+            console.log('dddddddddddddddddddd');
+            console.log(holiday);
+            console.log('dddddddddddddddddddd');
             let allresult = await hSQL.showHolidaysSQL();
             res.render('leave/holidays', { holiday, allresult });
         }

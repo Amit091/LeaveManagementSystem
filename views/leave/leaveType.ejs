@@ -6,9 +6,9 @@
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
-        <a href="#">Dashboard</a>
+        <a href="/">Dashboard</a>
     </li>
-    <li class="breadcrumb-item active">holiday</li>
+    <li class="breadcrumb-item active">Add Leave</li>
 </ol>
 
 <div class="row">
@@ -16,26 +16,25 @@
         <% include ./allleaves.ejs%>
     </div>
     <div class="col-md-6">
-        <div class="card ml-5" style="width: 25rem;">
-            <div class="card-header">
+        <div class="card" style="width: 25rem;">
+            <div class="card-header bg-card-head">
                 Add Leave Type
             </div>
-            <div class="card-body">
+            <div class="card-body bg-card-body" id="fromDiv">
                 <form action="/leave/leaveType" method="post">
                     <div class="form-group ">
-                        <label></label>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Name:</label>
+                            Name:
                             <input type="text" id="leave_type" class="form-control" name=name
-                                placeholder="number of day leave employee will be allowed" minlength="4" maxlength="8"
-                                size="10" onkeypress="return (event.charCode > 64 && 
-        event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" required>
+                                placeholder="name of the holiday event " minlength="4" maxlength="12" size="10"
+                                onkeypress="return (event.charCode > 64 && 
+                                event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" required>
                         </div>
 
                         <div class="form-group">
                             <label>Number of Days:</label>
-                            <input type="number" id="number_leaves" class="form-control" value=number name=number
-                                placeholder="name of the holiday event" min="1" max="100">
+                            <input type="number" id="number_leaves" class="form-control" name=number
+                                placeholder="number of day leave employee will be allowed" min="1" max="20">
                         </div>
 
 
@@ -43,7 +42,7 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Description:</label>
                             <textarea class="form-control" cols="30" rows="5" value=description name=description
-                                placeholder="desciption for the type of leave" required></textarea>
+                                placeholder="description for the type of leave" required></textarea>
                         </div>
 
 
@@ -62,6 +61,10 @@
 </div>
 <script>
     $(document).ready(function () {
+        // setTimeout(() => {
+        //     $('#fromDiv').hide('slow')
+        // }, 1000);
+
         $("input#leave_type").on({
             keydown: function (e) {
                 if (e.which === 32)
@@ -91,5 +94,3 @@
         });
     })
 </script>
-
-<% include ./../layouts/layoutfooter%>
