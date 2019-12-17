@@ -36,6 +36,7 @@ $(document).ready(function () {
     var maxdate = getDate('maxdate');
     $('#toDate').attr('max', maxdate + '-' + '03' + '-' + '31');
     $('#fromDate').attr('max', maxdate + '-' + '03' + '-' + '31');
+    $('#leaveDay').val(1);
   }
 
   function getDate(status) {
