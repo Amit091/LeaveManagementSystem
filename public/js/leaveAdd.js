@@ -23,10 +23,20 @@ $(document).ready(function () {
   $('#toDate').on('change', () => {
     var day = calculateDay();
     $('#leaveDay').val(day);
-
   });
 
-  function populateDate() {
+  $('#btnreset').on('click',()=>{
+    populateDate();
+  });
+
+  // $('#btncancel').on('click',()=>{
+  //   window.location.href = '/list'; 
+  // });
+
+ 
+});
+
+ function populateDate() {
     var today = getDate('today');
     console.log(today);
     $('#fromDate').val(today);
@@ -75,7 +85,6 @@ $(document).ready(function () {
       $('#toDate').val(fdate);
     }
   }
-});
 
 function calculateDay() {
   var fromdate = $('#fromDate').val();

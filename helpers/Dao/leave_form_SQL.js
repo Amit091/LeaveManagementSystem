@@ -70,6 +70,15 @@ async updateUserLeavRecord(data){
     }
   }
 
-  
+  async getLeaveData(){
+    try {
+      con = await gcon();
+      let status = await con.query(query.get_leave_data);
+      status = await JSON.parse(JSON.stringify(status));
+      return status;
+    } catch (error) {
+      console.log(error);      
+    }
+  } 
   
 };

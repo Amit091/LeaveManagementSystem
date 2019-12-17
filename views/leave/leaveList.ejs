@@ -1,4 +1,5 @@
 <% include ./../layouts/layoutheader%>
+<% include ./../partials/messages%>
 
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
@@ -6,7 +7,6 @@
         <a href="/">Dashboard</a>
     </li>
     <li class="breadcrumb-item active">Leave List</li>
-
     <li class="ml-auto"  style="float: right;">
         <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/list/add" style="color: white;">Add Leave </a></li>
     </li>
@@ -36,20 +36,17 @@
             <td><%=record.leave_type_lists_id%></td>
             <td><%=record.sDate%></td>
             <td><%=record.eDate%></td>
-            <td id="<%=record.id%>_status"><%=record.status%></td>
-            
-            <td class="btn-group-toggle btn-group-sm"> <button class="btn  btn-primary"><i class="fa fa-pen"></i></button>
-            <button class="btn btn-info"><i class="fa fa-check"></i></button>
-            <button class="btn btn-secondary"><i class="fa fa-times"></i></button>
-            <button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
-              </tr>
-          
+            <td id="<%=record.id%>_status"><%=record.status%></td>            
+            <td class="btn-group-toggle btn-group-sm"> 
+            <button class="btn  btn-primary"><i class="fa fa-pen"> Edit</i></button>
+            <button class="btn btn-info"><i class="fa fa-check"> Accept</i></button>
+            <button class="btn btn-secondary"><i class="fa fa-times"> Reject</i></button>
+            <button class="btn btn-danger"><i class="fa fa-trash"> Delete</i></button></td>
+              </tr>          
        <% });%>
-          </tbody>
-         
+          </tbody>         
         </table>
       </div>
-    </div>
-    
+    </div>    
   </div>
 <% include ./../layouts/layoutfooter%>

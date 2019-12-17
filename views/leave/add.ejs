@@ -18,10 +18,7 @@
   <li class="breadcrumb-item">
     <a href="/">Dashboard</a>
   </li>
-  <li class="breadcrumb-item active"><a href="/list">All Leave</a></li>
-  <li class="breadcrumb-item active">Add Leave Form</li>
-
-
+  <li class="breadcrumb-item"><a href="/list">All Leave</a></li>
   <li class="ml-auto" style="float: right;">
   <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/list/" style="color: white;">Leave List </a>
   </li>
@@ -31,28 +28,26 @@
 <div class="card mb-3">
   <div class="card-header">Leave Form</div>
   <div class="card-body">
-    <form method="post" action="/list/add">
+    <form method="post" action="/list/add" id="leaveapplyform">
 
       <div class="form-group">
         <label for="employeeName">Employee Name *</label>
         <input type="text" class="form-control" id="employeeName" name="employeeName" aria-describedby="nameinfo"
-          placeholder="Enter Employee Name" required value="">
+          placeholder="Enter Employee Name" required value="<%=(typeof data !='undefined')? data.employeeName:''%>">
         <small id="nameinfo" class="form-text text-muted"></small>
       </div>
- 
+
 
       <div class="form-row">
-        
         <div class="form-group col-md-6 col-sm-6 col-xs-12">
           <label for="leaveType">Leave Type *</label>
           <select name="leaveType" id="leaveType" class="form-control" required>
             <option value="">Select the leave</option>
-            <option value="casual">Casual Leave</option>
-            <option value="sick">Sick</option>
-            <option value="paternity">Paternity</option>
-            <option value="maternity">maternity</option>
-            <option value="marriage">Marriage</option>
-            <option value="mourn">mourn</option>
+            <%ldd.forEach(day => {%>
+            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' value="<%=day.name%>"
+              <%=(typeof data !='undefined')? (data.leaveType == day.name)?'selected':'':''%>><%=day.name%> leave
+            </option>
+            <%});%>
           </select>
         </div>
       </div>
@@ -61,19 +56,20 @@
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="fromDate">From Days*</label>
           <div class="input-group">
-            <input type="date" class="form-control" name="fromDate" id="fromDate"  required
-              aria-describedby="fdate">
-            <div class="input-group-append">
-              <span class="input-group-text" id="fdate"><i class="fa fa-calendar"></i></span>
+            <input type="date" class="form-control" name="fromDate" id="fromDate" required aria-describedby="fdate"
+              value="<%=(typeof data !='undefined')? data.fromDate:''%>">
+           <!-- <div class="input-group-append">
+              <span class=" open-button" id="fdate"><button type="button"><i  class="fa fa-calendar"></i></button></span>
             </div>
+          -->
           </div>
         </div>
 
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="toDate">To Days*</label>
           <div class="input-group">
-            <input type="date" class="form-control" name="toDate" id="toDate" required
-              aria-describedby="tdate">
+            <input type="date" class="form-control" name="toDate" id="toDate" required aria-describedby="tdate"
+              value="<%=(typeof data !='undefined')? data.toDate:''%>">
             <div class="input-group-append">
               <span class="input-group-text" id="tdate"><i class="fa fa-calendar"></i></span>
             </div>
@@ -83,30 +79,35 @@
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="leaveDay">Leave Days*</label>
           <input type="number" class="form-control" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1"
-            min="1" max="100" value="0" required aria-describedby="leaveinfo" autocomplete="off" readonly>
-         <small id="leaveinfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
-
+            min="1" max="100" value="0" required aria-describedby="leaveinfo" autocomplete="off" readonly value="value="
+            <%=(typeof data !='undefined')? data.leaveDay:''%>"">
+          <small id="leaveinfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
         </div>
-
-
       </div>
-
 
       <div class="form-group">
         <label for="leaveReason">Reason for Leave *</label>
         <textarea class="form-control" name="leaveReason" id="leaveReason" aria-describedby="reason"
-          placeholder="Reason for Leave in detail" required></textarea>
+          placeholder="Reason for Leave in detail"
+          required><%=(typeof data !='undefined')? data.leaveReason:''%></textarea>
         <small id="reason" class="form-text text-muted">PS: Write exact reason</small>
       </div>
 
-      <div class="form-check">
+      <!-- <div class="form-check">
         <input type="checkbox" class="form-check-input" id="doneCheck" >
         <label class="form-check-label" for="doneCheck">Check me out</label>
-      </div>
-      <button type="submit" id="btnSubmit" class="btn btn-primary" >Submit</button>
+      </div>       -->
     </form>
+    <div class="text-center">
+      <div class="btn-group-sm">
+        <button type="submit" form="leaveapplyform" id="btnsubmit" class="btn btn-primary">Apply</button>
+        <button id="btnreset" class="btn btn-secondary">Reset</button>
+        <button type="cancel" onclick="window.location.href = '/list'" id="btnCancel"
+          class="btn btn-danger">Discard</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <script src="/js/leaveAdd.js"></script>
-<% include ./../layouts/layoutfooter%>  
+<% include ./../layouts/layoutfooter%>
