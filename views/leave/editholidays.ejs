@@ -11,6 +11,10 @@
         <a href="/">Dashboard</a>
     </li>
     <li class="breadcrumb-item active">Edit Holiday</li>
+    <li class="ml-auto" style="float: right;">
+    <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/leave/addholidays" style="color: white;">Add Holiday</a>
+    </li>
+    </li>
 </ol>
 <div class="row">
     <div class="col-md-6">
@@ -82,9 +86,12 @@
 
         var now = getDate('today');
         var maxDate = getDate('maxdate') + '-' + '03' + '-' + '31';
+        var date = new Date();
+        var year = date.getFullYear();
+        var mini = year + '-' + '04' + '-' + '01';
         // $('#date_id').val(now)
         $('#date_id').attr('max', maxDate);
-        $('#date_id').attr('min', now);
+        $('#date_id').attr('min', mini);
 
         var dateF = getdateFormat($('#date_id').data('date'));
         $('#date_id').val(dateF);
@@ -117,11 +124,11 @@
             return today;
         }
 
-        $('.holiday-name').keyup(function () {
-            this.value = this.value.replace(/[^0-9\.]/g, '');
-        });
+
 
 
 
     })
 </script>
+
+<% include ./../layouts/layoutfooter%>
