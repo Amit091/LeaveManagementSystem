@@ -6,10 +6,11 @@ const hSQL = new holidaysSQL();
 var types = ['Public Holiday', 'Floating Holiday'];
 exports.createHolidays = async (req, res) => {
     try {
+
+
         var errors = req.validationErrors();
         errors = [];
         let holiday = await hSQL.getHolidayByName(req.body);
-        console.log(holiday);
         if (holiday != "") {
             errors.push({ 'param': 'name', 'msg': 'Holiday with this name already exists' });
         }
@@ -18,7 +19,7 @@ exports.createHolidays = async (req, res) => {
             res.render('leave/holidays', { allresult, errors })
         } else {
             await hSQL.createHolidays(req.body);
-            res.render('leave/holidays', { allresult });
+            res.redirect('/leave/addholidays');
             req.flash('success_msg', 'new holiday added');
         }
         console.log(errors);
@@ -53,11 +54,6 @@ exports.updateHoliday = async (req, res) => {
         const id = req.params.id;
         var errors = req.validationErrors();
         errors = [];
-        console.log('000000000000000');
-
-        console.log(req.body);
-        console.log('000000000000000');
-
         const allresult = await hSQL.showHolidaysSQL();
         const holiday = await hSQL.getHolidayById(id);
         let holidayName = await hSQL.getHolidayByName(req.body);
@@ -68,7 +64,7 @@ exports.updateHoliday = async (req, res) => {
                 console.log('dddddddddddddddddddd');
                 console.log(result);
                 console.log('dddddddddddddddddddd');
-                res.render('leave/holidays', { holiday, allresult });
+                res.redirect('/leave/addholidays');
             } else {
                 errors.push({ 'param': 'name', 'msg': 'Holiday with this name already exists' });
                 if (errors.length > 0) {
@@ -79,9 +75,6 @@ exports.updateHoliday = async (req, res) => {
 
         } else {
             let holiday = await hSQL.updateHoliday(id, req.body);
-            console.log('dddddddddddddddddddd');
-            console.log(holiday);
-            console.log('dddddddddddddddddddd');
             let allresult = await hSQL.showHolidaysSQL();
             res.render('leave/holidays', { holiday, allresult });
         }
@@ -126,7 +119,7 @@ exports.createLeave = async (req, res) => {
         else {
             await hSQL.createLeaveSQL(req.body);
             let allresult = await hSQL.showleavesSQL();
-            res.render('leave/leaveType', { allresult });
+            res.redirect('/leave/leaveType');
         }
 
     } catch (error) {

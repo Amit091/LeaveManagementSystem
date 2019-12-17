@@ -38,7 +38,7 @@
                             <div class="from-group box">
                                 <select class="custom-select form-control" id="holidaytype" name="holidaypicker"
                                     required>
-                                    <option selected>Choose holiday</option>
+                                    <option selected value="0">Choose holiday</option>
                                     <option value="Public Holiday">Public Holiday</option>
                                     <option value="Floating Holiday">Floating Holiday</option>
                                 </select>
@@ -83,12 +83,16 @@
 
         var now = getDate('today');
         var maxDate = getDate('maxdate') + '-' + '03' + '-' + '31';
+        var date = new Date();
+        var year = date.getFullYear();
+        var mini = year + '-' + '04' + '-' + '01';
+
 
 
         $('#date').mouseenter(function () {
             $('#date').val(now)
             $('#date').attr('max', maxDate);
-            $('#date').attr('min', now);
+            $('#date').attr('min', mini);
         })
 
 
@@ -108,7 +112,7 @@
 
         $(function () {
 
-            $('#holiday_type').keydown(function (e) {
+            $('#holiday_sadsa').keydown(function (e) {
 
                 if (e.shiftKey || e.ctrlKey || e.altKey) {
 
@@ -136,3 +140,4 @@
 
 
 </script>
+<% include ./../layouts/layoutfooter%>
