@@ -1,5 +1,7 @@
 <% include ./../layouts/layoutheader%>
 <% include ./../partials/messages%>
+<link href="/css/loader.css" rel="stylesheet">
+
 
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
@@ -11,42 +13,31 @@
         <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/list/add" style="color: white;">Add Leave </a></li>
     </li>
 </ol>
+<div class="loader"></div>
 
  <div class="card mb-3">
     <div class="card-header">
       <i class="fas fa-table"></i>
       Leave List Detail</div>
     <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table- table-sm" id="dataTable" width="100%" cellspacing="0">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Leave</th>
-              <th>From</th>
-              <th>To</th>
-              <th>Status</th>
-              <th>Option</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-          <%list.forEach(record => {%>
-            <tr id="<%=record.id%>">
-            <td><%=record.employee_name%></td>
-            <td><%=record.leave_type_lists_id%></td>
-            <td><%=record.sDate%></td>
-            <td><%=record.eDate%></td>
-            <td id="<%=record.id%>_status"><%=record.status%></td>            
-            <td class="btn-group-toggle btn-group-sm"> 
-            <button class="btn  btn-primary"><i class="fa fa-pen"> Edit</i></button>
-            <button class="btn btn-info"><i class="fa fa-check"> Accept</i></button>
-            <button class="btn btn-secondary"><i class="fa fa-times"> Reject</i></button>
-            <button class="btn btn-danger"><i class="fa fa-trash"> Delete</i></button></td>
-              </tr>          
-       <% });%>
-          </tbody>         
-        </table>
-      </div>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#all" role="tab" aria-controls="all">All</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#pending" role="tab" aria-controls="pending">Pending</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#accept" role="tab" aria-controls="accept">Accepted</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#reject" role="tab" aria-controls="reject">Rejected</a>
+        </li>
+      </ul>
+      
+
+
+
     </div>    
   </div>
 <% include ./../layouts/layoutfooter%>

@@ -36,7 +36,7 @@ module.exports = class leaveSQL {
       let con = await gcon();
             let status = await con.query(query1.get_holidays_record_between_date,[stDate,eDate]);
             status = JSON.parse(JSON.stringify(status));
-            return  (status.length == 0)?'':status;
+            return  (status.length == 0)?0:status;
     } catch (error) {
       console.log(error);      
     }
@@ -50,6 +50,7 @@ module.exports = class leaveSQL {
             return  (status.length == 0)?'':status.reduce(item=>{
                   return item;
             });            
+            // return status;
     } catch (error) {
       console.log(error);      
     }

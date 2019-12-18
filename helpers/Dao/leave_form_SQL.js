@@ -3,13 +3,13 @@ const query = require('../query/leave_form_query');
 var con;
 
 module.exports = class leaveSQL {
-  async saveLeaveForm(leaveForm,userjson) {
+  async saveLeaveForm(leaveForm) {
     try {
       con = await gcon();
-      console.log(query.insert_leave_apply_record, [leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay, leaveForm.leaveReason,userjson]);
+      console.log(query.insert_leave_apply_record, [leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay, leaveForm.leaveReason]);
       console.log('*********************99966');
       
-      let status = await con.query(query.insert_leave_apply_record, [leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay,  leaveForm.leaveReason,userjson]);
+      let status = await con.query(query.insert_leave_apply_record, [leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay,  leaveForm.leaveReason]);
       status = await JSON.parse(JSON.stringify(status));
       return status;
     } catch (error) {
@@ -43,6 +43,21 @@ async updateUserLeavRecord(data){
      let status = await con.query(query.update_user_leave_record,[data.casual,data.sick,data.marriage,data.mourn,data.paternity,data.maternity]);
      status = await JSON.parse(JSON.stringify(status));
     return status;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async addUserLeavRecordTemp(data){
+  try {
+    con = await gcon();      
+    console.log('**********SQL*********');
+    console.log(data);  
+    let SQL = `INSERT INTO user_leave_detail_temp (user_id,leave_form,casual,sick,marriage,mourn,paternity,maternity,unpaid) VALUE ${data}`;
+    
+     let status = await con.query(SQL);
+     status = await JSON.parse(JSON.stringify(status));
+    return 'status';
   } catch (error) {
     console.log(error);
   }
