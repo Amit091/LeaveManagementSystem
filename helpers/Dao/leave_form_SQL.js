@@ -66,7 +66,7 @@ async addUserLeavRecordTemp(data){
   async getLeaveRecord(leaveForm) {
     try {
       con = await gcon();
-      let status = await con.query(query.get_leve_record,[]);
+      let status = await con.query(query.get_leve_record);
       status = await JSON.parse(JSON.stringify(status));
       return status;
     } catch (error) {
@@ -95,5 +95,46 @@ async addUserLeavRecordTemp(data){
       console.log(error);      
     }
   } 
+
+
+  async getLeaveDataRecordByIdandUser(id,uid){
+    try {
+      con = await gcon();
+      let status = await con.query(query.get_leave_data_by_id_and_employee,[id,uid]);
+      status = await JSON.parse(JSON.stringify(status));
+      return (status.length !=1)?0:status.reduce((data)=>{
+        return data;
+      });
+    } catch (error) {
+      console.log(error);      
+    }
+  } 
+
+   async UpdateLeaveDataRecordStatus(data){
+    try {
+      con = await gcon();
+      console.log(query.update_user_leave_apply_data,[data.status,data.reason,data.id,data.user]);
+      
+      let result = await con.query(query.update_user_leave_apply_data,[data.status,data.reason,data.id,data.user]);
+      result = await JSON.parse(JSON.stringify(result));
+      return result;
+    } catch (error) {
+      console.log(error);      
+    }finally{
+      con.close();
+    }
+  } 
   
+
+  async getAllUser(user){
+    try {
+      con = await gcon();
+      let status = await con.query("SELECT employee_id,employee_name FROM leave_form WHERE employee_name like '%"+user+"%'");
+      status = await JSON.parse(JSON.stringify(status));
+      return status;
+     } catch (error) {
+      console.log(error);      
+    }
+  } 
+
 };

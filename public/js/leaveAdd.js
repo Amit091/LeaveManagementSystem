@@ -1,5 +1,6 @@
 $(document).ready(function () {
   populateDate();
+ 
   $('#doneCheck').click(function () {
     console.log('check this out');
     if ($('#doneCheck').is(":checked")) {
@@ -98,3 +99,4 @@ var is_date = function (input) {
     return true;
   return false;
 };
+

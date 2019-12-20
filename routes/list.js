@@ -13,24 +13,31 @@ var status = ['pending', 'accepted', 'rejected'];
 var weekDay = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 var ldd;
 
-router.all('/*', async (req, res, next) => {
+// router.all('/*', async (req, res, next) => {
+//   try {
+//     ldd = await lSQL.getLeaveData();
+//     next();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+async function getLeaveData(){
   try {
-    ldd = await lSQL.getLeaveData();
-    console.log(ldd);
-    next();
-  } catch (error) {
-    console.log(error);
-  }
-});
-
+        return await lSQL.getLeaveData();
+      } catch (error) {
+        console.log(error);
+      }
+}
 
 router.get('/', async (req, res, next) => {
+  var ldd = await getLeaveData();
   const list = await lSQL.getLeaveRecord();
-  console.log(list.userData);
   res.render('leave/leaveList', { list, status, ldd });
 });
 
-router.get('/add', (req, res, next) => {
+router.get('/add',async (req, res, next) => {
+ 
+  var ldd = await getLeaveData();
   console.log(ldd);
   res.render('leave/add', { ldd });
 });
@@ -121,6 +128,95 @@ router.post('/add', async (req, res) => {
   } catch (error) {
     console.log(error);
     res.render('leave/add', { error, data: leave_data });
+  }
+});
+
+
+router.post('/api/decideLeave',async(req,res)=>{
+  try {
+    console.log(req.body);
+     let  id  = req.body.id;
+    var user = req.body.user_id;
+    var status =req.body.status;
+    var reason = req.body.reason;    
+    req.checkBody('id', 'Invalid User Data').notEmpty().isNumeric(); 
+    req.checkBody('user_id', 'Invalid User Data').notEmpty().isNumeric(); 
+    req.checkBody('status', 'Select specific LeaveType').notEmpty().isIn('reject','accept'); 
+    reason =(reason=='')?(status=='accept')?'Accepted':reason:reason;
+    console.log(reason);
+    
+    req.checkBody('reason', 'reason required').notEmpty();
+   
+    var errors = req.validationErrors() || [];
+    console.log(errors);
+    
+    if(errors.length > 0){
+      res.status(400).send(errors);
+    }else{
+      let fromData = await lSQL.getLeaveDataRecordByIdandUser(id,user);
+      console.log(fromData);
+      var data = {'id':id,'user':user,'status':status,'reason':reason};
+      
+      console.log('#########################################################################################################################');
+      if( fromData == 0){
+        errors.push({'param':'user leave Data','msg':'Data of respective Query not found in Server','value':0});
+        res.status(404).send('Data of respective Query not found in Server');
+      }else if(fromData.status == 'pending'){
+        var updateData;
+        console.log(status);        
+          if(status == 'accept'){
+            updateData = await lSQL.UpdateLeaveDataRecordStatus(data);   
+            console.log(updateData);
+          }
+          else if( status == 'reject')
+          { 
+            updateData = await lSQL.UpdateLeaveDataRecordStatus(data);   
+            console.log(updateData);            
+          }
+           const list = await lSQL.getLeaveRecord();
+          res.render('./partials/pageItem/tableViewFull', { list},(err,out)=>{
+            if(err){
+                console.log(err);
+                res.send({ status: false });          
+            }else{
+                res.send({ htmlData: out, status: true });
+            }
+          });
+
+      }else if(fromData.status != 'pending' && fromData.status =='accept' && status =='accept' ){
+            let msg =`Leave Already  Accepted`;
+            res.status(409).send({msg});
+      }
+      else if(fromData.status != 'pending' && fromData.status =='accept' && status =='accept' ){
+            let msg =`Leave Already Rejected`;
+            res.status(409).send({msg});
+      }else{
+        res.status(400).send('NO data Update');
+      }
+      console.log(fromData);
+      if(status == fromData.status){
+        
+        return 'code for no changes';
+      }
+      else if(req.body.status == 'reject'){
+        req.checkBody('reason', 'No. of Days of  Leave is Empty').notEmpty();
+      }
+      else{
+          //no changes
+      }
+    }
+  } catch (error) {
+    console.log(error);    
+  }
+});
+
+router.get('/api/getuser',async(req,res)=>{
+  try {;
+    let user = req.query.query;  
+    let data  =await lSQL.getAllUser(user);    
+    res.send({ data}).status(200);
+  } catch (error) {
+    console.log(error);    
   }
 });
 

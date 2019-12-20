@@ -1,5 +1,5 @@
 
-<table class="table table-sm" id="dataTable"cellspacing="0">
+<table class="table table-sm" class="listTable"cellspacing="0">
   <thead>
     <tr>
       <th>Name</th>
@@ -12,7 +12,7 @@
   </thead>
   <tbody>
   <%list.forEach(record => {%>
-  <%if(record.status == 'accept'){%>
+  <%if(record.status == status){%>
     <tr id="<%=record.id%>">
     <td><%=record.employee_name%></td>
     <td><%=record.leave_type_lists_id%></td>
@@ -20,10 +20,13 @@
     <td><%=record.eDate%></td>
     <td id="<%=record.id%>_status"><%=record.status%></td>            
     <td class="btn-group-toggle btn-group-sm"> 
+      <textarea rows="1" cols="30" class="" readonly><%=record.leave_reason%></textarea>
+      <!--
     <button class="btn  btn-primary"><i class="fa fa-pen"> Edit</i></button>
     <button class="btn btn-info"><i class="fa fa-check"> Accept</i></button>
     <button class="btn btn-secondary"><i class="fa fa-times"> Reject</i></button>
-    <button class="btn btn-danger"><i class="fa fa-trash"> Delete</i></button></td>
+    <button class="btn btn-danger"><i class="fa fa-trash"> Delete</i></button>-->
+      </td>
       </tr>      
       <%}%>    
 <% });%>

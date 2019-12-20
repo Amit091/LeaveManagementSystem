@@ -1,0 +1,37 @@
+<!-- For all Type of leave Status -->
+<div class="tab-pane active" id="all" role="tabpanel">
+  <div class="table-responsive m-1" class="tableView">
+    <% var status = 'all',flag = 'dataTable'%>
+    <% include ./tableView %>
+  </div>
+</div>
+
+<!-- For Pending Leave Status Only -->
+<div class="tab-pane" id="pending" role="tabpanel">
+  <div class="table-responsive m-1 " class="tableView">
+    <% var status = 'pending',flag='pending-table'%>
+    <% include ./tableView %>
+  </div>
+</div>
+
+<!-- For Accepted Leave Status Only -->
+<div class="tab-pane" id="accept" role="tabpanel">
+  <div class="table-responsive m-1" class="tableView">
+    <% var status = 'accept'%>
+    <% include ./tableView-status %>
+  </div>
+</div>
+
+<!-- For Rejected Leave Status Only -->
+<div class="tab-pane" id="reject" role="tabpanel">
+  <div class="table-responsive m-1" class="tableView">
+    <% var status = 'reject'%>
+    <% include ./tableView-status %>
+  </div>
+</div>
+<script>
+$(document).ready(function() {
+$('table').DataTable();
+} );
+</script>
+

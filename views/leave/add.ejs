@@ -25,15 +25,28 @@
   </li>
 </ol>
 
+
+<link rel="stylesheet" href="/vendor/jqueryUI/jquery-ui.css">
+<style>
+  .ui-autocomplete {
+    color: teal; 
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  * html .ui-autocomplete {
+    height: 100px;
+  }
+</style>
+
 <div class="card mb-3">
   <div class="card-header">Leave Form</div>
   <div class="card-body">
     <form method="post" action="/list/add" id="leaveapplyform">
-
       <div class="form-group">
         <label for="employeeName">Employee Name *</label>
-        <input type="text" class="form-control" id="employeeName" name="employeeName" aria-describedby="nameinfo"
-          placeholder="Enter Employee Name" required value="<%=(typeof data !='undefined')? data.employeeName:''%>">
+        <input type="text" class="form-control" id="autoname" name="employeeName" aria-describedby="nameinfo"
+          placeholder="Enter Employee Name" required value="<%=(typeof data !='undefined')? data.employeeName:''%>" autocomplete="off">
         <small id="nameinfo" class="form-text text-muted"></small>
       </div>
 
@@ -56,9 +69,9 @@
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="fromDate">From Days*</label>
           <div class="input-group">
-            <input type="date" class="form-control" name="fromDate" id="fromDate" required aria-describedby="fdate"
+            <input type="date" class="form-control datepicker" name="fromDate" id="fromDate" required aria-describedby="fdate"
               value="<%=(typeof data !='undefined')? data.fromDate:''%>">
-           <!-- <div class="input-group-append">
+            <!-- <div class="input-group-append">
               <span class=" open-button" id="fdate"><button type="button"><i  class="fa fa-calendar"></i></button></span>
             </div>
           -->
@@ -68,7 +81,7 @@
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="toDate">To Days*</label>
           <div class="input-group">
-            <input type="date" class="form-control" name="toDate" id="toDate" required aria-describedby="tdate"
+            <input type="date" class="form-control datepicker " name="toDate" id="toDate" required aria-describedby="tdate"
               value="<%=(typeof data !='undefined')? data.toDate:''%>">
             <div class="input-group-append">
               <span class="input-group-text" id="tdate"><i class="fa fa-calendar"></i></span>
@@ -78,7 +91,7 @@
 
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="leaveDay">Leave Days*</label>
-          <input type="number" class="form-control" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1"
+          <input type="number" class="form-control datepicker" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1"
             min="1" max="100" value="0" required aria-describedby="leaveinfo" autocomplete="off" readonly value="value="
             <%=(typeof data !='undefined')? data.leaveDay:''%>"">
           <small id="leaveinfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
@@ -110,4 +123,10 @@
 </div>
 
 <script src="/js/leaveAdd.js"></script>
+<script src="/vendor/jqueryUI/jquery-ui.js"></script>
+<script src="/js/autocomplete.js"></script>
+<script>
+  $( "#fromDate" ).datepicker();
+  $( "#toDate" ).datepicker();
+  </script>
 <% include ./../layouts/layoutfooter%>
