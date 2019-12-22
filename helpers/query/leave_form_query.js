@@ -9,7 +9,7 @@ module.exports = {
     update_user_leave_record:`UPDATE user_leave_detail SET casual=casual-?, sick=sick-?,marriage = marriage-?, mourn = mourn -?,paternity=paternity-?,maternity =maternity-? WHERE user_id = 1`,
     get_leave_data:`SELECT * FROM leaves`,
     add_user_temp_leave_data:`INSERT INTO user_leave_detail_temp (user_id,leave_form,casual,sick,marriage,mourn,paternity,maternity) VALUE (?)`,
-    get_leave_data_by_id_and_employee : `SELECT * FROM leave_form WHERE id = ? AND employee_id = ? AND status = 'pending'`,
+    get_leave_data_by_id_and_employee : `SELECT *,DATE_FORMAT(l.start_date, "%Y-%m-%d") as sDate,DATE_FORMAT(l.end_date, "%Y-%m-%d") as eDate FROM leave_form AS l WHERE l.id = ? AND l.employee_id = ? AND l.status = 'pending'`,
     update_user_leave_apply_data:`UPDATE leave_form SET status = ? , reject_reason= ? WHERE id = ? AND employee_id = ?;`,
     get_all_user_data:`SELECT employee_id,employee_name FROM leave_form WHERE employee_name like '%?%'`
 };

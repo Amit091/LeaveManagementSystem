@@ -18,9 +18,9 @@
   <li class="breadcrumb-item">
     <a href="/">Dashboard</a>
   </li>
-  <li class="breadcrumb-item"><a href="/list">All Leave</a></li>
+  <li class="breadcrumb-item"><a href="/applyleave/list">All Leave</a></li>
   <li class="ml-auto" style="float: right;">
-  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/list/" style="color: white;">Leave List </a>
+  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/applyleave/list/" style="color: white;">Leave List </a>
   </li>
   </li>
 </ol>
@@ -42,22 +42,23 @@
 <div class="card mb-3">
   <div class="card-header">Leave Form</div>
   <div class="card-body">
-    <form method="post" action="/list/add" id="leaveapplyform">
-      <div class="form-group">
-        <label for="employeeName">Employee Name *</label>
-        <input type="text" class="form-control" id="autoname" name="employeeName" aria-describedby="nameinfo"
-          placeholder="Enter Employee Name" required value="<%=(typeof data !='undefined')? data.employeeName:''%>" autocomplete="off">
-        <small id="nameinfo" class="form-text text-muted"></small>
-      </div>
+    <form method="post" action="/applyleave/add" id="leaveapplyform">
+      
 
 
       <div class="form-row">
-        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+          <label for="employeeName">Employee Name *</label>
+          <input type="text" class="form-control" id="autoname" name="employeeName" aria-describedby="nameinfo"
+            placeholder="Enter Employee Name" required value="<%=(typeof data !='undefined')? data.employeeName:''%>" autocomplete="off">
+          <small id="nameinfo" class="form-text text-muted"></small>
+        </div>
+        <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="leaveType">Leave Type *</label>
           <select name="leaveType" id="leaveType" class="form-control" required>
             <option value="">Select the leave</option>
             <%ldd.forEach(day => {%>
-            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' value="<%=day.name%>"
+            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' value="<%=day.id%>"
               <%=(typeof data !='undefined')? (data.leaveType == day.name)?'selected':'':''%>><%=day.name%> leave
             </option>
             <%});%>
@@ -89,7 +90,7 @@
           </div>
         </div>
 
-        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group col-md-2 col-sm-2 col-xs-12">
           <label for="leaveDay">Leave Days*</label>
           <input type="number" class="form-control datepicker" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1"
             min="1" max="100" value="0" required aria-describedby="leaveinfo" autocomplete="off" readonly value="value="
@@ -101,7 +102,7 @@
       <div class="form-group">
         <label for="leaveReason">Reason for Leave *</label>
         <textarea class="form-control" name="leaveReason" id="leaveReason" aria-describedby="reason"
-          placeholder="Reason for Leave in detail"
+          placeholder="Reason for Leave in detail" rows="5"
           required><%=(typeof data !='undefined')? data.leaveReason:''%></textarea>
         <small id="reason" class="form-text text-muted">PS: Write exact reason</small>
       </div>
@@ -115,7 +116,7 @@
       <div class="btn-group-sm">
         <button type="submit" form="leaveapplyform" id="btnsubmit" class="btn btn-primary">Apply</button>
         <button id="btnreset" class="btn btn-secondary">Reset</button>
-        <button type="cancel" onclick="window.location.href = '/list'" id="btnCancel"
+        <button type="cancel" onclick="window.location.href = '/applyleave'" id="btnCancel"
           class="btn btn-danger">Discard</button>
       </div>
     </div>

@@ -40,14 +40,14 @@ $(document).ready(function () {
  function populateDate() {
     var today = getDate('today');
     console.log(today);
-    $('#fromDate').val(today);
-    $('#toDate').val(today);
+    $('#fromDate').val($('#fromDate').val()||today);
+    $('#toDate').val($('#toDate').val()||today);
     $('#fromDate').attr('min', today);
     $('#toDate').attr('min', today);
     var maxdate = getDate('maxdate');
     $('#toDate').attr('max', maxdate + '-' + '03' + '-' + '31');
     $('#fromDate').attr('max', maxdate + '-' + '03' + '-' + '31');
-    $('#leaveDay').val(1);
+    $('#leaveDay').val(calculateDay());
   }
 
   function getDate(status) {

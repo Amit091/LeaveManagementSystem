@@ -136,5 +136,17 @@ async addUserLeavRecordTemp(data){
       console.log(error);      
     }
   } 
+  async getLeaveRecordById(id,uid){
+    try {
+      con = await gcon();
+      let status = await con.query(query.get_leave_data_by_id_and_employee,[id,uid]);     
+      status = await JSON.parse(JSON.stringify(status));
+      return (status.length ==0)?0:status.reduce((data)=>{
+        return data;
+      });
+     } catch (error) {
+      console.log(error);      
+    }
+  } 
 
 };

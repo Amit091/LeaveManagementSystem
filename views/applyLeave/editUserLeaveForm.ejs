@@ -1,0 +1,130 @@
+<% include ./../layouts/layoutheader%>
+<style>
+  select::-webkit-inner-spin-button,
+  select::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="date"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+</style>
+
+<% include ./../partials/messages%>
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="/">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item"><a href="/applyleave/list">Leave List</a></li>
+  <li class="breadcrumb-item active\"><a>Edit Leave</a></li>
+  <li class="ml-auto" style="float: right;">
+  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/applyleave/list/" style="color: white;">Leave List </a>
+  </li>
+  </li>
+</ol>
+
+
+<link rel="stylesheet" href="/vendor/jqueryUI/jquery-ui.css">
+<style>
+  .ui-autocomplete {
+    color: teal; 
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  * html .ui-autocomplete {
+    height: 100px;
+  }
+</style>
+
+<div class="card mb-3">
+  <div class="card-header">Update Data Form</div>
+  <div class="card-body">
+    <form method="post" action="/applyleave/edit" id="leaveapplyform">       
+      
+      <div class="form-row">
+        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+          <label for="employeeName">Employee Name *</label>
+          <input type="text" class="form-control" id="employeeName" name="employeeName" aria-describedby="nameinfo"
+            placeholder="Enter Employee Name" required value="<%=(typeof data !='undefined')? data.employee_name || data.employeeName:''%>" autocomplete="off" readonly>
+          <small id="nameinfo" class="form-text text-muted"></small>
+        </div>
+
+        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+          <label for="leaveType">Leave Type *</label>
+          <select name="leaveType" id="leaveType" class="form-control" required>
+            <option value="">Select the leave</option>
+            <%ldd.forEach(day => {%>
+            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' value="<%=day.name%>"
+              <%=(typeof data !='undefined')? (data.leaveType == day.name)?'selected':'':''%>><%=day.name%> leave
+            </option>
+            <%});%>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+          <label for="fromDate">From Days*</label>
+          <div class="input-group">
+            <input type="date" class="form-control datepicker" name="fromDate" id="fromDate" required aria-describedby="fdate"
+              value="<%=(typeof data !='undefined')? data.sDate||data.fromDate:''%>">
+            <!-- <div class="input-group-append">
+              <span class=" open-button" id="fdate"><button type="button"><i  class="fa fa-calendar"></i></button></span>
+            </div>
+          -->
+          </div>
+        </div>
+
+        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+          <label for="toDate">To Days*</label>
+          <div class="input-group">
+            <input type="date" class="form-control datepicker " name="toDate" id="toDate" required aria-describedby="tdate"
+              value="<%=(typeof data !='undefined')? data.eDate||data.toDate:''%>">
+            <div class="input-group-append">
+              <span class="input-group-text" id="tdate"><i class="fa fa-calendar"></i></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-2 col-sm-2 col-xs-12">
+          <label for="leaveDay">Leave Days*</label>
+          <input type="number" class="form-control datepicker" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1"
+            min="1" max="100" value="0" required aria-describedby="leaveinfo" autocomplete="off" readonly value="value="
+            <%=(typeof data !='undefined')? data.leaveDay:''%>"">
+          <small id="leaveinfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="leaveReason">Reason for Leave *</label>
+        <textarea class="form-control" name="leaveReason" id="leaveReason" aria-describedby="reason"
+          placeholder="Reason for Leave in detail" rows="5"
+          required><%=(typeof data !='undefined')? data.leave_reason||data.leaveReason:''%></textarea>
+        <small id="reason" class="form-text text-muted">PS: Write exact reason</small>
+      </div>
+
+      <!-- <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="doneCheck" >
+        <label class="form-check-label" for="doneCheck">Check me out</label>
+      </div>       -->
+    </form>
+    <div class="text-center">
+      <div class="btn-group-sm">
+        <button type="submit" form="leaveapplyform" id="btnsubmit" class="btn btn-primary">Update & Apply</button>
+        <button id="btnreset"  class="btn btn-secondary">Reset</button>
+        <button type="cancel" onclick="window.location.href = '/applyleave'" id="btnCancel"
+          class="btn btn-danger">Discard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/leaveAdd.js"></script>
+<script src="/vendor/jqueryUI/jquery-ui.js"></script>
+<script src="/js/autocomplete.js"></script>
+
+<% include ./../layouts/layoutfooter%>

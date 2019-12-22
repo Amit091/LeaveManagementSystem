@@ -7,7 +7,7 @@
     source: function (req, res) {
       $.ajax({
         type: `GET`,
-        url: `/list/api/getuser`,
+        url: `/ajax/api/getuser`,
         data: { 'query': `${$('#autoname').val()}` },
         contentType: 'application/x-www-form-urlencoded',
         success: (result => {

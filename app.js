@@ -84,16 +84,20 @@ app.all('*', (req, res, next) => {
 });
 
 //loading route
-const leaveRouter = require('./routes/leave')
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/indexRoute');
+const leaveTypeRouter = require('./routes/leaveTypeRoute');
+const holidayRoute = require('./routes/holidayRoute');
+const applyLeaveRouter = require('./routes/applyLeaveRoute');
 const usersRouter = require('./routes/users');
-const listRouter = require('./routes/list');
+const ajaxRouter = require('./routes/apiRoute');
 
 //Routing
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/leave', leaveRouter);
-app.use('/list', listRouter);
+app.use('/leavetype', leaveTypeRouter);
+app.use('/holiday', holidayRoute);
+app.use('/applyleave',applyLeaveRouter);
+app.use('/ajax',ajaxRouter);
 
 
 // catch 404 and forward to error handler
