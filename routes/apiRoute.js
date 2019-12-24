@@ -6,4 +6,6 @@ router.post('/api/decideLeave',apiController.decideLeave);
 
 router.get('/api/getuser',apiController.getAllUser);
 
+router.get('/api/getDataForModal',apiController.getDataForModal);
+
 module.exports = router;

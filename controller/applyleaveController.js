@@ -17,7 +17,7 @@ exports.getApplyLeaveIndex = async(req,res)=>{
 
 exports.getApplyLeave = async(req,res)=>{
   var ldd = await getLeaveData();
-  console.log(ldd);
+  // console.log(ldd);
   res.render('applyLeave/add', { ldd });
 };
 
@@ -48,7 +48,7 @@ exports.addApplyLeave = async(req,res)=>{
 
     (!is_date(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid From-Date Format' }) : (!(is_date_valid(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid Date ! From Date Should not be before today' }) : '');
     (!is_date(toDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid To-Date Format' }) : (!(is_date_valid(toDateFormat)) ? errors.push({ 'param': 'toDate ', 'msg': 'Invalid  Date! Date Should not be before today' }) : '');
-
+    let ldd = await lSQL.getLeaveData();
     const leave_data = req.body;
     if (errors.length > 0) {
       res.render('applyLeave/add', { errors, data: leave_data, ldd });
@@ -61,7 +61,7 @@ exports.addApplyLeave = async(req,res)=>{
 
       //here goes code for user holidays validation
       usl = await calculateHoliday4Leave(leave_data.fromDate, leave_data.toDate, leaveType);
-      uls = await calculateLeave(leave_data.fromDate, leave_data.toDate, usl, leaveType);
+      uls = await calculateLeave(leave_data.fromDate, leave_data.toDate, usl, leaveType,uid);
       if (uls.length != 2) {
         errors.push({ 'param': 'Internal Error', 'msg': 'Internal Server Error' });
         res.render('applyLeave/add', { errors, data: leave_data, ldd });
@@ -74,21 +74,19 @@ exports.addApplyLeave = async(req,res)=>{
         //  });
         console.log(userLeaveData);
         let form_status = await lSQL.saveLeaveForm(leave_data);
-        if (form_status.affectedRows == 1 && form_status.insertId != 0) {
+        if (form_status.affectedRows == 1 ) {
           let insertValues = userLeaveStatus.map((data) => {
             return `(${form_status.insertId},'${data.date}','${data.isHoliday}',"${data.type}","${data.name}","${data.leave}")`;
           });
           let leave_detail = await lSQL.insertLeaveHolidaydata(insertValues);
           var userid = 1;
           console.log('*********************');
-          console.log(userLeaveData);
-          
+          console.log(userLeaveData);         
           
           var sql = userLeaveData.map((data) => {
-            return `(${userid},${form_status.insertId},'${data.casual}','${data.sick}','${data.marriage}','${data.mourn}','${data.paternity}','${data.maternity}','${data.unpaid}')`;
+            return `(${userid},${form_status.insertId},'${data.casual}','${data.sick}','${data.marriage}','${data.mourn}','${data.paternity}','${data.maternity}','${data.unpaid}',current_timestamp())`;
           });
-          console.log(sql);
-          
+          console.log(sql);          
           // //calculate the leave Data
           // if (leave_detail.insertId != 0) {
           //   let userLeave = await lSQL.updateUserLeavRecord(userLeaveData);
@@ -96,12 +94,12 @@ exports.addApplyLeave = async(req,res)=>{
           // }
           await lSQL.addUserLeavRecordTemp(sql);
         }
-        res.send(leave_data);
-        // req.flash(
-        //   "success_msg",
-        //   `Leave Apply have been added to pending list`
-        // );
-        // res.redirect('/applyleave/list');
+        // res.send(leave_data);
+        req.flash(
+          "success_msg",
+          `Leave Apply have been added to pending list`
+        );
+        res.redirect('/applyleave/list');
       }
     }
   } catch (error) {
@@ -116,13 +114,100 @@ exports.getApplyLeaveEdit = async(req,res)=>{
   console.log(id +'-'+uid);  
   var ldd = await getLeaveData();  
   var data = await lSQL.getLeaveRecordById(id,uid);
-  res.render('applyLeave/editUserLeaveForm',{ldd,data});
+  // console.log(data);
+  if(data.lenght > 0){
+    req.flash("error_msg", `Record does not Exist` );
+      res.redirect('/applyleave');
+  }else{
+    res.render('applyLeave/editUserLeaveForm',{ldd,data});
+  }
 };
 
 
 exports.UpdateApplyLeave = async(req,res)=>{
   try {
-    
+    let fid =req.params.id;
+    let uid =req.query.uid;
+    let leave_data =req.body;
+    console.log(fid);    
+    let chkId = await lSQL.getLeaveRecordById(fid,uid);
+    if(!chkId){
+      req.flash("error_msg", `Unable to Update data` );
+      res.redirect('/applyleave/');
+    }else{        
+    //data validation
+    req.checkBody('employeeName', 'Employee Name Required').notEmpty();
+    req.checkBody('leaveDay', 'No. of Days of  Leave is Empty').notEmpty();
+    req.checkBody('leaveDay', 'No. of Days of  Leave is Empty').isNumeric();
+    req.checkBody('leaveType', 'Select specific LeaveType').notEmpty();
+    req.checkBody('leaveReason', 'Reason shouldnot be empty').notEmpty();
+    //Date part
+    req.checkBody('fromDate', 'Date not select').notEmpty();
+    req.checkBody('fromDate', 'Date not select URI').isISO8601();
+    //req.checkBody('fromDate', 'from date of leave must be valid and must be after today date').isAfter((new Date()).toDateString());
+    req.checkBody('toDate', 'Date not selected').notEmpty();
+    req.checkBody('toDate', 'End date of leave must be valid and after start date').isAfter((new Date(req.body.fromDate)).toDateString());
+    // req.checkBody('toDate', 'End date of lab must be valid and after start date').isAfter((new Date()).toDateString());
+    console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~New session~~~~~~~~${new Date()}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
+    var errors = req.validationErrors() || [];
+    ((req.body.leaveDay) <= 0 ? errors.push({ 'param': 'leaveDay', 'msg': 'Leave must be positive Number' }) : '');
+    var fromDate = req.body.fromDate;
+    var toDate = req.body.toDate;
+    var fromDateFormat = new Date(req.body.fromDate);
+    var toDateFormat = new Date(req.body.toDate);
+
+    (!is_date(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid From-Date Format' }) : (!(is_date_valid(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid Date ! From Date Should not be before today' }) : '');
+    (!is_date(toDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid To-Date Format' }) : (!(is_date_valid(toDateFormat)) ? errors.push({ 'param': 'toDate ', 'msg': 'Invalid  Date! Date Should not be before today' }) : '');
+
+    console.log(errors);
+    let ldd = await lSQL.getLeaveData();
+    if (errors.length > 0) {
+      res.render('applyLeave/editUserLeaveForm', { errors, data: leave_data, ldd });
+    } else {
+      const leave_data = req.body;
+      var leaveType = req.body.leaveType;
+      var userLeaveStatus = []; //to store leave date detail with holiday, weekend, leave type   
+      var userLeaveData = [];
+      var usl, uls,flag =false;  //to store no of day of casual, leave unpaid and holiday
+
+      //here goes code for user holidays validation
+      usl = await calculateHoliday4Leave(leave_data.fromDate, leave_data.toDate, leaveType);
+      uls = await calculateLeave(leave_data.fromDate, leave_data.toDate, usl, leaveType);
+      if (uls.length != 2) {
+        errors.push({ 'param': 'Internal Error', 'msg': 'Internal Server Error' });
+        res.render('applyLeave/editUserLeaveForm',{ errors, data: leave_data, ldd });
+      } else {    
+        userLeaveData = uls[0];
+        userLeaveStatus = uls[1];
+        let form_status = await lSQL.updateAppliedLeave(leave_data,fid,uid);
+        if(form_status !='' && form_status.affectedRows == 1 && form_status.changedRows ==1 ){
+          let count = await lSQL.countAppliedLeaveDetail(fid);
+          if(count != 0){
+            let status = await lSQL.deleteAppliedLeaveDetail(fid);
+          }          
+          //update leave record
+          let insertValues = userLeaveStatus.map((data) => {
+            return `(${fid},'${data.date}','${data.isHoliday}',"${data.type}","${data.name}","${data.leave}")`;
+          });
+          let leave_detail = await lSQL.insertLeaveHolidaydata(insertValues);
+          console.log('*********************');
+          console.log(userLeaveData);  
+          var sql = userLeaveData.map((data) => {
+            return `(${uid},${fid},'${data.casual}','${data.sick}','${data.marriage}','${data.mourn}','${data.paternity}','${data.maternity}','${data.unpaid},current_timestamp()')`;
+          });
+          console.log(sql);
+          await lSQL.addUserLeavRecordTemp(sql);          
+          req.flash("success_msg", `Applied user leave Updated` );
+          res.redirect('/applyleave/');
+        }else{
+          req.flash("error_msg", `Unable to Update data` );
+          res.redirect('/applyleave/');
+        }   
+        //done the else of if (uls.length != 2) 
+      }
+    }
+    //res.send(req.body);
+    }    
   } catch (error) {
     console.log(error);    
   }
@@ -197,7 +282,7 @@ function getWeekDay(date) {
 }
 
 //to calculate the exact leave day
-async function calculateLeave(startDate, endDate, userLeaveStatus, type) {
+async function calculateLeave(startDate, endDate, userLeaveStatus, type , uid) {
   console.log('initiate leave Calculation');
   var leaveRecord = [];
   var ull = await ltSQL.getUserLeaveDetail(1);
@@ -322,3 +407,21 @@ async function getLeaveData(){
         console.log(error);
       }
 }
+
+var is_date_valid = (input) => {
+  if (is_date(input)) {
+    var date = new Date();
+    date.setUTCHours(0, 0, 0, 0);
+    if (date.getTime() <= input.getTime() || date.getTime() == input.getTime()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+
+var is_date = function (input) {
+  if (Object.prototype.toString.call(input) === "[object Date]")
+    return true;
+  return false;
+};

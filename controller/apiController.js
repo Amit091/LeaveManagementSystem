@@ -13,12 +13,9 @@ exports.decideLeave = async(req,res)=>{
     var reason = req.body.reason;    
     req.checkBody('id', 'Invalid User Data').notEmpty().isNumeric(); 
     req.checkBody('user_id', 'Invalid User Data').notEmpty().isNumeric(); 
-    req.checkBody('status', 'Select specific LeaveType').notEmpty().isIn('reject','accept'); 
+    req.checkBody('status', 'Select specific LeaveType').notEmpty();
     reason =(reason=='')?(status=='accept')?'Accepted':reason:reason;
-    console.log(reason);
-    
-    req.checkBody('reason', 'reason required').notEmpty();
-   
+    console.log(reason);   
     var errors = req.validationErrors() || [];
     console.log(errors);
     
@@ -38,12 +35,12 @@ exports.decideLeave = async(req,res)=>{
         console.log(status);        
           if(status == 'accept'){
             updateData = await lSQL.UpdateLeaveDataRecordStatus(data);   
-            console.log(updateData);
+            //console.log(updateData);
           }
           else if( status == 'reject')
           { 
             updateData = await lSQL.UpdateLeaveDataRecordStatus(data);   
-            console.log(updateData);            
+            //console.log(updateData);            
           }
            const list = await lSQL.getLeaveRecord();
           res.render('./partials/pageItem/tableViewFull', { list},(err,out)=>{
@@ -87,6 +84,23 @@ exports.getAllUser = async(req,res)=>{
     let user = req.query.query;  
     let data  =await lSQL.getAllUser(user);    
     res.send({ data}).status(200);
+  } catch (error) {
+    console.log(error);    
+  }
+};
+
+exports.getDataForModal = async(req,res)=>{
+  try {
+    let data= req.query;
+    let record = await lSQL.getLeaveDataRecordByIdandUser(data.id,data.user_id);
+    //console.log(record);    
+    res.render('./partials/decisonModal', { record,status:data.status},(err,out)=>{
+      if(err){
+          res.send({ status: false });          
+      }else{
+          res.send({ htmlData: out, status: true });
+      }
+    });
   } catch (error) {
     console.log(error);    
   }

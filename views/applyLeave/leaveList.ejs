@@ -20,20 +20,19 @@
   <div class="card-body">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#all" role="tab" aria-controls="all">All</a>
+        <a class="nav-link active" id="alltab" data-toggle="tab" href="#all"  role="tab" aria-controls="all">All</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#pending" role="tab" aria-controls="pending">Pending</a>
+        <a class="nav-link" id="pendingtab" data-toggle="tab" href="#pending"  role="tab" aria-controls="pending">Pending</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#accept" role="tab" aria-controls="accept">Accepted</a>
+        <a class="nav-link" id="accepttab" data-toggle="tab" href="#accept" role="tab" aria-controls="accept">Accepted</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link  text-danger" data-toggle="tab" href="#reject" role="tab" aria-controls="reject">Rejected</a>
+        <a class="nav-link  text-danger" id="rejecttab" data-toggle="tab" href="#reject" role="tab" aria-controls="reject">Rejected</a>
       </li>
     </ul>
     <div class="tab-content" id="tab-view-panel">
-      <br>
       <% include ./../partials/pageitem/tableViewFull%>
     </div>
   </div>
@@ -45,153 +44,11 @@
 <!--For Leave Record Detail-->
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel">Leave Apply Record </h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body"> 
-                <div class="row col form-group">
-          <p class="card-text" id="productname">
-            Empoyee Name:<output> Amit Dhoju</output>
-          </p>
-        </div>
-
-        <div class="row col form-group">
-          <p class="card-text">
-            Leave Type:<output>Amit Dhoju</output></p>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6">
-            <p class="card-text">
-              From Date :<output> 2019-12-24</output> </p>
-          </div>
-          <div class="col-md-6">
-            <p class="card-text">
-              To Date: <output>2019-12-24</output> </p>
-          </div>
-        </div>
-        <br>
-        <div class="row form-group">
-          <div class="col-md-5">
-            <p class="card-text">
-              Leave Reason</p>
-          </div>
-          <div class="col-md-7">
-            <textarea readonly class="form-control"></textarea>
-          </div>
-        </div>
-
-        <div class="row form-group">
-          <div class="col-md-5">
-            <label>Status</label>
-            <select class="form-control" id="status">
-              <option value="0" >Select any Option</option>
-              <option value="accept">Accept</option>
-              <option value="reject">Reject</option>
-            </select>
-          </div>
-          <div class="col-md-7">
-            <label>Reason (if reason):</label>
-            <textarea id="reason" placeholder="reason to reject the leave" class="form-control" ></textarea>
-            <small id="reasoninfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
-          </div>
-        </div>
-          
-        <div hidden>
-          <p id="from_id" hidden></p>
-          <p id="user_id" hidden></p>
-          </div>
-
-      </div>
-
-      <div class="modal-footer">
-        <div class="btn-group-toggle justify-content-center">
-          <button type="submit" id="btnsubmit" class="btn btn-primary" >Submit</button>
-          <button id="btndiscard" class="btn btn-secondary">Discard</button>
-          <button type="cancel" id="btnCancel" class="btn btn-danger" class="close" type="button" data-dismiss="modal"
-            aria-label="Close">Close</button>
-        </div>
-      </div>
+    <div class="modal-content" id="decisionModal">
+      <!--decision modal  -->
     </div>
   </div>
+</div>
 
-
-  <script src="js/leavelist.js"></script>
-  <script>
-    $('document').ready(function () {
-      //$('#detailModal').modal('show');
-
-      $('#status').on('change', () => {
-        console.log($('#status').val());
-        
-        if ($('#status').val() == 'reject') {
-          $('#reason').attr('disabled', false);
-        } else {
-          $('#reason').attr('disabled', true);
-        }
-      });
-      // onclick="window.location.href = '/list'" 
-      $('#btndiscard').on('click', () => {
-        $('#reason').attr('disabled', true);
-        $('#reason').val('');        
-        $('#status').val('0');
-        $('#reason').attr('disabled', true);
-      
-      });
-      $('#reason').on('keyup',()=>{
-          if($('#reason').val()==''){
-            $('#btnsubmit').attr('disabled',true);
-          }else{
-            $('#btnsubmit').attr('disabled',false);
-          }
-      });        
-
-      $('#btnsubmit').on('click', () => {
-        alert('asdas')
-        $('#reason').attr('disabled', true);
-        if($('#reason').val()==''){
-          $('#reasoninfo').html('Reason is blank');
-          return;
-        }else {
-          //jquery
-          var data = {
-            'id': `${104}`,
-            'user_id': `${3}`,
-            'reason':`${$('#reason').val()}`,
-            'status':`${$('#status').val()}`
-        };
-        console.log(data);
-
-        $.ajax({
-            type: `POST`,
-            url: `/ajax/api/decideLeave`,
-            data: data,
-            contentType: 'application/x-www-form-urlencoded',
-            success: result => {
-                console.log(result);
-                console.log('data is here');
-                $('#detailModal').modal('hide');
-                $('#tab-view-panel').children().remove();
-                $('#tab-view-panel').html(result.htmlData);
-                $('table.dataTable').DataTable();
-                $('#page-top').focus();
-            },
-            error: error => {
-              console.log('its from error');
-              
-                console.log(error);
-            }
-      });
-    }
-    })
-
-     
-  });
-
-  
-  </script>
+ 
   <%- include ./../layouts/layoutfooter%>

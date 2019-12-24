@@ -1,0 +1,146 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="modalLabel"> Decide the Leave Apply Record </h5>
+  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+
+<div class="modal-body">
+
+  <div class="row col form-group">
+    <p class="card-text">
+      Empoyee Name:<output id="modalname"> <%=record.employee_name%></output>
+    </p>
+  </div>
+
+  <div class="row col form-group">
+    <p class="card-text">
+      Leave Type:<output id="modalLeaveType"> <%=record.leave_type%></output>
+      </p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <p class="card-text">
+        From Date :<output id="modalSdate"> <%=record.sDate%></output> 
+      </p>
+    </div>
+    <div class="col-md-6">
+      <p class="card-text">
+        To Date: <output id="modalEdate"><%=record.eDate%></output> </p>
+    </div>
+  </div>
+  <br>
+
+  <div class="row form-group">
+    <div class="col-md-5">
+      <p class="card-text">
+        Leave Reason
+      </p>
+    </div>
+    <div class="col-md-7">
+      <textarea readonly class="form-control"><%=record.leave_reason%></textarea>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-5">
+      <label>Status </label>
+      <select class="form-control" id="modalstatus">
+        <option value="0">Select any Option</option>
+        <option value="accept" <%=(status == 'accept')?'selected':''%> >Accept</option>
+        <option value="reject"<%=(status == 'reject')?'selected':''%>  >Reject</option>
+      </select>
+    </div>
+    <div class="col-md-7">
+      <label>Reason (if reject):</label>
+      <textarea id="modalreason" placeholder="reason to reject the leave" class="form-control"></textarea>
+      <small id="modalreasoninfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
+    </div>
+  </div>
+
+  <div hidden>
+    <input id="modal_from_id" value="<%=record.id%>" hidden>
+    <input id="modal_user_id" value="<%=record.employee_id%>" hidden>
+  </div>
+
+</div>
+
+<div class="modal-footer">
+  <div class="btn-group-toggle justify-content-center">
+    <button type="submit" id="modalbtnsubmit" class="btn btn-primary">Submit</button>
+    <button id="modalbtndiscard" class="btn btn-secondary" class="close" type="button" data-dismiss="modal"
+    aria-label="Close">Discard</button>
+    <button type="cancel" id="modalbtnCancel" class="btn btn-danger" class="close" type="button" data-dismiss="modal"
+      aria-label="Close">Close</button>
+  </div>
+</div>
+
+<script>
+$('document').ready(()=>{
+  
+  $('#modalstatus').on('change', () => {
+    if ($('#modalstatus').val() == 'reject') {
+      $('#modalreason').val('');
+      $('#modalreason').attr('disabled', false);
+    } else {
+      $('#modalreason').attr('disabled', true);
+    }
+  });
+  // onclick="window.location.href = '/list'" 
+  $('#modalbtndiscard').on('click', () => {
+    $('#modalreason').attr('disabled', true);
+    $('#modalreason').val('');
+    $('#modalstatus').val('0');
+    $('#modalreason').attr('disabled', true);
+
+  });
+  $('#modalreason').on('keyup', () => {
+    if ($('#modalreason').val() == '') {
+      $('#modalbtnsubmit').attr('disabled', true);
+    } else {
+      $('#modalbtnsubmit').attr('disabled', false);
+    }
+  });
+
+  $('#modalbtnsubmit').on('click', () => {
+    $('#modalreason').attr('disabled', true);
+    if ($('#modalreason').val() == '' && $('#modalstatus').val() == 'reject') {
+      $('#modalreasoninfo').html('Reason is blank');
+      return;
+    } else {
+      //jquery
+      var data = {
+        'id': `${$('#modal_from_id').val()}`,
+        'user_id': `${$('#modal_user_id').val()}`,
+        'reason': `${$('#modalreason').val()}`,
+        'status': `${$('#modalstatus').val()}`
+      };
+      console.log(data);
+
+      $.ajax({
+        type: `POST`,
+        url: `/ajax/api/decideLeave`,
+        data: data,
+        contentType: 'application/x-www-form-urlencoded',
+        success: result => {
+          console.log(result);
+          console.log('data is here');
+          $('#detailModal').modal('hide');
+          $('#tab-view-panel').children().remove();
+          $('#tab-view-panel').html(result.htmlData);
+          $('table.dataTable').DataTable();
+          $('#page-top').focus();
+          $('#alltab').click();
+        },
+        error: error => {
+          console.log('its from error');
+          $('#detailModal').modal('hide');
+          $('decisionModal').html('');
+          console.log(error);
+        }
+      });
+    }
+  })    
+})
+</script>

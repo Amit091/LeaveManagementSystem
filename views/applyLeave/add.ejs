@@ -58,7 +58,7 @@
           <select name="leaveType" id="leaveType" class="form-control" required>
             <option value="">Select the leave</option>
             <%ldd.forEach(day => {%>
-            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' value="<%=day.id%>"
+            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' value="<%=day.name%>"
               <%=(typeof data !='undefined')? (data.leaveType == day.name)?'selected':'':''%>><%=day.name%> leave
             </option>
             <%});%>
@@ -126,8 +126,5 @@
 <script src="/js/leaveAdd.js"></script>
 <script src="/vendor/jqueryUI/jquery-ui.js"></script>
 <script src="/js/autocomplete.js"></script>
-<script>
-  $( "#fromDate" ).datepicker();
-  $( "#toDate" ).datepicker();
-  </script>
+
 <% include ./../layouts/layoutfooter%>
