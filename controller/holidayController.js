@@ -1,7 +1,7 @@
 const holidaysSQL = require('../helpers/Dao/holidaysSQL');
 const hSQL = new holidaysSQL();
 
-var types = ['Public Holiday', 'Floating Holiday'];
+var types = ['public', 'float'];
 
 exports.getHolidayIndex = async (req, res) => {
     try {
@@ -26,7 +26,7 @@ exports.createHoliday = async (req, res) => {
         } else {
             await hSQL.createHolidays(req.body);
             req.flash('success_msg', 'new holiday added');
-            res.redirect('/holiday');           
+            res.redirect('/holiday');
         }
         console.log(errors);
     } catch (error) {
@@ -71,7 +71,7 @@ exports.updateHoliday = async (req, res) => {
         } else {
             let holiday = await hSQL.updateHoliday(id, req.body);
             let allresult = await hSQL.showHolidaysSQL();
-            res.redirect('/holiday');   
+            res.redirect('/holiday');
         }
     } catch (error) {
         console.log(error);
@@ -82,7 +82,7 @@ exports.deleteHoliday = async (req, res) => {
     try {
         const id = req.params.id;
         await hSQL.deleteHoliday(id);
-        res.redirect('/holiday');   
+        res.redirect('/holiday');
     } catch (error) {
         console.log(error);
     }
