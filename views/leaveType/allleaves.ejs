@@ -1,5 +1,5 @@
 <div class="table table-responsive-sm text-center">
-    <table class="table  table-sm">
+    <table class="table  table-sm" id="tblleavetype">
         <thead>
             <tr>
                 <th scope="col">Name</th>
@@ -28,3 +28,8 @@
         </tbody>
     </table>
 </div>
+<script>
+$(document).ready(function() {
+$('#tblleavetype').DataTable();
+} );
+</script>

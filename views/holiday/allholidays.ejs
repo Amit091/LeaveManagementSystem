@@ -1,5 +1,5 @@
 <div class="table table-responsive-sm text-center">
-    <table class="table  table-sm">
+    <table class="table  table-sm" id="tblHoliday">
         <thead>
             <tr>
                 <th scope="col">Name</th>
@@ -27,3 +27,8 @@
         </tbody>
     </table>
 </div>
+<script>
+$(document).ready(function() {
+$('#tblHoliday').DataTable();
+} );
+</script>

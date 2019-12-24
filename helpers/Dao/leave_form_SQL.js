@@ -49,7 +49,6 @@ module.exports = class leaveSQL {
       console.log('**********SQL*********');
       console.log(data);
       let SQL = `INSERT INTO user_leave_detail_temp (user_id,leave_form,casual,sick,marriage,mourn,paternity,maternity,unpaid,update_at) VALUE ${data}`;
-
       let status = await con.query(SQL);
       status = await JSON.parse(JSON.stringify(status));
       return 'status';

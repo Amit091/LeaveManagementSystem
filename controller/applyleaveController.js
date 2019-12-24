@@ -23,6 +23,8 @@ exports.getApplyLeave = async(req,res)=>{
 
 exports.addApplyLeave = async(req,res)=>{
   try {
+    
+    const leave_data = req.body;
     //data validation
     req.checkBody('employeeName', 'Employee Name Required').notEmpty();
     req.checkBody('leaveDay', 'No. of Days of  Leave is Empty').notEmpty();
@@ -49,7 +51,6 @@ exports.addApplyLeave = async(req,res)=>{
     (!is_date(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid From-Date Format' }) : (!(is_date_valid(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid Date ! From Date Should not be before today' }) : '');
     (!is_date(toDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid To-Date Format' }) : (!(is_date_valid(toDateFormat)) ? errors.push({ 'param': 'toDate ', 'msg': 'Invalid  Date! Date Should not be before today' }) : '');
     let ldd = await lSQL.getLeaveData();
-    const leave_data = req.body;
     if (errors.length > 0) {
       res.render('applyLeave/add', { errors, data: leave_data, ldd });
     } else {
@@ -58,7 +59,7 @@ exports.addApplyLeave = async(req,res)=>{
       var userLeaveStatus = []; //to store leave date detail with holiday, weekend, leave type   
       var userLeaveData = [];
       var usl, uls;  //to store no of day of casual, leave unpaid and holiday
-
+var uid = 6;
       //here goes code for user holidays validation
       usl = await calculateHoliday4Leave(leave_data.fromDate, leave_data.toDate, leaveType);
       uls = await calculateLeave(leave_data.fromDate, leave_data.toDate, usl, leaveType,uid);
@@ -84,7 +85,7 @@ exports.addApplyLeave = async(req,res)=>{
           console.log(userLeaveData);         
           
           var sql = userLeaveData.map((data) => {
-            return `(${userid},${form_status.insertId},'${data.casual}','${data.sick}','${data.marriage}','${data.mourn}','${data.paternity}','${data.maternity}','${data.unpaid}',current_timestamp())`;
+            return `(${userid},${form_status.insertId},'${data.casual}','${data.sick}','${data.marriage}','${data.mourn}','${data.paternity}','${data.maternity}','${data.unpaid}','current_timestamp()')`;
           });
           console.log(sql);          
           // //calculate the leave Data
@@ -190,10 +191,10 @@ exports.UpdateApplyLeave = async(req,res)=>{
             return `(${fid},'${data.date}','${data.isHoliday}',"${data.type}","${data.name}","${data.leave}")`;
           });
           let leave_detail = await lSQL.insertLeaveHolidaydata(insertValues);
-          console.log('*********************');
-          console.log(userLeaveData);  
+          // console.log('*********************');
+          // console.log(userLeaveData);  
           var sql = userLeaveData.map((data) => {
-            return `(${uid},${fid},'${data.casual}','${data.sick}','${data.marriage}','${data.mourn}','${data.paternity}','${data.maternity}','${data.unpaid},current_timestamp()')`;
+            return `(${uid},${fid},'${data.casual}','${data.sick}','${data.marriage}','${data.mourn}','${data.paternity}','${data.maternity}','${data.unpaid}','current_timestamp()')`;
           });
           console.log(sql);
           await lSQL.addUserLeavRecordTemp(sql);          
