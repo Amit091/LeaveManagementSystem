@@ -24,12 +24,15 @@
         <% if(record.status =='pending') {%>
         <a class="btn  btn-primary" style="color: white;"
           href="/applyleave/edit/<%=record.id%>?uid=<%=record.employee_id%>"><i class="fa fa-pen"> Edit</i></a>
-        <button class="btn btn-info btnaccept"
+          <button class="btn btn-info btnaccept"
+          onclick="makeDecision(<%=record.id%>,<%=record.employee_id%>,'accept')"><i class="fas fa-question">
+            Decide</i></button>
+        <!--<button class="btn btn-info btnaccept"
           onclick="makeDecision(<%=record.id%>,<%=record.employee_id%>,'accept')"><i class="fa fa-check">
             Accept</i></button>
         <button class="btn btn-danger btnreject"
           onclick="makeDecision(<%=record.id%>,<%=record.employee_id%>,'reject')"><i class="fa fa-times">
-            Reject</i></button>
+            Reject</i></button> -->
         <%}%>    
     </td>
       </tr>   

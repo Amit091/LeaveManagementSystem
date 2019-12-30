@@ -1,8 +1,10 @@
 const leave_SQL = require('../helpers/Dao/leave_form_SQL');
 const leave_type_SQL = require('../helpers/Dao/Leave_type_SQL');
+const user_SQL = require('./../helpers/Dao/users_SQL');
 
 const lSQL = new leave_SQL();
 const ltSQL = new leave_type_SQL();
+const uSQL = new user_SQL();
 
 exports.decideLeave = async(req,res)=>{
   try {
@@ -32,9 +34,11 @@ exports.decideLeave = async(req,res)=>{
         res.status(404).send('Data of respective Query not found in Server');
       }else if(fromData.status == 'pending'){
         var updateData;
-        console.log(status);        
+        console.log(status);       
+        //this update the user leave status applied  reject/accept
           if(status == 'accept'){
-            updateData = await lSQL.UpdateLeaveDataRecordStatus(data);   
+            updateData = await lSQL.UpdateLeaveDataRecordStatus(data);  
+            //if(accept update the user leave Data) 
             //console.log(updateData);
           }
           else if( status == 'reject')
@@ -82,7 +86,8 @@ exports.decideLeave = async(req,res)=>{
 exports.getAllUser = async(req,res)=>{
   try {
     let user = req.query.query;  
-    let data  =await lSQL.getAllUser(user);    
+    user = `%${user}%`;
+    let data  =await uSQL.getAllUser(user);
     res.send({ data}).status(200);
   } catch (error) {
     console.log(error);    

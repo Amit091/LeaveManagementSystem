@@ -7,8 +7,9 @@
       <th>From</th>
       <th>To</th>
       <th>Apply</th>
+      <th>Reason</th>      
       <th>Option</th>
-      <th>Leave Reason</th>
+
     </tr>
   </thead>
   <tbody>
@@ -20,10 +21,10 @@
     <td><%=record.sDate%></td>
     <td><%=record.eDate%></td>
     <td><%=record.aDate%>, <%=record.aTime%></td>
-    <td id="<%=record.id%>_status"><%=record.status%></td>            
     <td class="btn-group-toggle btn-group-sm"> 
-      <textarea rows="2" cols="30" class="" readonly><%=record.leave_reason%></textarea>
+      <textarea rows="2" cols="30" class="" readonly> <%=(record.status =='reject')?record.reject_reason:record.leave_reason%></textarea>
       </td>
+      <td id="<%=record.id%>_status"><%=(record.status =='reject')?'if reject then only':''%></td>            
       </tr>      
       <%}%>    
 <% });%>

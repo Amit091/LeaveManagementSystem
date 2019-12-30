@@ -6,8 +6,8 @@ module.exports = class leaveSQL {
   async saveLeaveForm(leaveForm) {
     try {
       con = await gcon();
-      console.log(query.insert_leave_apply_record, [leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay, leaveForm.leaveReason]);
-      let status = await con.query(query.insert_leave_apply_record, [leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay, leaveForm.leaveReason]);
+      console.log(query.insert_leave_apply_record, [leaveForm.userid,leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay, leaveForm.leaveReason]);
+      let status = await con.query(query.insert_leave_apply_record, [leaveForm.userid,leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay, leaveForm.leaveReason]);
       status = await JSON.parse(JSON.stringify(status));
       return status;
     } catch (error) {
@@ -170,6 +170,17 @@ module.exports = class leaveSQL {
       return count || 0; 
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async getHolidayDashainAndTihar(day){
+    try {
+      con = await gcon();
+      let record =await con.query(`SELECT * FROM holidays WHERE name = '${day}'`);
+      record = await JSON.parse(JSON.stringify(record));
+      return record;      
+    } catch (error) {
+      console.log(error);      
     }
   }
 
