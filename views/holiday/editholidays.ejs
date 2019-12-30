@@ -1,4 +1,15 @@
 <% include ./../layouts/layoutheader%>
+<style>
+    select::-webkit-inner-spin-button,
+    select::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
 <!-- Custom styles for this template-->
 <link href="/css/change.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
@@ -24,9 +35,9 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card ml-5" style="width: 25rem;">
+        <div class="card ml-5  style=" width: 30rem;">
             <div class="card-header bg-card-head">
-                Add Holidays
+                Edit Holidays
             </div>
             <div class="card-body bg-card-body">
                 <form id="product-form" action="/holiday/editholiday/<%=holiday.id%>" method="post">
@@ -42,17 +53,65 @@
 
                             <div class="from-group box">
                                 <select class="custom-select form-control" id="holidaytype" name="holidaypicker"
+                                    onchange="myFunction()"
                                     value="<%=typeof holiday !='undefined' ? holiday.type : ''%>" required>
-                                    <option value="">Choose holiday</option>
+                                    <option selected value="0">Choose type</option>
 
                                     <%types.forEach((holi)=>{%>
                                     <option value="<%=holi%>" <%if(holiday.type==holi){%> selected <%}%>>
                                                     <%=holi%></option> <% })%> </select> </div> <div class="form-group"
                                         id="date_loader">
-                                        <label for="date">Date:</label>
-                                        <input type="date"
+
+                                        <div>
+
+
+                                            <br>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-5 col-sm-4 col-xs-12">
+                                                    <label for="fromDate">From Date*</label>
+                                                    <div class="input-group">
+                                                        <input type="date" class="form-control datepicker"
+                                                            name="fromDate" id="fromDate" required
+                                                            aria-describedby="fdate"
+                                                            value="<%=(typeof holiday !='undefined')? holiday.fromdateformat:''%>">
+                                                        <!-- <div class="input-group-append">
+                                                                      <span class=" open-button" id="fdate"><button type="button"><i  class="fa fa-calendar"></i></button></span>
+                                                                    </div>
+                                                                  -->
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="form-group col-md-5 col-sm-4 col-xs-12">
+                                                    <label for="toDate">To Date*</label>
+                                                    <div class="input-group">
+                                                        <input type="date" class="form-control datepicker "
+                                                            name="toDate" id="toDate" required aria-describedby="tdate"
+                                                            value="<%=(typeof holiday !='undefined')? holiday.todateformat:''%>">
+                                                        <div class="input-group-append">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                                                    <label for="leaveDay">Days*</label>
+                                                    <input type="number" class="form-control datepicker" id="leaveDay"
+                                                        name="leaveDay" placeholder="Enter leave day" step="1" min="1"
+                                                        max="100" value="0" required aria-describedby="leaveinfo"
+                                                        autocomplete="off" readonly value="value="
+                                                        <%=(typeof holiday !='undefined')? holiday.leaveDay:''%>"">
+                                                    <small id="leaveinfo" class="form-text text-muted"
+                                                        style="color: red;font-weight:bolder;"></small>
+                                                </div>
+
+                                            </div>
+
+
+
+                                        </div>
+                                        <!-- <input type="date"
                                             data-date="<%=typeof holiday !='undefined' ? holiday.date : ''%>"
-                                            id="date_id" name="date" class="form-control" required>
+                                            id="date_id" name="date" class="form-control" required> -->
 
                             </div>
 
@@ -82,7 +141,7 @@
 
 
 
-<script>
+<!-- <script>
     $(document).ready(function () {
 
         var now = getDate('today');
@@ -130,6 +189,17 @@
 
 
     })
-</script>
+</script> -->
+<script>
+    function myFunction() {
+        if ($("#holidaytype").val() == "float") {
+            $("#toDate").prop('readonly', true);
+            $("#toDate").val($("#fromDate").val())
+        } else if ($("#holidaytype").val() == "public") {
+            $("#toDate").removeAttr('readonly');
+        }
+    }
 
+</script>
 <% include ./../layouts/layoutfooter%>
+<script src="/js/holidays.js"></script>

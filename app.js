@@ -90,14 +90,17 @@ const holidayRoute = require('./routes/holidayRoute');
 const applyLeaveRouter = require('./routes/applyLeaveRoute');
 const usersRouter = require('./routes/users');
 const ajaxRouter = require('./routes/apiRoute');
+const calenderRouter = require('./routes/calenderRoute');
 
 //Routing
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/leavetype', leaveTypeRouter);
 app.use('/holiday', holidayRoute);
-app.use('/applyleave',applyLeaveRouter);
-app.use('/ajax',ajaxRouter);
+app.use('/applyleave', applyLeaveRouter);
+app.use('/ajax', ajaxRouter);
+app.use('/calender', calenderRouter);
+
 
 
 //catch 404 and forward to error handler
