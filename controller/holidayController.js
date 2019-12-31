@@ -1,7 +1,10 @@
 const holidaysSQL = require('../helpers/Dao/holidaysSQL');
 const hSQL = new holidaysSQL();
+const applyFloat = require('../helpers/applyFloat');
+const decisionFloat = new applyFloat();
 
 var types = ['public', 'float'];
+
 
 exports.getHolidayIndex = async (req, res) => {
     try {
@@ -11,6 +14,52 @@ exports.getHolidayIndex = async (req, res) => {
         console.log(error);
     }
 };
+
+const applyFloatCheck = async (date) => {
+    try {
+        const now = new Date();
+        const enteredDate = new Date(date);
+        const result = Math.ceil((enteredDate - now) / (1000 * 3600 * 24));
+        const decision = false;
+        return (result < 7) ? false : true;
+
+
+    }
+
+    catch (error) {
+        console.log(error);
+
+    }
+
+}
+
+exports.applyFloatLeave = async (req, res) => {
+    try {
+        res.render('holiday/applyFloat');
+        var errors = req.validationErrors();
+        console.log(req.body);
+        req.checkBody('userName', 'this field should not be empty').notEmpty();
+        req.checkBody('holidayName', 'this field should not be empty').notEmpty();
+        req.checkBody('date', 'this field should not be empty').notEmpty();
+        req.checkBody('reason', 'this field should not be empty').notEmpty();
+        errors = [];
+        let result = await applyFloatCheck(req.body.date);
+        if (result != true) {
+            errors.push({ 'param': 'date', 'msg': 'leave for float holidays must be applied prior 1 week ago' });
+        }
+            var numbers = /^[0-9]+$/;
+            if (req.body.holiday_name.value.match(numbers)) {
+                errors.push({ 'param': 'holiday_name', 'msg': 'numbers not allowed' });
+            }
+        if (errors.length > 0) {
+            res.render('holiday/applyFloat', { errors });
+        }
+
+    } catch (error) {
+        console.log(error);
+
+    }
+}
 
 exports.createHoliday = async (req, res) => {
     try {
