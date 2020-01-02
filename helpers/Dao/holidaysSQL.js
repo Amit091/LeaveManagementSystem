@@ -1,6 +1,7 @@
 const gcon = require('../../config/DBConnection');
 
 module.exports = class holidaysSQL {
+    
     async createHolidays(data) {
         try {
             let con = await gcon();

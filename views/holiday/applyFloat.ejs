@@ -1,0 +1,189 @@
+<% include ./../layouts/layoutheader%>
+
+<style>
+    select::-webkit-inner-spin-button,
+    select::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+<!-- Custom styles for this template-->
+<link href="/css/change.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="-ymous"></script>
+<!-- message -->
+<% include ./../partials/messages.ejs%>
+<!-- Breadcrumbs-->
+<ol class="breadcrumb ">
+    <li class="breadcrumb-item ">
+        <a href="/">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">Add Holiday</li>
+</ol>
+<div class="row">
+    <div class="col-md-7">
+
+    </div>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-card-head">
+                Apply Float Leave
+            </div>
+            <div class="card-body bg-card-body">
+                <form id="product-form" action="/holiday/applyfloat" method="post">
+                    <div class="form-group ">
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">User Name:</label>
+                            <input type="text" name="userName" id="holiday_type" class="form-control"
+                                id="exampleInputEmail1" aria-describedby="emailHelp"
+                                placeholder="name of the holiday event" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Holiday Name:</label>
+                            <input type="text" name="holidayName" id="holiday_name" class="form-control"
+                                id="exampleInputEmail1" aria-describedby="emailHelp"
+                                placeholder="name of the holiday event" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6"><label for="fromDate">number of days prior</label>
+                                <input type="text" name="holidayNumber" id="holiday_number" class="form-control"
+                                    id="exampleInputEmail1" aria-describedby="emailHelp"
+                                    placeholder="name of the holiday event" required></div>
+                            <div class="form-group col-md-6">
+                                <label for="fromDate">Date*</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control datepicker" name="date" id="date" required
+                                        aria-describedby="fdate"
+                                        value="<%=(typeof data !='undefined')? data.fromDate:''%>">
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="description">Reason:</label>
+                            <textarea class="form-control" cols="30" name="reason" rows="5" id="description"
+                                required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <div class="justify-content-end">
+                                <button type="submit" class="btn btn-primary ">Apply</button>
+                                <a href="/" type="submit" class="btn btn-warning">Cancel</a>
+                                <button type="reset" class="btn btn-danger">Reset</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+
+        if ($("#holidaytype").val() == "float") {
+            $("#toDate").prop('disabled', true);
+        }
+
+        var now = getDate('today');
+        var maxDate = getDate('maxdate') + '-' + '03' + '-' + '31';
+        var date = new Date();
+        var year = date.getFullYear();
+        var mini = year + '-' + '04' + '-' + '01';
+        $('#date').val(now)
+        $('#date').attr('max', maxDate);
+        $('#date').attr('min', now);
+
+
+
+        function getDate(status) {
+            var now = new Date();
+            var month = (now.getMonth() + 1);
+            var day = now.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var today = now.getFullYear() + '-' + month + '-' + day;
+            if (status === "today") return today;
+            if (status === "maxdate") return now.getFullYear() + 1;
+            else '';
+        }
+
+        $(function () {
+
+            $('#holiday_name').keydown(function (e) {
+
+                if (e.shiftKey || e.ctrlKey || e.altKey) {
+
+                    e.preventDefault();
+
+                } else {
+
+                    var key = e.keyCode;
+
+                    if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
+
+                        e.preventDefault();
+
+                    }
+
+                }
+
+            });
+
+        });
+    })
+</script>
+<!-- <script>
+    function myFunction() {
+        if ($("#holidaytype").val() == "float") {
+            $("#toDate").prop('readonly', true);
+            $("#toDate").val($("#fromDate").val())
+        } else if ($("#holidaytype").val() == "public") {
+            $("#toDate").removeAttr('readonly');
+        }
+    }
+
+</script> -->
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#holiday_number  ").bind("keypress", function (e) {
+            var keyCode = e.which ? e.which : e.keyCode
+
+            if (!(keyCode >= 48 && keyCode <= 57)) {
+                $(".error").css("display", "inline");
+                return false;
+            } else {
+                $(".error").css("display", "none");
+            }
+        });
+    });
+
+</script>
+
+
+
+
+
+<% include ./../layouts/layoutfooter%>
+<script src="/js/holidays.js"></script>
