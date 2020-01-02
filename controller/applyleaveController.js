@@ -11,6 +11,7 @@ const uSQL = new userSQL();
 var status = ['pending', 'accepted', 'rejected'];
 var weekDay = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 var months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+var LP = { 'casual': 4, 'sick': 0, 'mourn': 0, 'marriage': 7, 'paternity': 15, 'maternity': 15, 'unpaid': 0 };
 var ldd;
 
 exports.getApplyLeaveIndex = async (req, res) => {
@@ -28,8 +29,8 @@ exports.getApplyLeave = async (req, res) => {
 async function checkDashianOrTiharMonth(name) {
   try {
     //to check the month is dashian or tihar month
-    var prev = 0, next = 0,month;
-    
+    var prev = 0, next = 0, month;
+
     //check 
     var start = '2019-11-30';
     var end = '2019-12-01';
@@ -39,16 +40,16 @@ async function checkDashianOrTiharMonth(name) {
     if (dSd == dEd) {
       console.log('We have same month');
       month = dSd || dEd;
-    }else {
+    } else {
       var temparr = generateDateArray(start, end);
       temparr.forEach(date => {
         let dat = getDateMonth(date.date);
-        if (dat == dSd)prev++;
+        if (dat == dSd) prev++;
         else if (dat == dEd) next++;
       });
-      if(prev > next) console.log('it is in prev month');
-      else if(prev<=next) console.log('it is in next month');
-       month = (prev>next)? dSd:dEd;
+      if (prev > next) console.log('it is in prev month');
+      else if (prev <= next) console.log('it is in next month');
+      month = (prev > next) ? dSd : dEd;
     }
     return month;
   } catch (error) {
@@ -56,77 +57,80 @@ async function checkDashianOrTiharMonth(name) {
   }
 }
 
-async function checkCasualLeave(date){
- const dm =await checkDashianOrTiharMonth('dashian');
- const tm =await checkDashianOrTiharMonth('tihar');
- const cm = getDateMonth(date);
- if(cm == dm && cm == tm){
-   console.log('ony 1 day have both dashian'); 
-   return 1;
- }
- else if(cm == dm){
-  console.log('only  1  day dashain only');   
-  return 1;
- }
- else if(cm == tm){
-  console.log('only  2 day tihar only');   
-  return 2;
- }
- else{
-  console.log('as much');   
-  return 0;
- }
+async function checkCasualLeave(date) {
+  const dm = await checkDashianOrTiharMonth('dashian');
+  const tm = await checkDashianOrTiharMonth('tihar');
+  const cm = getDateMonth(date);
+  if (cm == dm && cm == tm) {
+    console.log('ony 1 day have both dashian');
+    return 1;
+  }
+  else if (cm == dm) {
+    console.log('only  1  day dashain only');
+    return 1;
+  }
+  else if (cm == tm) {
+    console.log('only  2 day tihar only');
+    return 2;
+  }
+  else {
+    console.log('as much');
+    return 0;
+  }
 }
 
 function getDateMonth(date) {
   return new Date(date).getMonth();
 }
 
+//calculate the next day by adding the params no.of day
+function calculateNextDay(day) {
+  var today = new Date();
+  var dd = today.setDate(today.getDate() + day);
+  return getDateFormat(today);
+}
+
+function calculateDayDiff(fromDate, toDate) {
+  var dayDiff = (new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24);
+  console.log(dayDiff + 1);
+  return dayDiff + 1;
+}
+
 exports.addApplyLeave = async (req, res) => {
   try {
-    //let result = await checkDashianOrTiharMonth(req.body.fromDate, req.body.toDate);
-    let dHoli = await lSQL.getHolidayDashainAndTihar('dashain');
-    let tHoli = await lSQL.getHolidayDashainAndTihar('tihar');
-    console.log(dHoli);
-    let fromMonth = getDateMonth(req.body.fromDate);
-    let toMonth = getDateMonth(req.body.toDate);
-    let month = await checkDashianOrTiharMonth();
-    if(fromMonth == toMonth){
-      console.log('same leave month');
-      if(fromMonth == month)     console.log('have dashain');
-      
-    }
-    res.send(req.body);
-    return;
     //check whether the date applied meet the requirement for leave apply
-    
     const leave_data = req.body;
     const uid = req.body.userid;
     //console.log(leave_data);
-    //data validation
+    //data validation express validators
     req.checkBody('employeeName', 'Employee Name Required').notEmpty();
     req.checkBody('leaveType', 'Select specific LeaveType').notEmpty();
     //Date part
     req.checkBody('fromDate', 'Date not select').notEmpty();
     req.checkBody('fromDate', 'Date not select URI').isISO8601();
     //req.checkBody('fromDate', 'from date of leave must be valid and must be after today date').isAfter((new Date()).toDateString());
+    req.checkBody('fromDate', `From date of leave must be valid and after ${LP[`${req.body.leaveType}`]} day from today`).isAfter(new Date(calculateNextDay(LP[`${req.body.leaveType}`] - 1)).toDateString());
     req.checkBody('toDate', 'Date not selected').notEmpty();
     req.checkBody('toDate', 'End date of leave must be valid and after start date').isAfter((new Date(req.body.fromDate)).toDateString());
     // req.checkBody('toDate', 'End date of lab must be valid and after start date').isAfter((new Date()).toDateString());
     req.checkBody('leaveDay', 'No. of Days of  Leave is Empty').notEmpty();
     req.checkBody('leaveDay', 'No. of Days of  Leave is Empty').isNumeric();
+    let days = calculateDayDiff(req.body.fromDate, req.body.toDate);
+    req.checkBody('leaveDay', 'Invalid Record').equals(days.toString());
     req.checkBody('leaveReason', 'Reason should not be empty').notEmpty();
+
     var fromDate = req.body.fromDate;
     var toDate = req.body.toDate;
     var fromDateFormat = new Date(req.body.fromDate);
     var toDateFormat = new Date(req.body.toDate);
     //(!is_date(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid From-Date Format' }) : (!(is_date_valid(fromDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid Date ! From Date Should not be before today' }) : '');
     //(!is_date(toDateFormat)) ? errors.push({ 'param': 'fromDate', 'msg': 'Invalid To-Date Format' }) : (!(is_date_valid(toDateFormat)) ? errors.push({ 'param': 'toDate ', 'msg': 'Invalid  Date! Date Should not be before today' }) : '');
-
     var errors = req.validationErrors() || [];
     ((req.body.leaveDay) <= 0 ? errors.push({ 'param': 'leaveDay', 'msg': 'Leave must be positive Number' }) : '');
-    
+
+
     /************************data valdiation************************** */
+
     let user = await uSQL.getUserByName(leave_data.employeeName);
     let useri = await uSQL.getUserById(leave_data.userid);
 
@@ -135,41 +139,43 @@ exports.addApplyLeave = async (req, res) => {
       errors.push({ 'param': 'Form Data', 'msg': 'Invalid Data or Data not Found' });
     } else {
       //console.log((JSON.stringify(user) === JSON.stringify(useri)));
-      let monthDiff = diff_months(new Date(user.joined), new Date());
-      //console.log(monthDiff);
-      if (monthDiff < 6 && leave_data.leaveType !== 'unpaid') {
-        errors.push({ 'param': 'Leave Type ', 'msg': 'Employee on progresion Period can only have Unpaid leave' });
+      let monthDiff = diff_months(user.joined, new Date());
+
+      //probation period 
+      if (monthDiff < 6) {
+        if (leave_data.leaveType !== 'unpaid') errors.push({ 'param': 'Leave Type ', 'msg': 'Employee on Probation Period can only have Unpaid leave' });
       } else {
-        if (user.gender == leave_data.usergender && getDateFormat(user.joined) == getDateFormat(leave_data.userdate)) {
-          if (leave_data.usergender == 'male' && leave_data.leaveType == 'maternity') {
-            errors.push({ 'param': 'Leave Type', 'msg': "Male Employee can't applied for Maternity Leave" });
-            console.log('male but maternity');
-          }
-          else if (leave_data.usergender == 'female' && leave_data.leaveType == 'paternity') {
-            errors.push({ 'param': 'Leave Type', 'msg': "Female Employee can't applied for Paternity Leave" });
-            console.log('female but paternity');
-          }
+        //user gender validation    
+        if (user.gender == leave_data.usergender) {
+          if (user.gender == 'male' && leave_data.leaveType == 'maternity') { errors.push({ 'param': 'leaveType', 'msg': 'No Maternity Leave for this employee' }); }
+          else if (user.gender == 'female' && leave_data.leaveType == 'paternity') { errors.push({ 'param': 'leaveType', 'msg': 'No Paternity Leave for this employee' }); }
+          else if (user.gender == 'other') errors.push({ 'param': 'user', 'msg': 'User Data Invalid' });
         } else {
-          errors.push({ 'param': 'Form Data', 'msg': 'Invalid Data Enter ' });
+          errors.push({ 'param': 'user', 'msg': 'Invalid User Data' });
         }
       }
     }
+    //checkLeaveApplyDay();
     var ldd = await lSQL.getLeaveData();
     if (errors.length > 0) {
       res.render('applyLeave/add', { errors, data: leave_data, ldd });
       return;
-    }
-    console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~New session~~~~~~~~${new Date()}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
-
-
-    // //let user_data = await 
-    // res.send(leave_data);
-    // //res.render('applyLeave/add', { errors, data: leave_data, ldd });
-    // return;
-    if (errors.length > 0) {
-      res.render('applyLeave/add', { errors, data: leave_data, ldd });
     } else {
-      const leave_data = req.body;
+      console.log('i think validaiton done');
+    //   res.send(req.body);
+    // }
+    
+    // return;
+
+    // console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~New session~~~~~~~~${new Date()}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
+    // // //let user_data = await 
+    // // res.send(leave_data);
+    // // //res.render('applyLeave/add', { errors, data: leave_data, ldd });
+    // // return;
+    // if (errors.length > 0) {
+    //   res.render('applyLeave/add', { errors, data: leave_data, ldd });
+    //   return;
+    // } else {
       var leaveType = req.body.leaveType;
       var userLeaveStatus = []; //to store leave date detail with holiday, weekend, leave type   
       var userLeaveData = [];
@@ -402,6 +408,7 @@ async function calculateLeave(startDate, endDate, userLeaveStatus, type, uid) {
   var ull = await ltSQL.getUserLeaveDetail(1);
   var netCasualDay = calculateCasualDay(startDate, endDate);
   var leaveAbleDay = (netCasualDay < ull.casual) ? parseInt(ull.casual - netCasualDay) : 0;
+  var allowabaleCL = await checkCasualLeave(startDate);
   //checking casual leave
   var casual = 0, sick = 0, marriage = 0, mourn = 0, paternity = 0, maternity = 0, unpaid = 0, holiday = 0;
   userLeaveStatus.forEach(leaveDay => {
@@ -522,14 +529,24 @@ async function getLeaveData() {
   }
 }
 
-function diff_months(jdate, nowdt) {
-  if (jdate.getFullYear() <= nowdt.getFullYear()) {
-    var diff = (jdate.getTime() - nowdt.getTime()) / 1000;
-    diff /= (60 * 60 * 24 * 7 * 4);
+
+function diff_months(startDate, endDate) {
+  if (moment(endDate).isAfter(startDate)) {
+    let diff = moment(endDate).diff(moment(startDate), 'months', true);
     diff = Math.abs(diff);
     return diff;
   } else {
-    return 0;
+    return 99;
+  }
+}
+
+function diff_day(startDate, endDate) {
+  if (moment(endDate).isAfter(startDate)) {
+    let diff = moment(endDate).diff(moment(startDate), 'days', true);
+    diff = Math.ceil(Math.abs(diff));
+    return diff;
+  } else {
+    return 99;
   }
 }
 

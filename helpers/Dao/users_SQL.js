@@ -19,9 +19,11 @@ module.exports = class userSQL {
     try {
       con = await gcon();
       let status = await con.query(query.get_user_detail_by_id_and_name,[user.id,user.name]);
-      console.log(status);      
+      // console.log(status);      
       status = await JSON.parse(JSON.stringify(status));
-      return status;
+      return (status.length ==1)?status.reduce(data=>{
+        return data;
+      }):status;
     } catch (error) {
       console.log(error);
     }

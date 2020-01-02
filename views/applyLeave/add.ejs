@@ -39,6 +39,14 @@
   * html .ui-autocomplete {
     height: 100px;
   }
+  /* .disabled{
+    color: gray;
+    font-weight: bolder;
+  } */
+  select option:disabled {
+    color: gray;
+    font-weight: bold;
+}
 </style>
 
 <div class="card mb-3">
@@ -56,13 +64,13 @@
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="leaveType">Leave Type *</label>
           <select name="leaveType" id="leaveType" class="form-control" required>
-            <option value="">Select the leave</option>
+            <option value="" disabled selected id="noneOption">Select the leave</option>
             <%ldd.forEach(day => {%>
-            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' id="<%=day.name%>"
-              value="<%=day.name%>" <%if(typeof data !='undefined'){%> <%if(data.leaveType == day.name){%>
+            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' id="<%=day.name%>" value="<%=day.name%>"               
+              <%if(typeof data !='undefined'){%> <%if(data.leaveType == day.name){%>
               selected='true' <%}%>                
-                <%}else{%> <%if(day.name =='maternity' || day.name =='paternity'){%> disabled='true' <%}%>
-                <%}%>><%=day.name%> leave
+                <%}%>           
+                ><%=day.name%> leave
             </option>
             <%});%>
           </select>
@@ -94,7 +102,7 @@
         </div>
 
         <div class="form-group col-md-2 col-sm-2 col-xs-12">
-          <label for="leaveDay">Leave Days*</label>
+          <label for="leaveDay">Days*</label>
           <input type="number" class="form-control datepicker" id="leaveDay" name="leaveDay"
             placeholder="Enter leave day" step="1" min="1" max="100" value="0" required aria-describedby="leaveinfo"
             autocomplete="off" readonly value="value=" <%=(typeof data !='undefined')? data.leaveDay:''%>"">
@@ -132,49 +140,6 @@
     </div>
   </div>
 </div>
-
-<script>
-  $('document').ready(() => {
-    var pat = $('#paternity');
-    var mat = $('#maternity');
-    if (pat.attr('selected') == 'selected') {
-      pat.removeAttr('disabled');
-      mat.attr('disabled', 'true');
-    } else if (mat.attr('selected') == 'selected') {
-      console.log('thi too');
-
-      mat.removeAttr('disabled');
-      pat.attr('disabled', 'true');
-    } else {
-      pat.attr('disabled', 'true');
-      pat.attr('disabled', 'true');
-    }
-  })
-  function validLeaveType(gender, status) {
-    if (status == false) {
-      console.log('it is here');
-
-      $('#leaveType').children().filter(':not(#unpaid)').attr('disabled', 'true');
-    } else {
-      $('#leaveType').children().removeAttr('disabled');
-      // console.log($('#autoname').data('gender'));
-      // let gender = $('#autoname').data('gender');
-      // console.log(gender);
-      (gender == '') ? $('#autoname').data('gender') : gender;
-      let select = $('#leaveType')
-      select.val('');
-      if (gender == 'male') {
-        $('#paternity').removeAttr('disabled')
-        $('#maternity').attr('disabled', 'true')
-        // attr('disabled',false)       
-      } else if (gender == 'female') {
-        $('#maternity').removeAttr('disabled')
-        $('#paternity').attr('disabled', 'true')
-      }
-    }
-  }
-
-</script>
 
 <script src="/js/leaveAdd.js"></script>
 <script src="/vendor/jqueryUI/jquery-ui.js"></script>
