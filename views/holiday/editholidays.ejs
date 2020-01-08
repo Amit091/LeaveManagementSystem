@@ -12,132 +12,94 @@
 </style>
 <!-- Custom styles for this template-->
 <link href="/css/change.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous"></script>
 <!-- message -->
 <% include ./../partials/messages.ejs%>
+
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
-    <li class="breadcrumb-item ">
-        <a href="/">Dashboard</a>
-    </li>
+    <li class="breadcrumb-item "><a href="/">Dashboard</a></li>
     <li class="breadcrumb-item active">Edit Holiday</li>
     <li class="ml-auto" style="float: right;">
-    <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/holiday" style="color: white;">Add
-            Holiday</a>
+    <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/holiday" style="color: white;">Add Holiday</a>
     </li>
     </li>
 </ol>
 <div class="row">
-    <div class="col-md-6">
-        <div>
-            <% include ./allholidays.ejs%>
-        </div>
+    <div class="col-md-6 col-sm-12">
+        <% include ./allholidays.ejs%>
     </div>
-    <div class="col-md-6">
-        <div class="card ml-5  style=" width: 30rem;">
-            <div class="card-header bg-card-head">
-                Edit Holidays
-            </div>
-            <div class="card-body bg-card-body">
-                <form id="product-form" action="/holiday/editholiday/<%=holiday.id%>" method="post">
-                    <div class="form-group ">
+    <div class="col-md-6 col-sm-12">
+        <div class="card-header bg-card-head">Edit Holidays</div>
+        <div class="card-body bg-card-body">
+            <form id="product-form" action="/holiday/editholiday/<%=holiday.id%>" method="post">
+                <div class="form-group">
+                    <label for="holidayname">Name:*</label>
+                    <input type="text" name="name" id="holidayname"
+                        value="<%=typeof holiday !='undefined' ? holiday.name : ''%>" class="form-control holiday-name"
+                        id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="name of the holiday event"
+                        required>
+                </div>
 
-                        <div class="form-group">
-                            Name:
-                            <input type="text" name="name" value="<%=typeof holiday !='undefined' ? holiday.name : ''%>"
-                                class="form-control holiday-name" id="exampleInputEmail1" aria-describedby="emailHelp"
-                                placeholder="name of the holiday event" required>
+                <div class="form-group ">
+                    <label for="holidaytype">Type *</label>
+                    <select name="holidaypicker" id="holidaytype" class="form-control" required onchange="myFunction()">
+                        <option value="" disabled selected id="noneOption">Choose Type</option>
+                        <%types.forEach(holi => {%>
+                        <option value="<%=holi%>" <%if(typeof holiday !='undefined'){%> <%if(holiday.type == holi){%>
+                            selected='true' <%}}%>> <%=holi%> </option>
+                        <%});%>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-5 col-sm-4 col-xs-12">
+                        <label for="fromDate">From Date*</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control datepicker" name="fromDate" id="fromDate" required
+                                aria-describedby="fdate"
+                                value="<%=(typeof holiday !='undefined')? holiday.fromdateformat:''%>">
+                            <!-- <div class="input-group-append">
+                                <span class=" open-button" id="fdate"><button type="button"><i  class="fa fa-calendar"></i></button></span>
+                            </div>-->
                         </div>
-                        <div>
-
-                            <div class="from-group box">
-                                <select class="custom-select form-control" id="holidaytype" name="holidaypicker"
-                                    onchange="myFunction()"
-                                    value="<%=typeof holiday !='undefined' ? holiday.type : ''%>" required>
-                                    <option selected value="0">Choose type</option>
-
-                                    <%types.forEach((holi)=>{%>
-                                    <option value="<%=holi%>" <%if(holiday.type==holi){%> selected <%}%>>
-                                                    <%=holi%></option> <% })%> </select> </div> <div class="form-group"
-                                        id="date_loader">
-
-                                        <div>
-
-
-                                            <br>
-                                            <div class="form-row">
-                                                <div class="form-group col-md-5 col-sm-4 col-xs-12">
-                                                    <label for="fromDate">From Date*</label>
-                                                    <div class="input-group">
-                                                        <input type="date" class="form-control datepicker"
-                                                            name="fromDate" id="fromDate" required
-                                                            aria-describedby="fdate"
-                                                            value="<%=(typeof holiday !='undefined')? holiday.fromdateformat:''%>">
-                                                        <!-- <div class="input-group-append">
-                                                                      <span class=" open-button" id="fdate"><button type="button"><i  class="fa fa-calendar"></i></button></span>
-                                                                    </div>
-                                                                  -->
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="form-group col-md-5 col-sm-4 col-xs-12">
-                                                    <label for="toDate">To Date*</label>
-                                                    <div class="input-group">
-                                                        <input type="date" class="form-control datepicker "
-                                                            name="toDate" id="toDate" required aria-describedby="tdate"
-                                                            value="<%=(typeof holiday !='undefined')? holiday.todateformat:''%>">
-                                                        <div class="input-group-append">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="form-group col-md-2 col-sm-2 col-xs-12">
-                                                    <label for="leaveDay">Days*</label>
-                                                    <input type="number" class="form-control datepicker" id="leaveDay"
-                                                        name="leaveDay" placeholder="Enter leave day" step="1" min="1"
-                                                        max="100" value="0" required aria-describedby="leaveinfo"
-                                                        autocomplete="off" readonly value="value="
-                                                        <%=(typeof holiday !='undefined')? holiday.leaveDay:''%>"">
-                                                    <small id="leaveinfo" class="form-text text-muted"
-                                                        style="color: red;font-weight:bolder;"></small>
-                                                </div>
-
-                                            </div>
-
-
-
-                                        </div>
-                                        <!-- <input type="date"
-                                            data-date="<%=typeof holiday !='undefined' ? holiday.date : ''%>"
-                                            id="date_id" name="date" class="form-control" required> -->
-
-                            </div>
-
-                            <div class="form-group">
-                                <label for="description">Description:</label>
-                                <textarea class="form-control" cols="30" name="description" rows="5" id="description"
-                                    value=""
-                                    required><%=typeof holiday !='undefined' ? holiday.description : ''%></textarea>
-                            </div>
-
-
-                        </div>
-                        <div class="justify-content-end">
-                            <button type="submit" class="btn btn-primary float-left">Edit</button>
-                            <a href="/holiday" type="submit" class="btn btn-danger float-right">Discard</a>
-                        </div>
-
                     </div>
-                </form>
 
+                    <div class="form-group col-md-5 col-sm-4 col-xs-12">
+                        <label for="toDate">To Date*</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control datepicker " name="toDate" id="toDate" required
+                                aria-describedby="tdate"
+                                value="<%=(typeof holiday !='undefined')? holiday.todateformat:''%>">
+                        </div>
+                    </div>
 
-            </div>
+                    <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                        <label for="leaveDay">Days*</label>
+                        <input type="number" class="form-control datepicker" id="leaveDay" name="leaveDay"
+                            placeholder="Enter leave day" step="1" min="1" max="100" value="0" required
+                            aria-describedby="leaveinfo" autocomplete="off" readonly value="value="
+                            <%=(typeof holiday !='undefined')? holiday.leaveDay:''%>"">
+                        <small id="leaveinfo" class="form-text text-muted"
+                            style="color: red;font-weight:bolder;"></small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea class="form-control" cols="30" name="description" rows="5" id="description" value=""
+                        required><%=typeof holiday !='undefined' ? holiday.description : ''%></textarea>
+                </div>
+
+                <div class="justify-content-center">
+                    <button type="submit" class="btn btn-primary float-left">Edit</button>
+                    <a href="/holiday" type="submit" class="btn btn-danger float-right">Discard</a>
+                </div>
+            </form>
         </div>
     </div>
-
 </div>
+
+
 
 
 

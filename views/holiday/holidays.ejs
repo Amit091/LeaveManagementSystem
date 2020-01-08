@@ -13,8 +13,6 @@
 </style>
 <!-- Custom styles for this template-->
 <link href="/css/change.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous"></script>
 <!-- message -->
 <% include ./../partials/messages.ejs%>
 <!-- Breadcrumbs-->
@@ -24,13 +22,12 @@
     </li>
     <li class="breadcrumb-item active">Add Holiday</li>
 </ol>
+
 <div class="row">
-    <div class="col-md-7">
-        <div>
-            <% include ./allholidays.ejs%>
-        </div>
+    <div class="col-md-6 col-sm-12 table-responsive">
+            <% include ./allholidays.ejs %>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6 col-sm-12">
         <div class="card">
             <div class="card-header bg-card-head">
                 Add Holidays
@@ -46,19 +43,18 @@
                                 placeholder="name of the holiday event" required>
                         </div>
                         <div>
-
                             <div class="from-group box">
                                 <select class="custom-select form-control" onchange="myFunction()" id="holidaytype"
                                     name="holidaypicker" required>
                                     <option selected value="0">Choose type</option>
-                                    <option value="public">public</option>
-                                    <option value="float">float</option>
+                                    <option value="public">public holiday</option>
+                                    <option value="float">float holiday</option>
                                 </select>
                             </div>
                             <br>
                             <div class="form-row">
                                 <div class="form-group col-md-5 col-sm-4 col-xs-12">
-                                    <label for="fromDate">From Date*</label>
+                                    <label for="fromDate">From*</label>
                                     <div class="input-group">
                                         <input type="date" class="form-control datepicker" name="fromDate" id="fromDate"
                                             required aria-describedby="fdate"
@@ -72,7 +68,7 @@
                                 </div>
                                 <br>
                                 <div class="form-group col-md-5 col-sm-4 col-xs-12">
-                                    <label for="toDate">To Date*</label>
+                                    <label for="toDate">To*</label>
                                     <div class="input-group">
                                         <input type="date" class="form-control datepicker " name="toDate" id="toDate"
                                             required aria-describedby="tdate"

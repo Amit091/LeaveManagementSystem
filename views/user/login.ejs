@@ -1,0 +1,157 @@
+<% include ./../layouts/layoutheader%>
+<link rel="stylesheet" href="/vendor/jqueryUI/jquery-ui.css">
+<style>
+  select::-webkit-inner-spin-button,
+  select::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="date"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .ui-autocomplete {
+    color: teal;
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  * html .ui-autocomplete {
+    height: 100px;
+  }
+
+  /* .disabled{
+    color: gray;
+    font-weight: bolder;
+  } */
+  select option:disabled {
+    color: gray;
+    font-weight: bold;
+  }
+</style>
+
+<% include ./../partials/messages%>
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="/">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item"><a href="/applyleave/list">All Leave</a></li>
+  <li class="ml-auto" style="float: right;">
+  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/user/55/apply/" style="color: white;">Apply
+      Leave</a>
+  </li>
+  </li>
+</ol>
+
+<div class="col">
+  <form action="/user/login" method="post" class="form" id="loginForm">
+  <div class="form-row">
+    <div class="form-group col-md-4 col-sm-4 col-xs-4">
+      <label for="employeeName">Login AS*</label>
+    </div>
+    <div class="form-group col-md-8 col-sm-8 col-xs-8">
+      <input type="text" class="form-control" id="username" name="username" aria-describedby="nameinfo"
+        placeholder="Enter Employee Name" required autocomplete="off">
+      <small id="nameinfo" class="form-text text-muted"></small>
+    </div>
+  </div>
+  <input type="number" name="userid" id="userid" hidden readonly>
+  </form>
+  <hr style="border: 2px solid teal;">
+  <div id="board" class="col-12">
+    
+  </div>
+
+</div>
+
+<script src="/vendor/jqueryUI/jquery-ui.js"></script>
+<script>
+  $("#username").autocomplete({
+    classes: {
+      "ui-autocomplete": "highlight"
+    },
+    autoFocus: true,
+    position: { my: "right top", at: "right bottom" },
+    source: function (req, res) {
+      $.ajax({
+        type: `GET`,
+        url: `/ajax/api/getuser`,
+        data: { 'query': `${$('#username').val()}` },
+        contentType: 'application/x-www-form-urlencoded',
+        success: (result => {
+          let arr = result.data;
+          let data = [];
+          arr.forEach(item => {
+            data.push({ 'data': item.id, 'label': item.name, 'value': item.name, 'gender': item.gender, 'jdate': item.fjoined });
+          });
+          res(data);
+        }),
+        error: error => {
+          console.log('its from error');
+        }
+      });
+    },
+    minLength: 2,
+    select: function (event, ui) {
+      $('#userid').val(ui.item.data);
+      var ele = `
+      <div class="card">
+      <div class="card-header">
+        Employee Info Detail
+        <h6  id="empid" style="float: right;">${ui.item.data}</h1>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3 col-sm-3 col-xs-6">
+            <h6 class="card-title">Name:</h6>
+          </div>
+          <div id="empname" class="col-md-3 col-sm-3 col-xs-6">${ui.item.value}</div>
+          <div class="col-md-3 col-sm-3 col-xs-6">
+            <h6 class="card-title">Gender:</h6>
+          </div>
+          <div class="col-md-3 col-sm-3 col-xs-6">${ui.item.gender}</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" form="loginForm" class="btn btn-primary" onclick="login()">Login</button>
+        <button type="reset" form="loginForm" class="btn btn-danger">Reset</button>
+      </div>
+    </div>
+   `
+      $('#board').html(ele);
+    }
+  });
+
+  function log(message) {
+    $("<div>").text(message).prependTo("#log");
+    $("#log").scrollTop(0);
+  }
+
+  function login(){
+    console.log($('#empname').text());
+    
+    // $.ajax({
+    //     type: `POST`,
+    //     url: `/user/login`,
+    //     data: { 'id':id,'name': `${$('#username').val()}` },
+    //     contentType: 'application/x-www-form-urlencoded',
+    //     success: (result => {
+    //       let arr = result.data;
+    //       let data = [];
+    //       arr.forEach(item => {
+    //         data.push({ 'data': item.id, 'label': item.name, 'value': item.name, 'gender': item.gender, 'jdate': item.fjoined });
+    //       });
+    //       res(data);
+    //     }),
+    //     error: error => {
+    //       console.log('its from error');
+    //     }
+    //   });
+  }
+</script>
+
+<% include ./../layouts/layoutfooter%>

@@ -36,7 +36,7 @@ $("#autoname").autocomplete({
     $('#leaveType').removeAttr('disabled');
     validLeaveType(ui.item.gender, status);
     //from leaveAdd.js
-    $('#leaveapplyform').trigger('reset');
+    // $('#leaveapplyform').trigger('reset');
     populateData();
   }
 });

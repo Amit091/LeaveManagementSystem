@@ -20,15 +20,6 @@ $(document).ready(function () {
   //   pat.attr('disabled', 'true');
   // }
 
-  $('#doneCheck').click(function () {
-    console.log('check this out');
-    if ($('#doneCheck').is(":checked")) {
-      $('#btnSubmit').prop('disabled', false);
-    } else {
-      $('#btnSubmit').prop('disabled', true);
-    }
-  });
-
   $('#fromDate').on('change', () => {
     $('#toDate').attr('min', $('#fromDate').val());
     $('#toDate').val($('#fromDate').val());
@@ -37,12 +28,11 @@ $(document).ready(function () {
     // //nextDay();
     // console.log($('#fromDate').val());
     $('#leaveDay').val(calculateDay());
-
   });
 
   $('#toDate').on('change', function () {
     $('#leaveDay').val(calculateDay());
-  }); 
+});   
 
   $('#btnreset').on('click', () => {
     // populateDate();

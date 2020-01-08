@@ -7,6 +7,7 @@ const express = require('express');
 const session = require('express-session');
 const validator = require('express-validator');
 const flash = require('connect-flash');
+const passport = require('passport');
 
 const app = express();
 
@@ -29,6 +30,10 @@ app.use(session({
   saveUninitialized: false,
   duration: 1000 * 1
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport')(passport);
 
 //flash message and CORS
 app.use(flash());
@@ -88,19 +93,18 @@ const indexRouter = require('./routes/indexRoute');
 const leaveTypeRouter = require('./routes/leaveTypeRoute');
 const holidayRoute = require('./routes/holidayRoute');
 const applyLeaveRouter = require('./routes/applyLeaveRoute');
-const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/userRoute');
 const ajaxRouter = require('./routes/apiRoute');
 const calenderRouter = require('./routes/calenderRoute');
 
 //Routing
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter);
 app.use('/leavetype', leaveTypeRouter);
 app.use('/holiday', holidayRoute);
 app.use('/applyleave', applyLeaveRouter);
 app.use('/ajax', ajaxRouter);
 app.use('/calender', calenderRouter);
-
 
 
 // //catch 404 and forward to error handler
@@ -117,7 +121,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('partials/error');
 });
-
-
 
 module.exports = app;

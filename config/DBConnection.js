@@ -13,7 +13,7 @@ const dbConfig = {
 module.exports = async() => {
     try {
         let con = await mysql.createConnection(dbConfig);
-        if (con) console.log(chalk.green('Mysql Connection Established'));
+        if (con) console.log(chalk.green('MYSQL Connected'));
         return con;
     } catch (ex) {
         if (ex.errno == 'ECONNREFUSED') {

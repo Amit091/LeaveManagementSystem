@@ -8,7 +8,7 @@ const uSQL = new user_SQL();
 
 exports.decideLeave = async(req,res)=>{
   try {
-    console.log(req.body);
+    // console.log(req.body);
      let  id  = req.body.id;
     var user = req.body.user_id;
     var status =req.body.status;
@@ -17,17 +17,15 @@ exports.decideLeave = async(req,res)=>{
     req.checkBody('user_id', 'Invalid User Data').notEmpty().isNumeric(); 
     req.checkBody('status', 'Select specific LeaveType').notEmpty();
     reason =(reason=='')?(status=='accept')?'Accepted':reason:reason;
-    console.log(reason);   
+    //console.log(reason);   
     var errors = req.validationErrors() || [];
-    console.log(errors);
-    
+    console.log(errors);    
     if(errors.length > 0){
       res.status(400).send(errors);
     }else{
       let fromData = await lSQL.getLeaveDataRecordByIdandUser(id,user);
-      console.log(fromData);
-      var data = {'id':id,'user':user,'status':status,'reason':reason};
-      
+      // console.log(fromData);
+      var data = {'id':id,'user':user,'status':status,'reason':reason};      
       console.log('#########################################################################################################################');
       if( fromData == 0){
         errors.push({'param':'user leave Data','msg':'Data of respective Query not found in Server','value':0});
@@ -40,9 +38,7 @@ exports.decideLeave = async(req,res)=>{
             updateData = await lSQL.UpdateLeaveDataRecordStatus(data);  
             //if(accept update the user leave Data) 
             //console.log(updateData);
-          }
-          else if( status == 'reject')
-          { 
+          }else if( status == 'reject'){ 
             updateData = await lSQL.UpdateLeaveDataRecordStatus(data);   
             //console.log(updateData);            
           }
@@ -64,19 +60,9 @@ exports.decideLeave = async(req,res)=>{
             let msg =`Leave Already Rejected`;
             res.status(409).send({msg});
       }else{
-        res.status(400).send('NO data Update');
+        res.status(400).send('No data Updated');
       }
-      console.log(fromData);
-      if(status == fromData.status){
-        
-        return 'code for no changes';
-      }
-      else if(req.body.status == 'reject'){
-        req.checkBody('reason', 'No. of Days of  Leave is Empty').notEmpty();
-      }
-      else{
-          //no changes
-      }
+    //   console.log(fromData);
     }
   } catch (error) {
     console.log(error);    
@@ -110,3 +96,4 @@ exports.getDataForModal = async(req,res)=>{
     console.log(error);    
   }
 };
+
