@@ -9,6 +9,11 @@
     -webkit-appearance: none;
     margin: 0;
   }
+
+  select option:disabled {
+    color: gray;
+    font-weight: bold;
+  }
 </style>
 
 <% include ./../partials/messages%>
@@ -19,32 +24,41 @@
     <a href="/">Dashboard</a>
   </li>
   <li class="breadcrumb-item"><a href="/applyleave/list">Leave List</a></li>
-  <li class="breadcrumb-item active\"><a>Edit Leave</a></li>
+  <li class="breadcrumb-item active"><a>Edit Leave</a></li>
   <li class="ml-auto" style="float: right;">
-  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/applyleave/list/" style="color: white;">Leave List </a>
+  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/applyleave/list/" style="color: white;">Leave
+      List </a>
   </li>
   </li>
 </ol>
 
 <div class="card mb-3">
-  <div class="card-header">Update Data Form</div>
+  <div class="card-header">Update Apply Leave Form
+    <a class="btn btn-sm btn-primary" href="/applyleave/add" style="color: white; float: right;">Add Leave </a>
+    
+  </div>
   <div class="card-body">
-    <form method="post" action="/applyleave/edit/<%=data.id%>?uid=<%=data.employee_id%>" id="leaveapplyform">       
-      
+    <form method="post" action="/applyleave/edit/<%=data.id%>?uid=<%=data.employee_id%>" id="leaveapplyform">
+
       <div class="form-row">
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="employeeName">Employee Name *</label>
-          <input type="text" class="form-control" id="employeeName" name="employeeName" aria-describedby="nameinfo" data-id="<%=(typeof data !='undefined')? data.employee_id || data.employeeid:''%>"placeholder="Enter Employee Name" required value="<%=(typeof data !='undefined')? data.employee_name || data.employeeName:''%>" autocomplete="off" readonly>
+          <input type="text" class="form-control" id="employeeName" name="employeeName" aria-describedby="nameinfo"
+            data-id="<%=(typeof data !='undefined')? data.employee_id || data.employeeid:''%>"
+            placeholder="Enter Employee Name" required
+            value="<%=(typeof data !='undefined')? data.employee_name || data.employeeName:''%>" autocomplete="off"
+            readonly>
           <small id="nameinfo" class="form-text text-muted"></small>
         </div>
 
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="leaveType">Leave Type *</label>
           <select name="leaveType" id="leaveType" class="form-control" required>
-            <option value="">Select the leave</option>
+            <option value="" id="noneOption">Select the leave</option>
             <%ldd.forEach(day => {%>
-            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' value="<%=day.name%>"
-              <%=(typeof data !='undefined')? (data.leave_type == day.name)?'selected':'':''%>><%=day.name%> leave
+            <option data-day='<%=day.number%>' id="<%=day.name%>" data-name='<%=day.name%>' value="<%=day.name%>"
+              <%=(typeof data !='undefined')? (data.leave_type == day.name)?'selected':(data.leaveType == day.name)?'selected':'':''%>>
+              <%=day.name%> leave
             </option>
             <%});%>
           </select>
@@ -55,8 +69,8 @@
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="fromDate">From Days*</label>
           <div class="input-group">
-            <input type="date" class="form-control datepicker" name="fromDate" id="fromDate" required aria-describedby="fdate"
-              value="<%=(typeof data !='undefined')? data.sDate||data.fromDate:''%>">
+            <input type="date" class="form-control datepicker" name="fromDate" id="fromDate" required
+              aria-describedby="fdate" value="<%=(typeof data !='undefined')? data.sDate||data.fromDate:''%>">
             <!-- <div class="input-group-append">
               <span class=" open-button" id="fdate"><button type="button"><i  class="fa fa-calendar"></i></button></span>
             </div>
@@ -67,8 +81,8 @@
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="toDate">To Days*</label>
           <div class="input-group">
-            <input type="date" class="form-control datepicker " name="toDate" id="toDate" required aria-describedby="tdate"
-              value="<%=(typeof data !='undefined')? data.eDate||data.toDate:''%>">
+            <input type="date" class="form-control datepicker " name="toDate" id="toDate" required
+              aria-describedby="tdate" value="<%=(typeof data !='undefined')? data.eDate||data.toDate:''%>">
             <div class="input-group-append">
               <span class="input-group-text" id="tdate"><i class="fa fa-calendar"></i></span>
             </div>
@@ -76,10 +90,10 @@
         </div>
 
         <div class="form-group col-md-2 col-sm-2 col-xs-12">
-          <label for="leaveDay">Leave Days*</label>
-          <input type="number" class="form-control datepicker" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1"
-            min="1" max="100" value="0" required aria-describedby="leaveinfo" autocomplete="off" readonly value="value="
-            <%=(typeof data !='undefined')? data.leaveDay:''%>"">
+          <label for="leaveDay">Days*</label>
+          <input type="number" class="form-control datepicker" id="leaveDay" name="leaveDay"
+            placeholder="Enter leave day" step="1" min="1" max="100" value="0" required aria-describedby="leaveinfo"
+            autocomplete="off" readonly value="value=" <%=(typeof data !='undefined')? data.leaveDay:''%>"">
           <small id="leaveinfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
         </div>
       </div>
@@ -91,16 +105,20 @@
           required><%=(typeof data !='undefined')? data.leave_reason||data.leaveReason:''%></textarea>
         <small id="reason" class="form-text text-muted">PS: Write exact reason</small>
       </div>
+      <!--hidden style="display: none;"-->
+      <div hidden style="display: none;" readonly>
+        <input name="id" id="id" value="<%=(typeof data !='undefined')? data.id :''%>" readonly>
+        <input name="userid" id="userid" value="<%=(typeof data !='undefined')? data.userid :''%>" readonly>
+        <input name="userdate" id="userdate" value="<%=(typeof data !='undefined')? data.userdate:''%>" readonly>
+        <input name="usergender" id="usergender" value="<%=(typeof data !='undefined')? data.usergender:''%>" readonly>
+      </div>
 
-      <!-- <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="doneCheck" >
-        <label class="form-check-label" for="doneCheck">Check me out</label>
-      </div>       -->
     </form>
     <div class="text-center">
       <div class="btn-group p-1">
-        <button type="submit" form="leaveapplyform" id="btnsubmit" class="btn btn-primary m-1">Update & Apply</button>
-        <button id="btnreset" type="reset" form="leaveapplyform"  class="btn btn-secondary m-1">Reset</button>
+        <button type="submit" form="leaveapplyform" id="btnsubmit" class="btn btn-primary m-1">Confirm & Update
+        </button>
+        <button id="btnreset" type="reset" form="leaveapplyform" class="btn btn-secondary m-1">Reset</button>
         <button type="cancel" onclick="window.location.href = '/applyleave'" id="btnCancel"
           class="btn btn-danger m-1">Discard</button>
       </div>
@@ -108,8 +126,20 @@
   </div>
 </div>
 
+
+<script>
+  function diff_months(jdate, nowdt) {
+    if (jdate.getFullYear() <= nowdt.getFullYear()) {
+      var diff = (jdate.getTime() - nowdt.getTime()) / 1000;
+      diff /= (60 * 60 * 24 * 7 * 4.4);
+      diff = Math.abs(diff);
+      return (diff > 6) ? true : false;
+    } else {
+      return false;
+    }
+  } 
+</script>
+
 <script src="/js/leaveAdd.js"></script>
-<script src="/vendor/jqueryUI/jquery-ui.js"></script>
-<!--<script src="/js/autocomplete.js"></script>-->
 
 <% include ./../layouts/layoutfooter%>

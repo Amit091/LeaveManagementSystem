@@ -1,12 +1,10 @@
-<div class="table table-responsive-sm text-center">
-    <table class="table  " id="tblHoliday">
+<table class="table table-responsive-sm text-center " id="tblHoliday">
         <thead>
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Type</th>
-                <th scope="col">Leave Days</th>
-                <th scope="col">Date</th>
-
+                <th scope="col">Day </th>
+                <th scope="col">Date Range</th>
                 <th>Options</th>
             </tr>
         </thead>
@@ -21,21 +19,18 @@
                 <%}else{%>
                 <td><%= holiday.fromdateformat%> </td>
                 <%}%>
-
-
                 <td>
                     <div class="btn-group btn-group-justified mr-0">
                         <a href="/holiday/editholiday/<%=holiday.id%>" class="btn btn-warning btn-sm"><i
-                    class="fa fa-pen"></i></a>
-                <a href="/holiday/deleteholiday/<%=holiday.id%>" class="btn btn-danger btn-sm"><i
+                        class="fa fa-pen"></i></a>
+                        <a href="/holiday/deleteholiday/<%=holiday.id%>" class="btn btn-danger btn-sm"><i
                         class="fa fa-times"></i></a>
-</div>
-</td>
-</tr>
-<%})%>
-</tbody>
+                    </div>
+                </td>
+            </tr>
+            <%})%>
+        </tbody>
 </table>
-</div>
 <script>
     $(document).ready(function () {
         $('#tblHoliday').DataTable();

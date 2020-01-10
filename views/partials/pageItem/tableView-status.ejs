@@ -9,7 +9,6 @@
       <th>Apply</th>
       <th>Reason</th>      
       <th>Option</th>
-
     </tr>
   </thead>
   <tbody>
@@ -18,9 +17,9 @@
     <tr id="<%=record.id%>">
     <td><%=record.employee_name%></td>
     <td><%=record.leave_type%></td>
-    <td><%=record.sDate%></td>
-    <td><%=record.eDate%></td>
-    <td><%=record.aDate%>, <%=record.aTime%></td>
+    <td><%=record.startDate%></td>
+    <td><%=record.endDate%></td>
+    <td><%=record.applyDate%>, <%=record.aTime%></td>
     <td class="btn-group-toggle btn-group-sm"> 
       <textarea rows="2" cols="30" class="" readonly> <%=(record.status =='reject')?record.reject_reason:record.leave_reason%></textarea>
       </td>

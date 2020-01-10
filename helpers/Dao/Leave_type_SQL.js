@@ -31,16 +31,7 @@ module.exports = class leaveSQL {
       console.log(error);      
     }
   }
-  async getAllholidays(stDate,eDate){
-    try {
-      let con = await gcon();
-            let status = await con.query(query1.get_holidays_record_between_date,[stDate,eDate]);
-            status = JSON.parse(JSON.stringify(status));
-            return  (status.length == 0)?0:status;
-    } catch (error) {
-      console.log(error);      
-    }
-  }
+ 
 
   async getUserLeaveDetail(uid){
     try {

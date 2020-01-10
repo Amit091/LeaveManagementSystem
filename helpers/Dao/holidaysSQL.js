@@ -35,12 +35,6 @@ module.exports = class holidaysSQL {
             status.forEach(holiday => {
                 status = holiday;
             });
-
-            console.log('==============');
-
-            console.log(status);
-            console.log('==============');
-
             return status;
         } catch (err) {
             console.log(err);
@@ -76,8 +70,7 @@ module.exports = class holidaysSQL {
             let con = await gcon();
             const readSQL = `SELECT *,DATE_FORMAT(holidays.from_date,'%Y-%m-%d')as fromdateformat,DATE_FORMAT(holidays.to_date,'%Y-%m-%d')as todateformat FROM holidays WHERE id='${id}'`;
             let status = await con.query(readSQL);
-            console.log(status);
-
+            // console.log(status);
             status = JSON.parse(JSON.stringify(status));
             status.forEach(holiday => {
                 status = holiday;
@@ -96,17 +89,33 @@ module.exports = class holidaysSQL {
             let status = await con.query(readSQL);
             status = JSON.parse(JSON.stringify(status));
             status.forEach(date => {
-                status = date
+                status = date;
             });
-
-            console.log('==============');
-
-            console.log(status);
-            console.log('==============');
-
             return status;
         } catch (err) {
             console.log(err);
         }
     }
+
+    async getAllholidaystest(startDate,endDate){
+        try {
+          let con = await gcon();
+                //let status = await con.query(`SELECT * FROM holidaystest WHERE from_date BETWEEN '${stDate}' AND '${eDate}' OR to_date BETWEEN '${stDate}' AND '${eDate}'`);
+                let status = await con.query(`SELECT *,DATE_FORMAT(date,'%Y-%m-%d')as dateFormat FROM holidaystest WHERE date BETWEEN '${startDate}' AND '${endDate}' AND type ='public' ORDER BY date`);
+                status = JSON.parse(JSON.stringify(status));
+                return  (status.length == 0)?0:status;
+        } catch (error) {
+          console.log(error);      
+        }
+      }
+      async getAllholidays(startDate,endDate){
+        try {
+          let con = await gcon();
+                let status = await con.query(`SELECT *,DATE_FORMAT(H.from_date,'%Y-%m-%d') as fromDate,DATE_FORMAT(H.to_date,'%Y-%m-%d') as toDate FROM holidays AS H WHERE H.from_date BETWEEN '${startDate}' AND '${endDate}' OR H.to_date BETWEEN '${startDate}' AND '${endDate}' AND H.type ='public'` );                
+                status = JSON.parse(JSON.stringify(status));
+                return  (status.length == 0)?0:status;
+        } catch (error) {
+          console.log(error);      
+        }
+      }
 };

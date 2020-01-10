@@ -9,68 +9,38 @@
     -webkit-appearance: none;
     margin: 0;
   }
+  select option:disabled {
+    color: gray;
+    font-weight: bold;
+  }
 </style>
 
 <% include ./../partials/messages%>
 
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
-  <li class="breadcrumb-item">
-    <a href="/">Dashboard</a>
-  </li>
-  <li class="breadcrumb-item"><a href="/applyleave/list">All Leave</a></li>
+  <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+  <li class="breadcrumb-item"><a href="/user">All Leave</a></li>
   <li class="ml-auto" style="float: right;">
-  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/applyleave/list/" style="color: white;">Leave
-      List </a>
+  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/user" style="color: white;">Applied Leave</a>
   </li>
   </li>
 </ol>
 
-
-<link rel="stylesheet" href="/vendor/jqueryUI/jquery-ui.css">
-<style>
-  .ui-autocomplete {
-    color: teal;
-    max-height: 100px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  * html .ui-autocomplete {
-    height: 100px;
-  }
-  /* .disabled{
-    color: gray;
-    font-weight: bolder;
-  } */
-  select option:disabled {
-    color: gray;
-    font-weight: bold;
-}
-</style>
-
 <div class="card mb-3">
-  <div class="card-header">Leave Form</div>
+  <div class="card-header">Apply Leave as <b><%=user.name%></b></div>
   <div class="card-body">
-    <form method="post" action="/applyleave/add" id="leaveapplyform">
+    <form method="post" action="/user/applyLeave" id="leaveapplyform">
       <div class="form-row">
-        <div class="form-group col-md-4 col-sm-4 col-xs-12">
-          <label for="employeeName">Employee Name *</label>
-          <input type="text" class="form-control" id="autoname" name="employeeName" aria-describedby="nameinfo"
-            placeholder="Enter Employee Name" required value="<%=(typeof data !='undefined')? data.employeeName:''%>"
-            autocomplete="off">
-          <small id="nameinfo" class="form-text text-muted"></small>
-        </div>
         <div class="form-group col-md-4 col-sm-4 col-xs-12">
           <label for="leaveType">Leave Type *</label>
           <select name="leaveType" id="leaveType" class="form-control" required>
             <option value="" disabled selected id="noneOption">Select the leave</option>
             <%ldd.forEach(day => {%>
-            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' id="<%=day.name%>" value="<%=day.name%>"               
-              <%if(typeof data !='undefined'){%> <%if(data.leaveType == day.name){%>
+            <option data-id='<%=day.id%>' data-day='<%=day.number%>' data-name='<%=day.name%>' id="<%=day.name%>"
+              value="<%=day.name%>" <%if(typeof data !='undefined'){%> <%if(data.leaveType == day.name){%>
               selected='true' <%}%>                
-                <%}%>           
-                ><%=day.name%> leave
+                <%}%>><%=day.name%> leave
             </option>
             <%});%>
           </select>
@@ -117,19 +87,8 @@
           required><%=(typeof data !='undefined')? data.leaveReason:''%></textarea>
         <small id="reason" class="form-text text-muted">PS: Write exact reason</small>
       </div>
-<!--hidden style="display: none;"-->
-      <div hidden style="display: none;" readonly class="form-group" >
-      <input  name="userid" id="userid" class="from-"  value="<%=(typeof data !='undefined')? data.userid:''%>" readonly>
-      <input  name="userdate" id="userdate" value="<%=(typeof data !='undefined')? data.userdate:''%>" readonly>
-      <input  name="usergender" id="usergender" value="<%=(typeof data !='undefined')? data.usergender:''%>" readonly>
-      </div>
-
-      <!-- <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="doneCheck" >
-        <label class="form-check-label" for="doneCheck">Check me out</label>
-      </div>      
-        -->
     </form>
+
     <div class="text-center">
       <div class="btn-group-sm">
         <button type="submit" form="leaveapplyform" id="btnsubmit" class="btn btn-primary">Apply</button>
@@ -138,11 +97,10 @@
           class="btn btn-danger">Discard</button>
       </div>
     </div>
+    
   </div>
 </div>
 
 <script src="/js/leaveAdd.js"></script>
-<script src="/vendor/jqueryUI/jquery-ui.js"></script>
-<script src="/js/autocomplete.js"></script>
 
 <% include ./../layouts/layoutfooter%>
