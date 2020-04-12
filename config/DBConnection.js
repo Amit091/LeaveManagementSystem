@@ -2,15 +2,15 @@ const mysql = require("promise-mysql");
 const chalk = require("chalk");
 
 const dbConfig = {
-    user: "root",
+    user: process.env.DB_USER,
     password: "",
-    database: "mock_leave",
-    host: "localhost",
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
     queueLimit: 0, // unlimited queueing
     connectionLimit: 0
 };
 
-module.exports = async() => {
+module.exports = async () => {
     try {
         let con = await mysql.createConnection(dbConfig);
         if (con) console.log(chalk.green("MYSQL Connected"));

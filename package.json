@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node ./bin/www",
         "dev": "nodemon ./bin/www",
-        "test": "mocha"
+        "test": "mocha",
+        "debug": "nodemon --inspect-brk = 41352 ./bin/www"
     },
     "keywords": [
         "Leave",
@@ -19,9 +20,10 @@
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "connect-flash": "^0.1.1",
-        "cookie-parser": "~1.4.4",
+        "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
         "debug": "~2.6.9",
+        "dotenv": "^8.2.0",
         "ejs": "~2.6.1",
         "express": "~4.16.1",
         "express-fileupload": "^1.1.6",
@@ -30,9 +32,11 @@
         "fs-extra": "^8.1.0",
         "http-errors": "~1.6.3",
         "jimp": "^0.9.3",
-        "mkdirp": "^0.5.1",
+        "knex": "^0.20.13",
+        "mkdirp": "^1.0.4",
         "moment": "^2.24.0",
         "morgan": "~1.9.1",
+        "mysql": "^2.18.1",
         "mysql2": "^2.0.2",
         "passport": "^0.4.1",
         "passport-local": "^1.0.0",
@@ -42,7 +46,6 @@
     },
     "devDependencies": {
         "chai": "^4.2.0",
-        "mocha": "^7.0.1",
         "nodemon": "^2.0.1",
         "request": "^2.88.2"
     }
