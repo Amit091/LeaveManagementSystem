@@ -16,11 +16,16 @@ module.exports = {
     },
     migrations: {
       tableName: `knex_migrations`,
+      directory: `./migrations/development`
     },
+    seeds: {
+      tableName: `knex_seeds`,
+      directory: './seeds/development'
+    }
   },
 
   // knex migrate:latest
-  local: {
+  staging: {
     client: `mysql`,
     connection: {
       host: process.env.DB_HOST,
@@ -34,7 +39,12 @@ module.exports = {
     },
     migrations: {
       tableName: `knex_migrations`,
+      directory: `./migrations/staging`
     },
+    seeds: {
+      tableName: `knex_seeds`,
+      directory: './seeds/staging'
+    }
   },
 
   // knex migrate:latest --env production
@@ -53,6 +63,11 @@ module.exports = {
     },
     migrations: {
       tableName: `knex_migrations`,
+      directory: `./migrations/production`
     },
+    seeds: {
+      tableName: `knex_seeds`,
+      directory: './seeds/prod'
+    }
   },
 };
