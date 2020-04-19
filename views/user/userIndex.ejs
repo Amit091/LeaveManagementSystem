@@ -1,54 +1,54 @@
 <%- include ./../layouts/layoutheader%>
-<% include ./../partials/messages%>
+    <% include ./../partials/messages%>
 
-<!-- Breadcrumbs-->
-<ol class="breadcrumb">
-  <li class="breadcrumb-item">
-    <a href="/">Dashboard</a>
-  </li>
-  <li class="breadcrumb-item active">Applied Leave List</li>
-  <li class="ml-auto" style="float: right;">
-  <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/user/applyLeave" style="color: white;">Add Leave </a>
-  </li>
-  </li>
-</ol>
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Applied Leave List</li>
+            <li class="ml-auto" style="float: right;">
+                <li class="breadcrumb-item "><a class="btn btn-sm btn-primary" href="/user/applyLeave" style="color: white;">Add Leave
+    </a>
+                </li>
+            </li>
+        </ol>
 
-<div class="card mb-3">
-  <div class="card-header">
-    <i class="fas fa-table"></i>
-    Leave List Detail</div>
-  <div class="card-body">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="alltab" data-toggle="tab" href="#all"  role="tab" aria-controls="all">All</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="pendingtab" data-toggle="tab" href="#pending"  role="tab" aria-controls="pending">Pending</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="accepttab" data-toggle="tab" href="#accept" role="tab" aria-controls="accept">Accepted</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link  text-danger" id="rejecttab" data-toggle="tab" href="#reject" role="tab" aria-controls="reject">Rejected</a>
-      </li>
-    </ul>
-    <div class="tab-content" id="tab-view-panel">
-      <% include ./../partials/pageitem/tableViewFull%>
-    </div>
-  </div>
-</div>
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-table"></i> Leave List Detail</div>
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="alltab" data-toggle="tab" href="#all" role="tab" aria-controls="all">All</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pendingtab" data-toggle="tab" href="#pending" role="tab" aria-controls="pending">Pending</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="accepttab" data-toggle="tab" href="#accept" role="tab" aria-controls="accept">Accepted</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  text-danger" id="rejecttab" data-toggle="tab" href="#reject" role="tab" aria-controls="reject">Rejected</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="tab-view-panel">
+                    <% include ./../partials/pageItem/tableViewFull%>
+                </div>
+            </div>
+        </div>
 
-<!-- <<button data-toggle="modal" data-target="#detailModal">View</button> -->
+        <!-- <<button data-toggle="modal" data-target="#detailModal">View</button> -->
 
 
-<!--For Leave Record Detail-->
-<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content" id="decisionModal">
-      <!--decision modal  -->
-    </div>
-  </div>
-</div>
+        <!--For Leave Record Detail-->
+        <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" id="decisionModal">
+                    <!--decision modal  -->
+                </div>
+            </div>
+        </div>
 
- 
-  <%- include ./../layouts/layoutfooter%>
+
+        <%- include ./../layouts/layoutfooter%>

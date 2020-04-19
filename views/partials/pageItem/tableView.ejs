@@ -1,72 +1,87 @@
 <table class="table table-sm" id="<%=status%>-table" class="listTable" cellspacing="0">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Leave</th>
-      <th>From</th>
-      <th>To</th>
-      <th>Status</th>
-      <th>Apply At</th>
-      <th>Option</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%list.forEach(record => {%>
-    <%if(record.status == status || status=='all'){%>
-    <tr id="<%=record.id%>" data-uid="<%=record.employee_id%>" data-status="<%=record.status%>">
-      <td><%=record.employee_name%></td>
-      <td><%=record.leave_type%></td>
-      <td><%=record.startDate%></td>
-      <td><%=record.endDate%></td>
-      <td><%=record.status%></td>
-      <td><%=record.applyDate%>, <%=record.applyTime%></td>
-      <td class="btn-group-toggle btn-group-sm">
-        <% if(record.status =='pending' && typeof user !='undefined') {%>
-          <% if(user.designation_id == 1){%>
-        <a class="btn  btn-primary" style="color: white;"
-          href="/applyleave/edit/<%=record.id%>?uid=<%=record.employee_id%>"><i class="fa fa-pen"> Edit</i></a>
-        <button class="btn btn-info btndecision"><i class="fas fa-question">Decide</i></button>       
-          <%}else{%>
-            <a class="btn  btn-primary" style="color: white;"
-          href="/user/editLeave/<%=record.id%>"><i class="fa fa-pen"> Edit</i></a>
-          <%}%>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Leave</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Status</th>
+            <th>Apply At</th>
+            <th>Option</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%list.forEach(record => {%>
+            <%if(record.status == status ||
+    status=='all'){%>
+                <tr id="<%=record.id%>" data-uid="<%=record.employee_id%>" data-status="<%=record.status%>">
+                    <td>
+                        <%=record.employee_name%>
+                    </td>
+                    <td>
+                        <%=record.leave_type%>
+                    </td>
+                    <td>
+                        <%=record.startDate%>
+                    </td>
+                    <td>
+                        <%=record.endDate%>
+                    </td>
+                    <td>
+                        <%=record.status%>
+                    </td>
+                    <td>
+                        <%=record.applyDate%>,
+                            <%=record.applyTime%>
+                    </td>
+                    <td class="btn-group-toggle btn-group-sm">
+                        <% if(record.status =='pending' && typeof user !='undefined') {%>
+                            <a class="btn  btn-primary" style="color: white;" href="/applyleave/edit/<%=record.id%>?uid=<%=record.employee_id%>"><i class="fa fa-pen"> Edit</i></a
+        >
+        <button class="btn btn-info btndecision">
+          <i class="fas fa-question">Decide</i>
+        </button>
+
         <%} %>
-          
-    </td>
-      </tr>   
-      <%}%>
-        <% });%>
+      </td>
+    </tr>
+    <%}%> <% });%>
   </tbody>
 </table>
 
-  <script>
-    $('.btndecision').on('click', function () {
-      let id = $(this).closest('tr').val();
-      let uid = $(this).closest('tr').data('uid');
-      let status = $(this).closest('tr').data('status');
-      makeDecision(id, uid, status);
-    })
-    function makeDecision(id, uid, status) {
-      var data = {
-        'id': `${id}`,
-        'user_id': `${uid}`,
-        'status': `${status}`
-      };
-      $.ajax({
-        type: `GET`,
-        url: `/ajax/api/getDataForModal`,
-        data: data,
-        contentType: 'application/x-www-form-urlencoded',
-        success: result => {
-          $('#decisionModal').html(result.htmlData);
-          $('#page-top').focus();
-          $('#detailModal').modal('show');
-        },
-        error: error => {
-          console.log('its from error');
-          console.log(error);
-        }
-      });
-    }
-
-  </script>
+<script>
+  $(".btndecision").on("click", function() {
+    let id = $(this)
+      .closest("tr")
+      .val();
+    let uid = $(this)
+      .closest("tr")
+      .data("uid");
+    let status = $(this)
+      .closest("tr")
+      .data("status");
+    makeDecision(id, uid, status);
+  });
+  function makeDecision(id, uid, status) {
+    var data = {
+      id: `${id}`,
+      user_id: `${uid}`,
+      status: `${status}`
+    };
+    $.ajax({
+      type: `GET`,
+      url: `/ajax/api/getDataForModal`,
+      data: data,
+      contentType: "application/x-www-form-urlencoded",
+      success: result => {
+        $("#decisionModal").html(result.htmlData);
+        $("#page-top").focus();
+        $("#detailModal").modal("show");
+      },
+      error: error => {
+        console.log("its from error");
+        console.log(error);
+      }
+    });
+  }
+</script>

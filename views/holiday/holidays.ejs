@@ -1,193 +1,160 @@
 <% include ./../layouts/layoutheader%>
 
-<style>
-    select::-webkit-inner-spin-button,
-    select::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="date"]::-webkit-inner-spin-button,
-    input[type="date"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-</style>
-<!-- Custom styles for this template-->
-<link href="/css/change.css" rel="stylesheet">
-<!-- message -->
-<% include ./../partials/messages.ejs%>
-<!-- Breadcrumbs-->
-<ol class="breadcrumb ">
-    <li class="breadcrumb-item ">
-        <a href="/">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item active">Add Holiday</li>
-</ol>
+    <style>
+        select::-webkit-inner-spin-button,
+        select::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="date"]::-webkit-inner-spin-button,
+        input[type="date"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+    <!-- Custom styles for this template-->
+    <link href="/css/change.css" rel="stylesheet" />
+    <!-- message -->
+    <% include ./../partials/messages.ejs%>
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb ">
+            <li class="breadcrumb-item ">
+                <a href="/">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Add Holiday</li>
+        </ol>
 
-<div class="row">
-    <div class="col-md-6 col-sm-12 table-responsive">
-            <% include ./allholidays.ejs %>
-    </div>
-    <div class="col-md-6 col-sm-12">
-        <div class="card">
-            <div class="card-header bg-card-head">
-                Add Holidays
+        <div class="row">
+            <div class="col-md-6 col-sm-12 table-responsive">
+                <% include ./allholidays.ejs %>
             </div>
-            <div class="card-body bg-card-body">
-                <form id="product-form" action="/holiday/addholidays" method="post">
-                    <div class="form-group ">
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-header bg-card-head">
+                        Add Holidays
+                    </div>
+                    <div class="card-body bg-card-body">
+                        <form id="product-form" action="/holiday/addholidays" method="post">
+                            <div class="form-group ">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Name:</label>
+                                    <input type="text" name="name" id="holiday_type" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="name of the holiday event" />
+                                </div>
+                                <div>
+                                    <div class="from-group box">
+                                        <select class="custom-select form-control" onchange="myFunction()" id="holidaytype" name="holidaypicker">
+                  <option selected value="0">Choose type</option>
+                  <option value="public">public holiday</option>
+                  <option value="float">float holiday</option>
+                </select>
+                                    </div>
+                                    <br />
+                                    <div class="form-row">
+                                        <div class="form-group col-md-5 col-sm-4 col-xs-12">
+                                            <label for="fromDate">From*</label>
+                                            <div class="input-group">
+                                                <input type="date" class="form-control datepicker" name="fromDate" id="fromDate" aria-describedby="fdate" value="<%=(typeof data !='undefined')? data.fromDate:''%>" />
 
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Name:</label>
-                            <input type="text" name="name" id="holiday_type" class="form-control"
-                                id="exampleInputEmail1" aria-describedby="emailHelp"
-                                placeholder="name of the holiday event" required>
-                        </div>
-                        <div>
-                            <div class="from-group box">
-                                <select class="custom-select form-control" onchange="myFunction()" id="holidaytype"
-                                    name="holidaypicker" required>
-                                    <option selected value="0">Choose type</option>
-                                    <option value="public">public holiday</option>
-                                    <option value="float">float holiday</option>
-                                </select>
-                            </div>
-                            <br>
-                            <div class="form-row">
-                                <div class="form-group col-md-5 col-sm-4 col-xs-12">
-                                    <label for="fromDate">From*</label>
-                                    <div class="input-group">
-                                        <input type="date" class="form-control datepicker" name="fromDate" id="fromDate"
-                                            required aria-describedby="fdate"
-                                            value="<%=(typeof data !='undefined')? data.fromDate:''%>">
-
-                                        <!-- <div class="input-group-append">
+                                                <!-- <div class="input-group-append">
                               <span class=" open-button" id="fdate"><button type="button"><i  class="fa fa-calendar"></i></button></span>
                             </div>
                           -->
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="form-group col-md-5 col-sm-4 col-xs-12">
-                                    <label for="toDate">To*</label>
-                                    <div class="input-group">
-                                        <input type="date" class="form-control datepicker " name="toDate" id="toDate"
-                                            required aria-describedby="tdate"
-                                            value="<%=(typeof holiday !='undefined')? holiday.leaveDay:''%>">
-                                        <div class="input-group-append">
-
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-group col-md-5 col-sm-4 col-xs-12">
+                                            <label for="toDate">To*</label>
+                                            <div class="input-group">
+                                                <input type="date" class="form-control datepicker " name="toDate" id="toDate" required aria-describedby="tdate" value="<%=(typeof holiday !='undefined')? holiday.leaveDay:''%>" />
+                                                <div class="input-group-append"></div>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                                            <label for="leaveDay">Days*</label>
+                                            <input type="number" class="form-control datepicker" id="leaveDay" name="leaveDay" placeholder="Enter leave day" step="1" min="1" max="100" value="0" required aria-describedby="leaveinfo" autocomplete="off" readonly value="value=" <%=(typeof data !='undefined'
+                                                )? data.leaveDay: ''%>"">
+                                            <small id="leaveinfo" class="form-text text-muted" style="color: red;font-weight:bolder;"></small>
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="description">Description:</label>
+                                        <textarea class="form-control" cols="30" name="description" rows="5" id="description"></textarea>
+                                    </div>
                                 </div>
-                                <br>
-                                <div class="form-group col-md-2 col-sm-2 col-xs-12">
-                                    <label for="leaveDay">Days*</label>
-                                    <input type="number" class="form-control datepicker" id="leaveDay" name="leaveDay"
-                                        placeholder="Enter leave day" step="1" min="1" max="100" value="0" required
-                                        aria-describedby="leaveinfo" autocomplete="off" readonly value="value="
-                                        <%=(typeof data !='undefined')? data.leaveDay:''%>"">
-                                    <small id="leaveinfo" class="form-text text-muted"
-                                        style="color: red;font-weight:bolder;"></small>
+                                <div class="justify-content-end">
+                                    <button type="submit" class="btn btn-primary float-left">
+                Submit
+              </button>
+                                    <button type="submit" class="btn btn-danger float-right">
+                Discard
+              </button>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label for="description">Description:</label>
-                                <textarea class="form-control" cols="30" name="description" rows="5" id="description"
-                                    required></textarea>
-                            </div>
-
-
-                        </div>
-                        <div class="justify-content-end">
-                            <button type="submit" class="btn btn-primary float-left">Submit</button>
-                            <button type="submit" class="btn btn-danger float-right">Discard</button>
-                        </div>
-
+                        </form>
                     </div>
-                </form>
-
-
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
-
-
-
-
-<script>
-    $(document).ready(function () {
-
-        if ($("#holidaytype").val() == "float") {
-            $("#toDate").prop('disabled', true);
-        }
-
-        var now = getDate('today');
-        var maxDate = getDate('maxdate') + '-' + '03' + '-' + '31';
-        var date = new Date();
-        var year = date.getFullYear();
-        var mini = year + '-' + '04' + '-' + '01';
-        $('#date').val(now)
-        $('#date').attr('max', maxDate);
-        $('#date').attr('min', mini);
-
-
-
-        function getDate(status) {
-            var now = new Date();
-            var month = (now.getMonth() + 1);
-            var day = now.getDate();
-            if (month < 10)
-                month = "0" + month;
-            if (day < 10)
-                day = "0" + day;
-            var today = now.getFullYear() + '-' + month + '-' + day;
-            if (status === "today") return today;
-            if (status === "maxdate") return now.getFullYear() + 1;
-            else '';
-        }
-
-        $(function () {
-
-            $('#holiday_sadsa').keydown(function (e) {
-
-                if (e.shiftKey || e.ctrlKey || e.altKey) {
-
-                    e.preventDefault();
-
-                } else {
-
-                    var key = e.keyCode;
-
-                    if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
-
-                        e.preventDefault();
-
-                    }
-
+        <script>
+            $(document).ready(function() {
+                if ($("#holidaytype").val() == "float") {
+                    $("#toDate").prop("disabled", true);
                 }
 
+                var now = getDate("today");
+                var maxDate = getDate("maxdate") + "-" + "03" + "-" + "31";
+                var date = new Date();
+                var year = date.getFullYear();
+                var mini = year + "-" + "04" + "-" + "01";
+                $("#date").val(now);
+                $("#date").attr("max", maxDate);
+                $("#date").attr("min", mini);
+
+                function getDate(status) {
+                    var now = new Date();
+                    var month = now.getMonth() + 1;
+                    var day = now.getDate();
+                    if (month < 10) month = "0" + month;
+                    if (day < 10) day = "0" + day;
+                    var today = now.getFullYear() + "-" + month + "-" + day;
+                    if (status === "today") return today;
+                    if (status === "maxdate") return now.getFullYear() + 1;
+                    else "";
+                }
+
+                $(function() {
+                    $("#holiday_sadsa").keydown(function(e) {
+                        if (e.shiftKey || e.ctrlKey || e.altKey) {
+                            e.preventDefault();
+                        } else {
+                            var key = e.keyCode;
+
+                            if (!(
+                                    key == 8 ||
+                                    key == 32 ||
+                                    key == 46 ||
+                                    (key >= 35 && key <= 40) ||
+                                    (key >= 65 && key <= 90)
+                                )) {
+                                e.preventDefault();
+                            }
+                        }
+                    });
+                });
             });
+        </script>
+        <script>
+            function myFunction() {
+                if ($("#holidaytype").val() == "float") {
+                    $("#toDate").prop("readonly", true);
+                    $("#toDate").val($("#fromDate").val());
+                } else if ($("#holidaytype").val() == "public") {
+                    $("#toDate").removeAttr("readonly");
+                }
+            }
+        </script>
 
-        });
-    })
-</script>
-<script>
-    function myFunction() {
-        if ($("#holidaytype").val() == "float") {
-            $("#toDate").prop('readonly', true);
-            $("#toDate").val($("#fromDate").val())
-        } else if ($("#holidaytype").val() == "public") {
-            $("#toDate").removeAttr('readonly');
-        }
-    }
-
-</script>
-
-
-
-
-
-<% include ./../layouts/layoutfooter%>
-<script src="/js/holidays.js"></script>
+        <% include ./../layouts/layoutfooter%>
+            <script src="/js/holidays.js"></script>
