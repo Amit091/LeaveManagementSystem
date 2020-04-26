@@ -1,11 +1,11 @@
 {
-    "name": "leave",
-    "version": "0.0.0",
+    "name": "ems",
+    "version": "2.0.0",
     "description": "A leave Management System for a company",
     "private": true,
     "scripts": {
         "start": "node ./bin/www",
-        "dev": "nodemon ./bin/www",
+        "dev": "nodemon -e pug,js ./bin/www",
         "test": "mocha",
         "debug": "nodemon --inspect-brk = 41352 ./bin/www"
     },
@@ -19,6 +19,7 @@
     "license": "ISC",
     "dependencies": {
         "bcryptjs": "^2.4.3",
+        "bookshelf": "^1.1.1",
         "connect-flash": "^0.1.1",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
@@ -41,6 +42,7 @@
         "passport": "^0.4.1",
         "passport-local": "^1.0.0",
         "promise-mysql": "^4.1.1",
+        "pug": "^2.0.4",
         "sequelize": "^5.21.3",
         "sequelize-cli": "^5.5.1"
     },

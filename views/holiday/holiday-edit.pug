@@ -1,0 +1,39 @@
+.card
+  .card-header.bg-card-head
+    h5.textbold.text-center Add Holidays
+  .card-body.bg-card-body
+    form#product-form(action="/holiday/addholidays",method="post")
+      .form-group
+        .form-group
+          label(for="name") Name:*
+          input.form-control#holiday_type(type="text",name="name",aria-describedby="holidayName",required,placeholder="Holiday Name Event",autocomplete="off")
+        .form-group.box
+          select.custom-select.form-control#holidaytype(name="holidaypicker",onchange="myFunction()",required)
+            +typeList(0)
+            +typeList('public')
+            +typeList('float')
+        .form-row
+          .form-group.col-5
+            label(for="fromDate") FromDate*
+            .input-group 
+            - fromDate = (typeof data !="undefined")? data.fromDate : ""
+              input.form-control.datepicker#fromDate(name="fromDate",type="date",aria-describedby="from Date",value=`${fromDate}`,required) 
+          .form-group.col-5
+            label(for="toDate") To Date*
+            .input-group 
+              - toDate = (typeof data !="undefined")? data.toDate : ""
+              input.form-control.datepicker#toDate(name="toDate",type="date",aria-describedby="To Date",value= `${toDate}`,required) 
+          .form-group.col-2
+            label(for='leaveDay') Days*
+            -leaveDay = (typeof data !=='undefined')? data.leaveDay:""
+            input.form-control#leaveDay(type="number",name=leaveDay,placeholder="holidays day",step='1',min='1',max='100',required,value=`${leaveDay}`)
+            small#leaveinfo.form-text.text-muted(style='color: red;font-weight:bolder;')
+        .form-group
+          label(for='description') Description:
+          textarea#description.form-control( name='description', rows='4',required)
+            //form field done
+      .row
+        .col-6
+          button.btn.btn-primary.float-left(type='submit') Submit
+        .col-6
+          button.btn.btn-danger.float-right(type='cancel') Discard

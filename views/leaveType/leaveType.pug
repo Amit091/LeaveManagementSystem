@@ -1,0 +1,54 @@
+extends ./../base/base-layout
+
+mixin typeList(value)
+  if value == 0
+    option(value=value,selected) Choose Holiday type
+  else
+    option(value=value) #{value} holiday
+
+block style
+  style.
+    select::-webkit-inner-spin-button,
+    select::-webkit-outer-spin-button,
+    input::-webkit-outer-spin-button
+  // Custom styles for this template
+  link(href='/css/change.css', rel='stylesheet')
+
+block content
+  ol.breadcrumb
+    li.breadcrumb-item
+      a(href='/') DashBoard
+    li.breadcrumb-item leave
+    li.breadcrumb-item.active 
+      a(href='/leaveType') Add Leave
+  
+  .row
+    .col-md.col-sm.table-responsive
+      include allleaves
+    .col-md.col-sm
+      .card
+        .card-header.bg-card-head
+          h5.textbold.text-center Add LeaveType
+        .card-body.bg-card-body
+          form#product-form(action="/leavetype",method="post")
+          .form-group
+            .form-group
+              label(for="name") Name:
+              input.form-control#leave_type(type="text",name="name",aria-describedby="LeavType",required,placeholder="Holiday Name Event",autocomplete="off")
+            .form-group
+              label Number of Days:
+              input#number_leaves.form-control(type='number', name='number', placeholder='number of day leave employee will be allowed')
+            .form-group
+              label(for='exampleInputEmail1') Description:
+              textarea.form-control(cols='30', rows='5', value='description', name='description', placeholder='description for the type of leave')
+
+          .row
+            .col-6
+              button.btn.btn-primary.float-left(type='submit') Submit
+            .col-6
+              button.btn.btn-danger.float-right(type='cancel') Discard
+
+block script
+  script(src="/custom/leaveType.js")
+  script(src="/js/holidays.js")
+

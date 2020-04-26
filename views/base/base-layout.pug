@@ -1,0 +1,24 @@
+extends base
+
+block style
+  style.
+    select::-webkit-inner-spin-button,
+    select::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button,
+    input::-webkit-outer-spin-button{
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+block layout
+  include topbar  
+  #wrapper
+    //- include ../partials/messages
+    include sidebar
+    #content-wrapper
+      .container-fluid
+        block content
+
+block footer 
+  include base-logout-modal
+  //- include icons 

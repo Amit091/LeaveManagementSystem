@@ -1,0 +1,33 @@
+// Custom styles for this template
+block style
+  link(href='/css/change.css' rel='stylesheet')
+
+nav.navbar.navbar-expand.navbar-expand-xs.navbar-expand-xl.navbar-dark.bg-proshore.static-top(style='background-color: #5a6a6a;')
+  a.navbar-brand(href='/')
+    | Pro
+    small
+      span.lite(style='color:white;') shore
+  button#sidebarToggle.btn.btn-link.btn-sm.text-white.order-1.order-sm-0(href='#')
+    i.fas.fa-bars
+  // Navbar
+  ul.navbar-nav.ml-auto.mr-0.mr-md-3.my-2.my-md-0
+    // user icon
+    li.nav-item.dropdown.no-arrow
+      a#userDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+        span.mr-2.d-none.d-lg-inline.text-gray-600.small.icon-change User 
+        img.img-profile.rounded-circle(src='https://source.unsplash.com/QAB-WJcbgJk/60x60' height='30' width='30')
+      // Dropdown - User Information
+      .dropdown-menu.dropdown-menu-right.shadow.animated--grow-in(aria-labelledby='userDropdown')
+        a.dropdown-item(href='#')
+          i.fas.fa-user.fa-sm.fa-fw.mr-2.text-gray-400
+          |           Profile
+        a.dropdown-item(href='#')
+          i.fas.fa-cogs.fa-sm.fa-fw.mr-2.text-gray-400
+          |           Settings
+        a.dropdown-item(href='#')
+          i.fas.fa-list.fa-sm.fa-fw.mr-2.text-gray-400
+          |           Activity Log
+        .dropdown-divider
+        a.dropdown-item(href='#' data-toggle='modal' data-target='#logoutModal')
+          i.fas.fa-sign-out-alt.fa-sm.fa-fw.mr-2.text-gray-400
+          |           Logout

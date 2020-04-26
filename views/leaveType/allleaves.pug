@@ -1,0 +1,17 @@
+table#tblLeave.table.table-responsive-sm.text-center
+  thead
+    tr
+      th(scope='col') Name
+      th(scope='col') Days
+      th Options
+  tbody
+    each holiday in allresult
+      tr
+        td #{holiday.name}
+        td #{holiday.number}
+        td 
+          .btn-group.btn-group-justified.mr-0
+            a.btn.btn-primary.btn-sm(href=`/leavetype/editleave/${leave.id}`)
+              i.fa.fa-pen
+            a.btn.btn-danger.btn-sm(href=`/leavetype/deleteleave/${leave.id}`)
+              i.fa.fa-times

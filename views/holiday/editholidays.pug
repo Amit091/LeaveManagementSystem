@@ -1,0 +1,69 @@
+extends ../base/base-layout
+
+mixin typeList(value)
+  if value == 0
+    option(value=value,selected) Choose Holiday type
+  else
+    option(value=value) #{value} holiday
+
+block style
+  style.
+    select::-webkit-inner-spin-button,
+    select::-webkit-outer-spin-button,
+    input::-webkit-outer-spin-button
+  // Custom styles for this template
+  link(href='/css/change.css', rel='stylesheet')
+
+block content
+  ol.breadcrumb
+    li.breadcrumb-item
+      a(href='/') DashBoard
+    li.breadcrumb-item.active Add Holiday
+  
+  .row
+    .col-md.col-sm.table-responsive
+      //-all holiday
+      include allholidays
+    .col-md.col-sm
+      .card
+        .card-header.bg-card-head
+          h5.textbold.text-center Add Holidays
+        .card-body.bg-card-body
+          form#product-form(action="/holiday/addholidays",method="post")
+            .form-group
+              label(for="name") Name:
+              input.form-control#holiday_type(type="text",name="name",aria-describedby="holidayName",required,placeholder="Holiday Name Event",autocomplete="off")
+            .form-group.box
+              select.custom-select.form-control#holidayType(name="type",onchange="myFunction()",required)
+                +typeList(0)
+                +typeList('public')
+                +typeList('float')
+            .form-row.box
+              .form-group.col-5
+                label(for="fromDate") FromDate
+                .input-group 
+                  - fromDate = (typeof data !="undefined")? data.fromDate : ""
+                  input.form-control.datepicker#fromdate(name="fromDate",type="date",aria-describedby="from Date",value=`${fromDate}`,required) 
+              .form-group.col-5
+                label(for="toDate") To Date
+                .input-group 
+                  - toDate = (typeof data !="undefined")? data.toDate : ""
+                  input.form-control.datepicker#todate(name="toDate",type="date",aria-describedby="To Date",value= `${toDate}`,required) 
+              .form-group.col
+                label(for='leaveDay') Days
+                -leaveDay = (typeof data !=='undefined')? data.leaveDay:""
+                input.form-control#leaveDay(type="number",name=leaveDay,placeholder="holidays day",step='1',min='1',max='100',required,value=`${leaveDay}`)
+                small#leaveinfo.form-text.text-muted(style='color: red;font-weight:bolder;')
+            .form-group
+                label(for='description') Description:
+                textarea#description.form-control( name='description', rows='3',cols='100',required)
+                //form field done
+            .row
+                .col-50
+                  button.btn.btn-primary.float-left(type='submit') Submit
+                .col-50
+                  button.btn.btn-danger.float-right(type='cancel') Discard
+
+block script
+  script(src="/custom/holiday.js")
+  script(src="/js/holidays.js")

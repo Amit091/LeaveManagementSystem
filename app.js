@@ -1,6 +1,6 @@
 const path = require('path');
 const cors = require('cors');
-const logger = require('morgan');
+const morgan = require('morgan');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const express = require('express');
@@ -13,16 +13,36 @@ const app = express();
 
 require('dotenv').config({ path: __dirname + '/.env' })
 
+
+// app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
-//app.use(logger('dev'));
+
+// app.use(
+//   morgan(function (tokens, req, res) {
+//     return [
+//       tokens.method(req, res),
+//       tokens.url(req, res),
+//       tokens.status(req, res),
+//       tokens.res(req, res, 'content-length'), '-',
+//       tokens['response-time'](req, res), 'ms'
+//     ].join(' ')
+//   })
+// );
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//use middleware to serve static files
+app.use(express.static('public'));
+//use middleware to serve static files
+app.use('/static', express.static('public'));
+
+app.enable('view cache', false)
 
 
 //express session
@@ -121,7 +141,10 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   // render the error page
   res.status(err.status || 500);
-  res.render('partials/error');
+  let error = err.status
+  console.log('error', err);
+
+  res.render('base/error404', error);
 });
 
 module.exports = app;

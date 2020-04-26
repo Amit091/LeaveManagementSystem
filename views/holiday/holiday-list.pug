@@ -1,0 +1,25 @@
+block style
+  link(href='/stylesheets/table.css' rel='stylesheet')
+
+table#tblHoliday.table.table-responsive-lg.text-center(cellspacing='0',width="100%")
+  thead
+    tr
+      th.col1(width="15%") Name
+      th.col2(width="10%") Type
+      th.col3(width="10%") Day 
+      th.col4(width="30%") Date Range
+      th.col5(width="15%") Options
+  tbody
+    each holiday in allresult
+      tr.holiday-detail
+        td.col1 #{holiday.name}
+        td.col2 #{holiday.type}
+        td.col3 #{holiday.leaveDay}
+        - dateData = (holiday.todateformat != holiday.fromdateformat) ? `${holiday.fromdateformat} -  ${holiday.todateformat}` : `${holiday.fromdateformat}`
+        td.col4 #{dateData}
+        td.col5
+          .btn-group.btn-group-justified.mr-0
+            a.btn.btn-primary.btn-sm(href=`/holiday/editholiday/${holiday.id}`)
+              i.fa.fa-pen
+            a.btn.btn-danger.btn-sm(href=`/holiday/deleteholiday/${holiday.id}`)
+              i.fa.fa-times

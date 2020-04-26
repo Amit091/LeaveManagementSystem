@@ -11,8 +11,7 @@ exports.up = function (knex) {
     table.enum('status', ['pending','accept','reject']).defaultTo("pending").notNullable();
     table.text('leave_reason', ['longtext']).collate('utf8mb4_unicode_ci').notNullable();
     table.text('reject_reason', ['longtext']).collate('utf8mb4_unicode_ci').notNullable().defaultTo('not yet');
-    table.timestamp('created_at').defaultTo(knex.fn.now());
-    table.timestamp('updated_at').defaultTo(knex.fn.now());
+    table.timestamps({ useTz: true }).defaultTo(knex.fn.now());    
     table.text('data', ['longtext']).collate('utf8mb4_unicode_ci');
     table.engine('InnoDB');
     table.charset('utf8mb4')

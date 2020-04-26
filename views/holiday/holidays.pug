@@ -1,0 +1,32 @@
+extends ../base/base-layout
+
+mixin typeList(value)
+  if value == 0
+    option(value=value,selected) Choose Holiday type
+  else
+    option(value=value) #{value} holiday
+
+block style
+  link(href='/vendor/datatables/dataTables.bootstrap4.css' rel='stylesheet')
+
+block content
+  ol.breadcrumb
+    li.breadcrumb-item
+      a(href='/') DashBoard
+    li.breadcrumb-item.active Add Holiday
+    li.ml-auto(style='float: right;')
+    li.breadcrumb-item
+      a.btn.btn-sm.btn-primary(href='/applyleave/add' style='color: white;')
+        | Add Leave
+  button#button BUtton
+  .row
+    .col-lg.col-md.col-sm.table-responsive#amit
+      include holiday-list
+
+
+
+block script
+  script(src="/javascripts/holiday.js")
+  script(src="/js/holidays.js")
+  
+
