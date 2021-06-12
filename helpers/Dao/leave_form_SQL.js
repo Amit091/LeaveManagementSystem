@@ -7,7 +7,7 @@ module.exports = class leaveSQL {
     try {
       con = await gcon();
       //console.log(query.insert_leave_apply_record, [leaveForm.userid,leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay, leaveForm.leaveReason]);
-      let status = await con.query(query.insert_leave_apply_record, [leaveForm.userid,leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay, leaveForm.leaveReason]);
+      let status = await con.query(query.insert_leave_apply_record, [leaveForm.userid, leaveForm.employeeName, leaveForm.leaveType, leaveForm.fromDate, leaveForm.toDate, leaveForm.leaveDay, leaveForm.leaveReason]);
       status = await JSON.parse(JSON.stringify(status));
       return status;
     } catch (error) {
@@ -128,7 +128,7 @@ module.exports = class leaveSQL {
   //     console.log(error);
   //   }
   // }
-  async getLeaveRecordById(id, uid , uname) {
+  async getLeaveRecordById(id, uid, uname) {
     try {
       con = await gcon();
       let status = await con.query(query.get_leave_data_by_id_and_employee, [id, uid, uname]);
@@ -146,7 +146,7 @@ module.exports = class leaveSQL {
       con = await gcon();
       let status = await con.query(query.update_apply_leave, [data.leaveDay, data.leaveType, data.fromDate, data.toDate, data.leaveReason, id, uid]);
       status = await JSON.parse(JSON.stringify(status));
-       return status || 0; 
+      return status || 0;
     } catch (error) {
       console.log(error);
     }
@@ -155,46 +155,46 @@ module.exports = class leaveSQL {
   async deleteAppliedLeaveDetail(fid) {
     try {
       con = await gcon();
-      let status = await con.query(query.delete_all_record_from_form_detail,[fid]);
+      let status = await con.query(query.delete_all_record_from_form_detail, [fid]);
       status = await JSON.parse(JSON.stringify(status));
-       return status || 0; 
+      return status || 0;
     } catch (error) {
       console.log(error);
     }
   }
 
-  async countAppliedLeaveDetail(fid){
+  async countAppliedLeaveDetail(fid) {
     try {
       con = await gcon();
-      let count = await con.query(query.select_all_record_from_form_detail,[fid]);  
-      return count || 0; 
+      let count = await con.query(query.select_all_record_from_form_detail, [fid]);
+      return count || 0;
     } catch (error) {
       console.log(error);
     }
   }
 
-  async getHolidayDashainAndTihar(day){
+  async getHolidayDashainAndTihar(day) {
     try {
       con = await gcon();
-      let record =await con.query(`SELECT * FROM holidays WHERE name = '${day}'`);
+      let record = await con.query(`SELECT * FROM holidays WHERE name = '${day}'`);
       record = await JSON.parse(JSON.stringify(record));
-      return record;      
+      return record;
     } catch (error) {
-      console.log(error);      
+      console.log(error);
     }
   }
 
-//user specific leave record
-async getLeaveRecord4User(id,name) {
-  try {
-    con = await gcon();
-    let status = await con.query(query.get_leave_record_by_user_id_and_name,[id,name]);
-    status = await JSON.parse(JSON.stringify(status));
-    // console.log(status);      
-    return status;
-  } catch (error) {
-    console.log(error);
+  //user specific leave record
+  async getLeaveRecord4User(id, name) {
+    try {
+      con = await gcon();
+      let status = await con.query(query.get_leave_record_by_user_id_and_name, [id, name]);
+      status = await JSON.parse(JSON.stringify(status));
+      // console.log(status);      
+      return status;
+    } catch (error) {
+      console.log(error);
+    }
   }
-}
 
 };
